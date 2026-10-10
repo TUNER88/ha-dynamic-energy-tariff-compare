@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry
@@ -9,9 +11,23 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse
 from homeassistant.exceptions import ServiceValidationError
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers import entity_registry as er
 
-from .const import ATTR_DAYS, ATTR_ENTRY_ID, DEFAULT_BACKFILL_DAYS, DOMAIN, SERVICE_BACKFILL, SERVICE_RESET
+from .const import (
+    ATTR_DAYS,
+    ATTR_ENTRY_ID,
+    DEFAULT_BACKFILL_DAYS,
+    DOMAIN,
+    LEGACY_KEYS,
+    SERVICE_BACKFILL,
+    SERVICE_RESET,
+)
 from .manager import DynamicEnergyTariffCompareManager
+
+_LOGGER = logging.getLogger(__name__)
+
+# Sensors removed in 0.3.0 (prices are always final all-in prices now)
+REMOVED_SENSOR_KEYS = ("current_spot_price",)
 
 PLATFORMS = [Platform.SENSOR, Platform.BUTTON]
 
@@ -72,6 +88,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: DynamicEnergyTariffCompa
     entry.runtime_data = manager
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
+    return True
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Migrate old config entries.
+
+    v1 -> v2 (0.3.0): energy-charts fallback, the "final price" toggle and the
+    surcharge fields (markup, grid fee, levies, VAT, grid base fee) were removed.
+    The price sensor is now always the final all-in price per kWh.
+    """
+    if entry.version > 2:
+        return False  # downgraded from a future version
+    if entry.version == 1:
+        data = {k: v for k, v in entry.data.items() if k not in LEGACY_KEYS}
+        options = {k: v for k, v in entry.options.items() if k not in LEGACY_KEYS}
+        if options.get("price_entity") is None:
+            options.pop("price_entity", None)  # cleared in old options -> fall back to data
+        registry = er.async_get(hass)
+        for key in REMOVED_SENSOR_KEYS:
+            if entity_id := registry.async_get_entity_id("sensor", DOMAIN, f"{entry.entry_id}_{key}"):
+                registry.async_remove(entity_id)
+        hass.config_entries.async_update_entry(entry, data=data, options=options, version=2)
+        _LOGGER.info("Migrated %s config entry %s to version 2", DOMAIN, entry.entry_id)
     return True
 
 

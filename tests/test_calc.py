@@ -47,6 +47,9 @@ def test_split_zero_duration():
     [
         ("EUR/kWh", 100), ("€/kWh", 100), ("ct/kWh", 1), ("Cent/kWh", 1),
         ("EUR/MWh", 0.1), ("€/MWh", 0.1), ("EUR / MWh", 0.1), ("SEK/kWh", None), (None, None),
+        ("eur/kwh", 100), ("EUR / kWh", 100), ("Euro/kWh", 100), ("€ / kWh", 100), ("c/kWh", 1),
+        ("Ct/kWh", 1), ("cents/kWh", 1), ("€ct/kWh", 1), ("EURct/kWh", 1), ("EUR/Wh", 100000),
+        ("", None), ("kWh", None), ("EUR", None), ("EUR/kWh/h", None), (42, None), ("%", None),
     ],
 )
 def test_price_units(unit, factor):
@@ -63,11 +66,19 @@ def test_energy_units():
     assert calc.energy_factor_to_kwh(None) == 1
 
 
-def test_effective_price_raw_and_final():
-    p = calc.TariffParams(provider_markup_ct=2.0, network_fee_ct=9.0, levies_ct=7.0, vat_percent=19)
-    assert calc.effective_price_ct(10.0, p) == pytest.approx(11.9 + 18.0)
-    assert calc.effective_price_ct(-5.0, p) == pytest.approx(-5.95 + 18.0)
-    assert calc.effective_price_ct(30.0, p, is_final=True) == 30.0
+def test_energy_units_case_insensitive():
+    assert calc.energy_factor_to_kwh("WH") == 0.001
+    assert calc.energy_factor_to_kwh("MWh") == 1000
+
+
+def test_parse_core_tibber_attributes_yield_no_list():
+    attrs = {
+        "app_nickname": "Home", "grid_company": "Stadtwerke", "estimated_annual_consumption": 3000,
+        "max_price": 0.41, "avg_price": 0.31, "min_price": 0.25, "off_peak_1": 0.28, "peak": 0.35,
+        "off_peak_2": 0.29, "intraday_price_ranking": 0.4, "unit_of_measurement": "EUR/kWh",
+        "state_class": "measurement", "friendly_name": "Tibber Pricing DE Current Price",
+    }
+    assert calc.parse_price_attributes(attrs, "EUR/kWh") == {}
 
 
 def test_parse_epex_spot_attributes():
@@ -92,26 +103,17 @@ def test_parse_nordpool_custom_hourly_expands():
     assert all(v == pytest.approx(20.0) for v in m.values())
 
 
-def test_parse_tibber_like_and_energy_charts():
+def test_parse_tibber_like_list():
     m = calc.parse_price_attributes({"today": [{"startsAt": "2026-10-10T10:00:00Z", "total": 0.3}]}, "EUR/kWh")
     assert m[T0] == pytest.approx(30.0)
-    m2 = calc.parse_price_attributes({"unix_seconds": [T0, T0 + 900], "price": [100.0, None], "unit": "EUR / MWh"}, None)
-    assert m2 == {T0: pytest.approx(10.0)}
-
-
-def test_parse_energy_charts_payload_15min_and_hourly():
-    m = calc.parse_energy_charts({"unix_seconds": [T0, T0 + 900], "price": [50.0, 60.0], "unit": "EUR / MWh"})
-    assert m == {T0: pytest.approx(5.0), T0 + 900: pytest.approx(6.0)}
-    h = calc.parse_energy_charts({"unix_seconds": [T0, T0 + 3600], "price": [50.0, 60.0], "unit": "EUR / MWh"})
-    assert len(h) == 8 and h[T0 + 2700] == pytest.approx(5.0) and h[T0 + 3600 + 2700] == pytest.approx(6.0)
 
 
 def _lookup(prices):
-    return lambda slot: (prices[slot], False) if slot in prices else None
+    return prices.get
 
 
 def test_accumulator_basic_and_split():
-    p = calc.TariffParams(fixed_price_ct=30, provider_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
+    p = calc.TariffParams(fixed_price_ct=30)
     acc = calc.Accumulator(p)
     prices = {T0: 10.0, T0 + 900: 20.0}
     look = _lookup(prices)
@@ -135,8 +137,7 @@ def test_accumulator_reset_and_negative_delta_ignored():
 
 
 def test_pending_resolution_and_savings_exclude_pending():
-    p = calc.TariffParams(fixed_price_ct=30, fixed_base_fee_eur_month=0, provider_monthly_fee_eur=0,
-                          grid_base_fee_eur_month=0, provider_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
+    p = calc.TariffParams(fixed_price_ct=30, fixed_base_fee_eur_month=0, provider_monthly_fee_eur=0)
     acc = calc.Accumulator(p)
     prices: dict[int, float] = {}
     look = _lookup(prices)
@@ -151,12 +152,17 @@ def test_pending_resolution_and_savings_exclude_pending():
 
 
 def test_monthly_fees_prorated():
-    p = calc.TariffParams(fixed_base_fee_eur_month=12, provider_monthly_fee_eur=6, grid_base_fee_eur_month=8)
+    p = calc.TariffParams(fixed_base_fee_eur_month=12, provider_monthly_fee_eur=6)
     acc = calc.Accumulator(p, calc.Totals(tracking_start=T0))
     now = T0 + calc.SECONDS_PER_MONTH
     assert acc.fixed_total_cost(now) == pytest.approx(12)
-    assert acc.dynamic_total_cost(now) == pytest.approx(14)
-    assert acc.savings(now) == pytest.approx(-2)
+    assert acc.dynamic_total_cost(now) == pytest.approx(6)
+    assert acc.savings(now) == pytest.approx(6)
+
+
+def test_totals_from_old_store_ignores_removed_fields():
+    t = calc.Totals.from_dict({"energy_kwh": 2, "spot_weighted_ct_kwh_sum": 99})
+    assert t.energy_kwh == 2
 
 
 def test_totals_roundtrip():
@@ -177,7 +183,7 @@ def test_state_timeline_time_weighted():
 
 
 def test_backfill_hourly_with_15min_prices_and_merge():
-    p = calc.TariffParams(fixed_price_ct=30, provider_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
+    p = calc.TariffParams(fixed_price_ct=30)
     prices = {T0: 0.0, T0 + 900: 10.0, T0 + 1800: 20.0}  # last quarter missing
     back = calc.backfill_energy([(T0, T0 + 3600, 4.0)], _lookup(prices), p)
     assert back.priced_energy_kwh == pytest.approx(3.0)

@@ -3,35 +3,27 @@
     "step": {
       "user": {
         "title": "Dynamic Energy Tariff Compare",
-        "description": "Compare a dynamic 15-min spot-price electricity tariff (Tibber, Rabot Energy, Octopus, …) with your fixed tariff. All ct/kWh values are gross (incl. VAT), except the spot price, which gets VAT applied. The defaults are examples only. Enter the values of your provider and grid operator.",
+        "description": "Compare a dynamic electricity tariff (Tibber, Rabot Energy, Octopus, …) with your fixed tariff. The price sensor must deliver the FINAL all-in price per kWh (incl. grid fees, taxes, levies, VAT and provider markup). The defaults are examples only.",
         "data": {
           "provider_name": "Provider name (optional, e.g. Tibber, Rabot Energy, Octopus)",
-          "energy_entity": "Grid import energy sensor (kWh, e.g. EDL21 total active energy / OBIS 1.8.0)",
-          "price_entity": "Price sensor (optional: EPEX Spot, Nord Pool, provider integration, …)",
-          "price_is_final": "Price sensor already is the final all-in price (no VAT/surcharges added)",
-          "use_energy_charts": "Fetch DE-LU spot prices from energy-charts.info if no price sensor is selected",
-          "fixed_price_ct": "Current fixed tariff: energy price (ct/kWh, gross)",
-          "fixed_base_fee_eur_month": "Current fixed tariff: base fee (€/month, gross)",
-          "provider_markup_ct": "Dynamic tariff: provider markup on the spot price (ct/kWh, gross)",
-          "network_fee_ct": "Grid fee / Netzentgelt Arbeitspreis (ct/kWh, gross)",
-          "levies_ct": "Taxes & levies: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, gross)",
-          "vat_percent": "VAT applied to the spot price (%)",
-          "provider_monthly_fee_eur": "Dynamic tariff: provider monthly fee (€/month, gross)",
-          "grid_base_fee_eur_month": "Dynamic tariff: grid base fee + metering (€/month, gross)"
+          "energy_entity": "Grid import energy sensor (e.g. EDL21 total active energy / OBIS 1.8.0)",
+          "price_entity": "Price sensor: final all-in price per kWh",
+          "fixed_price_ct": "Fixed tariff: energy price (ct/kWh, gross)",
+          "fixed_base_fee_eur_month": "Fixed tariff: base fee (€/month, gross)",
+          "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)"
         },
         "data_description": {
           "provider_name": "Only used for display (device and entry name). Entity IDs stay the same.",
-          "price_entity": "Leave empty to use energy-charts.info. 15-min price lists are read from attributes (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …); otherwise the current state is used per slot. Unit is detected from unit_of_measurement (€/kWh, ct/kWh, €/MWh).",
-          "price_is_final": "Off: sensor is the raw (net) spot price -> VAT, markup, grid fee and levies are added. On: the sensor already contains everything (e.g. your provider's own integration, or EPEX Spot total price with surcharges configured) -> used as is.",
-          "provider_markup_ct": "See your provider's price sheet / tariff calculator for your postcode. The default is only an example.",
-          "network_fee_ct": "Depends on your grid operator / postcode; shown in the price breakdown of most dynamic-tariff providers. The default is only an example.",
-          "provider_monthly_fee_eur": "The default is only an example."
+          "price_entity": "Pick a sensor that already includes all surcharges, e.g. your provider's integration (Tibber, …) or EPEX Spot with surcharges configured. 15-min price lists in attributes are used when present, otherwise the current state. Units: €/kWh, ct/kWh, €/MWh.",
+          "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "The price sensor has no recognised unit (€/kWh, ct/kWh, €/MWh) and no price list attributes.",
-      "no_price_source": "Select a price sensor or enable energy-charts.info."
+      "unknown_price_unit": "The price sensor's unit '{unit}' is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
+      "price_entity_required": "Select a price sensor.",
+      "entity_not_found": "Entity not found.",
+      "unknown": "Unexpected error, see the Home Assistant log."
     },
     "abort": {
       "already_configured": "This energy sensor is already configured."
@@ -41,44 +33,33 @@
     "step": {
       "init": {
         "title": "Dynamic Energy Tariff Compare options",
-        "description": "Changed tariff values apply to new consumption only. Use Reset (and Backfill) to recalculate.",
+        "description": "Changed values apply to new consumption only. Use Reset (and Backfill) to recalculate.",
         "data": {
           "provider_name": "Provider name (optional, e.g. Tibber, Rabot Energy, Octopus)",
-          "energy_entity": "Grid import energy sensor (kWh, e.g. EDL21 total active energy / OBIS 1.8.0)",
-          "price_entity": "Price sensor (optional: EPEX Spot, Nord Pool, provider integration, …)",
-          "price_is_final": "Price sensor already is the final all-in price (no VAT/surcharges added)",
-          "use_energy_charts": "Fetch DE-LU spot prices from energy-charts.info if no price sensor is selected",
-          "fixed_price_ct": "Current fixed tariff: energy price (ct/kWh, gross)",
-          "fixed_base_fee_eur_month": "Current fixed tariff: base fee (€/month, gross)",
-          "provider_markup_ct": "Dynamic tariff: provider markup on the spot price (ct/kWh, gross)",
-          "network_fee_ct": "Grid fee / Netzentgelt Arbeitspreis (ct/kWh, gross)",
-          "levies_ct": "Taxes & levies: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, gross)",
-          "vat_percent": "VAT applied to the spot price (%)",
-          "provider_monthly_fee_eur": "Dynamic tariff: provider monthly fee (€/month, gross)",
-          "grid_base_fee_eur_month": "Dynamic tariff: grid base fee + metering (€/month, gross)"
+          "energy_entity": "Grid import energy sensor (e.g. EDL21 total active energy / OBIS 1.8.0)",
+          "price_entity": "Price sensor: final all-in price per kWh",
+          "fixed_price_ct": "Fixed tariff: energy price (ct/kWh, gross)",
+          "fixed_base_fee_eur_month": "Fixed tariff: base fee (€/month, gross)",
+          "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)"
         },
         "data_description": {
           "provider_name": "Only used for display (device and entry name). Entity IDs stay the same.",
-          "price_entity": "Leave empty to use energy-charts.info. 15-min price lists are read from attributes (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …); otherwise the current state is used per slot. Unit is detected from unit_of_measurement (€/kWh, ct/kWh, €/MWh).",
-          "price_is_final": "Off: sensor is the raw (net) spot price -> VAT, markup, grid fee and levies are added. On: the sensor already contains everything (e.g. your provider's own integration, or EPEX Spot total price with surcharges configured) -> used as is.",
-          "provider_markup_ct": "See your provider's price sheet / tariff calculator for your postcode. The default is only an example.",
-          "network_fee_ct": "Depends on your grid operator / postcode; shown in the price breakdown of most dynamic-tariff providers. The default is only an example.",
-          "provider_monthly_fee_eur": "The default is only an example."
+          "price_entity": "Pick a sensor that already includes all surcharges, e.g. your provider's integration (Tibber, …) or EPEX Spot with surcharges configured. 15-min price lists in attributes are used when present, otherwise the current state. Units: €/kWh, ct/kWh, €/MWh.",
+          "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "The price sensor has no recognised unit (€/kWh, ct/kWh, €/MWh) and no price list attributes.",
-      "no_price_source": "Select a price sensor or enable energy-charts.info."
+      "unknown_price_unit": "The price sensor's unit '{unit}' is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
+      "price_entity_required": "Select a price sensor.",
+      "entity_not_found": "Entity not found.",
+      "unknown": "Unexpected error, see the Home Assistant log."
     }
   },
   "entity": {
     "sensor": {
-      "current_spot_price": {
-        "name": "Current price (source)"
-      },
       "current_dynamic_price": {
-        "name": "Current dynamic price (effective)"
+        "name": "Current dynamic price"
       },
       "dynamic_energy_cost": {
         "name": "Dynamic tariff energy cost"
@@ -123,7 +104,7 @@
   "services": {
     "backfill": {
       "name": "Backfill from history",
-      "description": "Calculates costs for the period before tracking started from recorder statistics (5-min short-term stats where available, else hourly).",
+      "description": "Calculates costs for the period before tracking started from recorder data: consumption from statistics, prices from the price sensor's recorded history (states, else statistics).",
       "fields": {
         "entry_id": {
           "name": "Entry",

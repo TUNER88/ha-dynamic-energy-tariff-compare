@@ -18,7 +18,6 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from . import DynamicEnergyTariffCompareConfigEntry
-from . import calc
 from .entity import DynamicEnergyTariffCompareEntity, reserve_entity_ids
 from .manager import DynamicEnergyTariffCompareManager
 
@@ -38,41 +37,18 @@ def _r(value: float | None, nd: int = 4) -> float | None:
     return None if value is None else round(value, nd)
 
 
-def _current_source(m: DynamicEnergyTariffCompareManager) -> float | None:
+def _current_price(m: DynamicEnergyTariffCompareManager) -> float | None:
     p = m.current_slot_price()
-    return None if p is None else round(p[0], 3)
+    return None if p is None else round(p, 3)
 
 
-def _current_effective(m: DynamicEnergyTariffCompareManager) -> float | None:
-    p = m.current_slot_price()
-    return None if p is None else round(calc.effective_price_ct(p[0], m.params, p[1]), 3)
-
-
-def _source_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
-    p = m.current_slot_price()
+def _price_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
     return {
         "source": m.price_source,
-        "price_is_final": m.params.price_is_final,
         "price_entity": m.price_entity,
         "last_error": m.last_price_error,
-        "last_energy_charts_fetch": m.last_price_fetch.isoformat() if m.last_price_fetch else None,
-        "current_slot_is_final": None if p is None else p[1],
-        **m.price_list(effective=False),
-    }
-
-
-def _effective_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
-    p = m.params
-    return {
-        "formula": "final price as delivered"
-        if p.price_is_final
-        else "spot * (1 + VAT) + markup + network fee + levies",
-        "vat_percent": p.vat_percent,
-        "provider_markup_ct": p.provider_markup_ct,
-        "network_fee_ct": p.network_fee_ct,
-        "levies_ct": p.levies_ct,
-        "fixed_price_ct": p.fixed_price_ct,
-        **m.price_list(effective=True),
+        "fixed_price_ct": m.params.fixed_price_ct,
+        **m.price_list(),
     }
 
 
@@ -96,29 +72,14 @@ def _period_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
     }
 
 
-def _avg_spot(m: DynamicEnergyTariffCompareManager) -> float | None:
-    t = m.acc.totals
-    if t.priced_energy_kwh <= 0 or m.params.price_is_final:
-        return None
-    return round(t.spot_weighted_ct_kwh_sum / t.priced_energy_kwh, 3)
-
-
 SENSORS: tuple[TCSensorDescription, ...] = (
-    TCSensorDescription(
-        key="current_spot_price",
-        native_unit_of_measurement=CT_KWH,
-        state_class=SensorStateClass.MEASUREMENT,
-        suggested_display_precision=2,
-        value_fn=_current_source,
-        attr_fn=_source_attrs,
-    ),
     TCSensorDescription(
         key="current_dynamic_price",
         native_unit_of_measurement=CT_KWH,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
-        value_fn=_current_effective,
-        attr_fn=_effective_attrs,
+        value_fn=_current_price,
+        attr_fn=_price_attrs,
     ),
     TCSensorDescription(
         key="dynamic_energy_cost",
@@ -176,7 +137,6 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
         value_fn=lambda m: _r(m.acc.avg_dynamic_price_ct(), 3),
-        attr_fn=lambda m: {"consumption_weighted_spot_ct": _avg_spot(m)},
     ),
     TCSensorDescription(
         key="avg_dynamic_price_incl_fees",

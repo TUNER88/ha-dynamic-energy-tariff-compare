@@ -81,27 +81,31 @@ def split_interval(start_ts: float, end_ts: float, amount: float) -> list[tuple[
 # ---------------------------------------------------------------------------
 
 
-def price_factor_to_ct_kwh(unit: str | None) -> float | None:
-    """Return factor that converts a price in `unit` to ct/kWh.
+_CENT_TOKENS = ("ct", "c", "¢", "cent", "cents", "eurct", "ceur", "c€", "€ct", "eurocent", "eurocents")
+_EUR_TOKENS = ("eur", "€", "euro", "euros", "e")
+_ENERGY_FACTORS = {"kwh": 1.0, "mwh": 1 / 1000.0, "wh": 1000.0}
 
-    Supports EUR/kWh, €/kWh, ct/kWh, Cent/kWh, EUR/MWh, €/MWh, ct/Wh, EUR/Wh.
-    Returns None if the unit is unknown/empty.
+
+def price_factor_to_ct_kwh(unit: Any) -> float | None:
+    """Return the factor that converts a price in `unit` to ct/kWh, or None.
+
+    Accepts e.g. "EUR/kWh", "€/kWh", "EUR / kWh", "ct/kWh", "Cent/kWh",
+    "c/kWh", "€ct/kWh", "EUR/MWh", "€/MWh" and Wh variants. Never raises.
     """
-    if not unit:
+    if not isinstance(unit, str):
         return None
-    u = unit.strip().lower().replace(" ", "").replace("€", "eur")
-    u = u.replace("cent", "ct").replace("cts", "ct").replace("euro", "eur")
-    if "/" not in u:
+    u = "".join(unit.split()).lower()
+    if u.count("/") != 1:
         return None
-    money, energy = u.split("/", 1)
-    if money in ("ct", "c", "¢"):
+    money, energy = u.split("/")
+    energy_factor = _ENERGY_FACTORS.get(energy)
+    if energy_factor is None:
+        return None
+    if money in _CENT_TOKENS:
         m = 1.0
-    elif money in ("eur", "e"):
+    elif money in _EUR_TOKENS:
         m = 100.0
     else:
-        return None
-    energy_factor = {"kwh": 1.0, "mwh": 1 / 1000.0, "wh": 1000.0}.get(energy)
-    if energy_factor is None:
         return None
     return m * energy_factor
 
@@ -161,7 +165,6 @@ def parse_price_attributes(attrs: dict[str, Any] | None, sensor_unit: str | None
       * EPEX Spot: data=[{start_time, end_time, price_per_kwh|price_ct_per_kwh|price_eur_per_mwh}]
       * Nord Pool custom: raw_today/raw_tomorrow=[{start, end, value}]
       * Tibber-like: today/tomorrow=[{startsAt, total}]
-      * energy-charts style: unix_seconds=[...], price=[...] (unit attr or EUR/MWh)
     Hourly entries are expanded to four 15-minute slots.
     """
     out: dict[int, float] = {}
@@ -178,15 +181,6 @@ def parse_price_attributes(attrs: dict[str, Any] | None, sensor_unit: str | None
         energy_unit = str(attrs.get("unit", "kWh"))
         base = "ct" if attrs.get("price_in_cents") else "EUR"
         sensor_factor = price_factor_to_ct_kwh(f"{base}/{energy_unit}")
-
-    # energy-charts style parallel arrays
-    if isinstance(attrs.get("unix_seconds"), list) and isinstance(attrs.get("price"), list):
-        factor = price_factor_to_ct_kwh(str(attrs.get("unit") or "EUR/MWh")) or 0.1
-        for ts, p in zip(attrs["unix_seconds"], attrs["price"], strict=False):
-            if p is None:
-                continue
-            out[slot_start(float(ts))] = float(p) * factor
-        return out
 
     for key in _LIST_ATTRS:
         items = attrs.get(key)
@@ -216,27 +210,6 @@ def parse_price_attributes(attrs: dict[str, Any] | None, sensor_unit: str | None
     return out
 
 
-def parse_energy_charts(payload: dict[str, Any]) -> dict[int, float]:
-    """Parse api.energy-charts.info /price payload into {slot: ct/kWh}."""
-    out: dict[int, float] = {}
-    secs = payload.get("unix_seconds") or []
-    prices = payload.get("price") or []
-    factor = price_factor_to_ct_kwh(str(payload.get("unit") or "EUR/MWh").replace(" ", "")) or 0.1
-    # Resolution is derived per point (15 min since 2025-10-01, 60 min before)
-    for i, (ts, p) in enumerate(zip(secs, prices, strict=False)):
-        if p is None:
-            continue
-        if i + 1 < len(secs):
-            step = secs[i + 1] - ts
-        elif i > 0:
-            step = ts - secs[i - 1]
-        else:
-            step = SLOT_SECONDS
-        step = min(max(step, SLOT_SECONDS), 3600)
-        _expand(float(ts), float(ts) + step, float(p) * factor, out)
-    return out
-
-
 # ---------------------------------------------------------------------------
 # Tariff
 # ---------------------------------------------------------------------------
@@ -244,34 +217,15 @@ def parse_energy_charts(payload: dict[str, Any]) -> dict[int, float]:
 
 @dataclass
 class TariffParams:
-    """Tariff parameters. All ct/kWh values are GROSS (incl. 19 % VAT) unless noted."""
+    """Tariff parameters (gross).
 
-    fixed_price_ct: float = 32.0  # current tariff Arbeitspreis, gross
-    fixed_base_fee_eur_month: float = 12.0  # current tariff Grundpreis, gross
-    provider_markup_ct: float = 2.15  # provider markup on the spot price, gross (example value)
-    network_fee_ct: float = 9.0  # Netzentgelt Arbeitspreis (+ Messstelle var.), gross
-    levies_ct: float = 7.5  # Stromsteuer + Konzessionsabgabe + Umlagen, gross
-    vat_percent: float = 19.0  # applied to the raw spot price
-    provider_monthly_fee_eur: float = 5.99  # gross
-    grid_base_fee_eur_month: float = 8.0  # Netz-Grundpreis + Messstellenbetrieb, gross
-    price_is_final: bool = False  # price source already all-in (no surcharges)
-
-
-def effective_price_ct(spot_ct: float, params: TariffParams, is_final: bool | None = None) -> float:
-    """Effective dynamic-tariff energy price in ct/kWh gross for one slot.
-
-    raw:   spot_net * (1 + VAT) + markup + network fee + levies   (all add-ons gross)
-    final: price as delivered by the source
+    The dynamic price comes from the selected price sensor and is always taken
+    as the final all-in price per kWh (incl. grid fees, levies, VAT, markup).
     """
-    final = params.price_is_final if is_final is None else is_final
-    if final:
-        return spot_ct
-    return (
-        spot_ct * (1 + params.vat_percent / 100.0)
-        + params.provider_markup_ct
-        + params.network_fee_ct
-        + params.levies_ct
-    )
+
+    fixed_price_ct: float = 32.0  # fixed tariff energy price
+    fixed_base_fee_eur_month: float = 12.0  # fixed tariff base fee
+    provider_monthly_fee_eur: float = 5.99  # dynamic tariff monthly fee
 
 
 # ---------------------------------------------------------------------------
@@ -287,7 +241,6 @@ class Totals:
     priced_energy_kwh: float = 0.0
     dynamic_energy_cost_eur: float = 0.0
     fixed_energy_cost_eur: float = 0.0
-    spot_weighted_ct_kwh_sum: float = 0.0  # sum(kWh * spot ct) for priced energy
     tracking_start: float | None = None  # POSIX seconds; earliest covered time
     live_start: float | None = None  # when live tracking began (backfill end)
     last_value: float | None = None  # last meter reading (kWh)
@@ -325,7 +278,7 @@ class Accumulator:
     ) -> float:
         """Process a new meter reading. Returns the kWh attributed (0 if none).
 
-        price_lookup(slot_start) -> (ct_kwh, is_final) | None
+        price_lookup(slot_start) -> ct/kWh (final all-in price) | None
         """
         t = self.totals
         if t.tracking_start is None:
@@ -359,16 +312,12 @@ class Accumulator:
                 t.pending.append([slot, kwh])
 
     def _price(self, slot: int, kwh: float, price_lookup) -> bool:
-        res = price_lookup(slot)
-        if res is None:
+        ct = price_lookup(slot)
+        if ct is None:
             return False
-        ct, is_final = res
-        eff = effective_price_ct(ct, self.params, is_final)
         t = self.totals
         t.priced_energy_kwh += kwh
-        t.dynamic_energy_cost_eur += kwh * eff / 100.0
-        if not is_final:
-            t.spot_weighted_ct_kwh_sum += kwh * ct
+        t.dynamic_energy_cost_eur += kwh * float(ct) / 100.0
         return True
 
     def resolve_pending(self, price_lookup, now_ts: float | None = None) -> int:
@@ -404,9 +353,7 @@ class Accumulator:
     def dynamic_total_cost(self, now_ts: float) -> float:
         p = self.params
         months = self.elapsed_months(now_ts)
-        return self.totals.dynamic_energy_cost_eur + months * (
-            p.provider_monthly_fee_eur + p.grid_base_fee_eur_month
-        )
+        return self.totals.dynamic_energy_cost_eur + months * p.provider_monthly_fee_eur
 
     def fixed_total_cost(self, now_ts: float) -> float:
         months = self.elapsed_months(now_ts)
@@ -509,7 +456,6 @@ def merge_backfill(live: Totals, back: Totals, backfill_start: float) -> None:
     live.priced_energy_kwh += back.priced_energy_kwh
     live.dynamic_energy_cost_eur += back.dynamic_energy_cost_eur
     live.fixed_energy_cost_eur += back.fixed_energy_cost_eur
-    live.spot_weighted_ct_kwh_sum += back.spot_weighted_ct_kwh_sum
     live.backfilled_kwh += back.energy_kwh
     if live.tracking_start is None or backfill_start < live.tracking_start:
         live.tracking_start = backfill_start
