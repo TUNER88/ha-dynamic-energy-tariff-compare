@@ -47,6 +47,44 @@ views:
         columns: 3
         square: false
         cards:
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_24h
+            name: Ø dynamic 24 h
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_30d
+            name: Ø dynamic 30 days
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_365d
+            name: Ø dynamic 365 days
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_savings_24h
+            name: Saved 24 h
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_savings_30d
+            name: Saved 30 days
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_savings_365d
+            name: Saved 365 days
+
+      - type: markdown
+        title: Rolling windows
+        content: |
+          {%- macro v(e, k) %}{% set x = state_attr(e, k) %}{{ '–' if x is none else x }}{% endmacro %}
+          {%- set w = ['sensor.dynamic_energy_tariff_compare_avg_dynamic_price_24h', 'sensor.dynamic_energy_tariff_compare_avg_dynamic_price_30d', 'sensor.dynamic_energy_tariff_compare_avg_dynamic_price_365d'] %}
+          | | 24 h | 30 days | 365 days |
+          |:--|--:|--:|--:|
+          | Consumption (kWh) |{% for e in w %} {{ v(e, 'consumption_kwh') }} |{% endfor %}
+          | Ø dynamic energy (ct/kWh) |{% for e in w %} {{ v(e, 'avg_dynamic_price_ct') }} |{% endfor %}
+          | Ø dynamic incl. fees (ct/kWh) |{% for e in w %} {{ v(e, 'avg_dynamic_price_incl_fees_ct') }} |{% endfor %}
+          | Ø fixed incl. fees (ct/kWh) |{% for e in w %} {{ v(e, 'avg_fixed_price_incl_fees_ct') }} |{% endfor %}
+          | Dynamic cost (€) |{% for e in w %} {{ v(e, 'dynamic_total_cost_eur') }} |{% endfor %}
+          | Fixed cost (€) |{% for e in w %} {{ v(e, 'fixed_total_cost_eur') }} |{% endfor %}
+          | **Savings (€)** |{% for e in w %} **{{ v(e, 'savings_eur') }}** |{% endfor %}
+
+      - type: grid
+        columns: 3
+        square: false
+        cards:
           # needs examples/utility_meter.yaml
           - type: tile
             entity: sensor.dynamic_energy_tariff_compare_dynamic_monthly

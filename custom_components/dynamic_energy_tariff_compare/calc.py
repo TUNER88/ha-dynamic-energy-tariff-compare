@@ -491,12 +491,160 @@ class Totals:
 MAX_PENDING_AGE = 3 * 86400
 
 
+# ---------------------------------------------------------------------------
+# Rolling windows
+# ---------------------------------------------------------------------------
+
+WINDOWS: dict[str, int] = {"24h": 86400, "30d": 30 * 86400, "365d": 365 * 86400}
+HISTORY_KEEP_SECONDS = 366 * 86400
+HOUR = 3600
+DAY = 86400
+# 15-min rows older than 2 days become hourly rows, hourly rows older than
+# 35 days become daily (UTC) rows. Only complete hours/days are compacted.
+COMPACT_RULES = ((SLOT_SECONDS, HOUR, 2 * DAY), (HOUR, DAY, 35 * DAY))
+# row = [kWh, priced kWh, dynamic energy cost EUR, fixed energy cost EUR of the priced kWh]
+ROW_LEN = 4
+
+
+class SlotHistory:
+    """Consumption and energy cost per time bucket for rolling windows."""
+
+    def __init__(self) -> None:
+        self.rows: dict[int, dict[int, list[float]]] = {SLOT_SECONDS: {}, HOUR: {}, DAY: {}}
+
+    def _row(self, ts: float) -> list[float]:
+        return self.rows[SLOT_SECONDS].setdefault(slot_start(ts), [0.0] * ROW_LEN)
+
+    def add_energy(self, slot: float, kwh: float) -> None:
+        self._row(slot)[0] += kwh
+
+    def add_priced(self, slot: float, kwh: float, dynamic_eur: float, fixed_eur: float) -> None:
+        row = self._row(slot)
+        row[1] += kwh
+        row[2] += dynamic_eur
+        row[3] += fixed_eur
+
+    def merge(self, other: "SlotHistory") -> None:
+        for res, rows in other.rows.items():
+            mine = self.rows[res]
+            for start, row in rows.items():
+                cur = mine.setdefault(start, [0.0] * ROW_LEN)
+                for i in range(ROW_LEN):
+                    cur[i] += row[i]
+
+    def clear(self) -> None:
+        for rows in self.rows.values():
+            rows.clear()
+
+    def __len__(self) -> int:
+        return sum(len(r) for r in self.rows.values())
+
+    def compact(self, now_ts: float) -> None:
+        """Merge old rows into coarser ones and drop rows beyond the keep period."""
+        for src, dst, age in COMPACT_RULES:
+            cutoff = now_ts - age
+            rows, target = self.rows[src], self.rows[dst]
+            for start in [k for k in rows if (k - k % dst) + dst <= cutoff]:
+                row = rows.pop(start)
+                cur = target.setdefault(start - start % dst, [0.0] * ROW_LEN)
+                for i in range(ROW_LEN):
+                    cur[i] += row[i]
+        limit = now_ts - HISTORY_KEEP_SECONDS
+        for res, rows in self.rows.items():
+            for start in [k for k in rows if k + res <= limit]:
+                del rows[start]
+
+    def window(self, start_ts: float, end_ts: float) -> list[float]:
+        """Sums over [start, end). Rows crossing a boundary count proportionally."""
+        out = [0.0] * ROW_LEN
+        for res, rows in self.rows.items():
+            for start, row in rows.items():
+                lo, hi = max(start, start_ts), min(start + res, end_ts)
+                if hi <= lo:
+                    continue
+                frac = (hi - lo) / res
+                for i in range(ROW_LEN):
+                    out[i] += row[i] * frac
+        return out
+
+    def to_dict(self) -> dict[str, list[list[float]]]:
+        return {
+            str(res): [[start, *(round(v, 6) for v in row)] for start, row in sorted(rows.items())]
+            for res, rows in self.rows.items()
+        }
+
+    @classmethod
+    def from_dict(cls, data: Any) -> "SlotHistory":
+        hist = cls()
+        if not isinstance(data, dict):
+            return hist
+        for res in hist.rows:
+            for item in data.get(str(res)) or []:
+                try:
+                    start = int(item[0])
+                    row = [float(v) for v in item[1 : ROW_LEN + 1]]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                if len(row) == ROW_LEN and start % res == 0:
+                    hist.rows[res][start] = row
+        return hist
+
+
+@dataclass
+class WindowStats:
+    """Rolling-window figures (gross)."""
+
+    seconds: int
+    start_ts: float
+    covered_from: float | None  # max(window start, tracking start)
+    energy_kwh: float  # all consumption in the window
+    priced_kwh: float  # consumption with a known dynamic price (compared on both sides)
+    dynamic_energy_cost_eur: float
+    fixed_energy_cost_eur: float
+    dynamic_fees_eur: float
+    fixed_fees_eur: float
+
+    @property
+    def dynamic_total_cost_eur(self) -> float:
+        return self.dynamic_energy_cost_eur + self.dynamic_fees_eur
+
+    @property
+    def fixed_total_cost_eur(self) -> float:
+        return self.fixed_energy_cost_eur + self.fixed_fees_eur
+
+    @property
+    def savings_eur(self) -> float:
+        return self.fixed_total_cost_eur - self.dynamic_total_cost_eur
+
+    def _ct(self, eur: float) -> float | None:
+        return eur / self.priced_kwh * 100.0 if self.priced_kwh > 0 else None
+
+    @property
+    def avg_dynamic_price_ct(self) -> float | None:
+        return self._ct(self.dynamic_energy_cost_eur)
+
+    @property
+    def avg_dynamic_price_incl_fees_ct(self) -> float | None:
+        return self._ct(self.dynamic_total_cost_eur)
+
+    @property
+    def avg_fixed_price_ct(self) -> float | None:
+        return self._ct(self.fixed_energy_cost_eur)
+
+    @property
+    def avg_fixed_price_incl_fees_ct(self) -> float | None:
+        return self._ct(self.fixed_total_cost_eur)
+
+
 class Accumulator:
     """Attributes meter deltas to slots and accumulates costs."""
 
-    def __init__(self, params: TariffParams, totals: Totals | None = None) -> None:
+    def __init__(
+        self, params: TariffParams, totals: Totals | None = None, history: SlotHistory | None = None
+    ) -> None:
         self.params = params
         self.totals = totals or Totals()
+        self.history = history if history is not None else SlotHistory()
 
     # -- meter handling ---------------------------------------------------
     def process_reading(
@@ -537,6 +685,7 @@ class Accumulator:
                 continue
             t.energy_kwh += kwh
             t.fixed_energy_cost_eur += kwh * self.params.fixed_price_ct / 100.0
+            self.history.add_energy(slot, kwh)
             if not self._price(slot, kwh, price_lookup):
                 t.pending.append([slot, kwh])
 
@@ -547,6 +696,9 @@ class Accumulator:
         t = self.totals
         t.priced_energy_kwh += kwh
         t.dynamic_energy_cost_eur += kwh * float(ct) / 100.0
+        self.history.add_priced(
+            slot, kwh, kwh * float(ct) / 100.0, kwh * self.params.fixed_price_ct / 100.0
+        )
         return True
 
     def resolve_pending(self, price_lookup, now_ts: float | None = None) -> int:
@@ -596,6 +748,25 @@ class Accumulator:
         """
         pending_fixed = self.pending_kwh * self.params.fixed_price_ct / 100.0
         return (self.fixed_total_cost(now_ts) - pending_fixed) - self.dynamic_total_cost(now_ts)
+
+    def window_stats(self, seconds: int, now_ts: float) -> WindowStats:
+        """Rolling window ending now. Fees are prorated over the tracked part of the window."""
+        start = now_ts - seconds
+        kwh, priced, dyn, fixed = self.history.window(start, now_ts)
+        tracking = self.totals.tracking_start
+        covered_from = None if tracking is None else max(start, min(tracking, now_ts))
+        months = 0.0 if covered_from is None else (now_ts - covered_from) / SECONDS_PER_MONTH
+        return WindowStats(
+            seconds=seconds,
+            start_ts=start,
+            covered_from=covered_from,
+            energy_kwh=kwh,
+            priced_kwh=priced,
+            dynamic_energy_cost_eur=dyn,
+            fixed_energy_cost_eur=fixed,
+            dynamic_fees_eur=months * self.params.provider_monthly_fee_eur,
+            fixed_fees_eur=months * self.params.fixed_base_fee_eur_month,
+        )
 
     def avg_dynamic_price_ct(self) -> float | None:
         t = self.totals
@@ -659,13 +830,14 @@ def backfill_energy(
     buckets: list[tuple[float, float, float]],
     price_lookup,
     params: TariffParams,
+    history: SlotHistory | None = None,
 ) -> Totals:
     """Compute totals for historic energy buckets [(start_ts, end_ts, kWh)].
 
     Buckets are split proportionally into 15-min slots. Energy without price
     goes to pending (and is reported, not priced).
     """
-    acc = Accumulator(params, Totals())
+    acc = Accumulator(params, Totals(), history)
     for start, end, kwh in buckets:
         if kwh is None or kwh <= 0:
             continue

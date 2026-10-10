@@ -260,7 +260,8 @@ async def async_run_backfill(mgr: DynamicEnergyTariffCompareManager, days: int) 
             **price_info,
         }
 
-    back = calc.backfill_energy(buckets, prices.get, mgr.params)
+    history = calc.SlotHistory()
+    back = calc.backfill_energy(buckets, prices.get, mgr.params, history)
     unpriced = sum(k for _, k in back.pending)
     if back.priced_energy_kwh <= 0:
         return {
@@ -276,6 +277,8 @@ async def async_run_backfill(mgr: DynamicEnergyTariffCompareManager, days: int) 
     priced_slots = [s for b in buckets for s, _ in calc.split_interval(b[0], b[1], b[2] or 1.0) if s in prices]
     covered_from = min(priced_slots) if priced_slots else first
     calc.merge_backfill(totals, back, covered_from)
+    mgr.acc.history.merge(history)  # rolling windows (24 h / 30 d / 365 d)
+    mgr.acc.history.compact(dt_util.utcnow().timestamp())
     result = {
         "status": "ok" if unpriced <= 0 else "partial",
         "from": dt_util.as_local(dt_util.utc_from_timestamp(covered_from)).isoformat(),

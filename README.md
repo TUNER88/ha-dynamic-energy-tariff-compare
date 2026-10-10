@@ -220,8 +220,39 @@ Entity IDs are fixed (also when you set a provider name):
 | `sensor.dynamic_energy_tariff_compare_avg_dynamic_price_incl_fees` | ct/kWh | measurement | |
 | `sensor.dynamic_energy_tariff_compare_avg_fixed_price_incl_fees` | ct/kWh | measurement | |
 | `sensor.dynamic_energy_tariff_compare_pending_energy` | kWh | diagnostic | consumption still waiting for a price |
+| `sensor.dynamic_energy_tariff_compare_avg_dynamic_price_24h` | ct/kWh | measurement | consumption-weighted Ø dynamic energy price, **last 24 h** (rolling); window figures as attributes, see [rolling windows](#rolling-windows-last-24-h-30-days-365-days) |
+| `sensor.dynamic_energy_tariff_compare_avg_dynamic_price_30d` | ct/kWh | measurement | same, **last 30 days** |
+| `sensor.dynamic_energy_tariff_compare_avg_dynamic_price_365d` | ct/kWh | measurement | same, **last 365 days** |
+| `sensor.dynamic_energy_tariff_compare_savings_24h` | EUR | monetary | fixed − dynamic total cost incl. prorated fees, **last 24 h**; same attributes |
+| `sensor.dynamic_energy_tariff_compare_savings_30d` | EUR | monetary | same, **last 30 days** |
+| `sensor.dynamic_energy_tariff_compare_savings_365d` | EUR | monetary | same, **last 365 days** |
 | `button.dynamic_energy_tariff_compare_backfill` | | config | backfill 30 days |
 | `button.dynamic_energy_tariff_compare_reset` | | config | reset all totals |
+
+### Rolling windows (last 24 h, 30 days, 365 days)
+
+The `avg_dynamic_price_<window>` and `savings_<window>` sensors look back from *now*. They
+update every 15 minutes even when the meter doesn't report. Both carry the same attributes:
+
+| Attribute | Meaning |
+|---|---|
+| `window`, `window_start` | `24h` / `30d` / `365d` and the window's start (local time) |
+| `covered_from` | later of window start and tracking start: fees are prorated from here |
+| `consumption_kwh` | consumption with a known dynamic price (compared on both sides) |
+| `unpriced_kwh` | consumption without a price (pending or skipped), not compared |
+| `avg_dynamic_price_ct`, `avg_dynamic_price_incl_fees_ct` | Ø dynamic energy price, and incl. the prorated monthly fee |
+| `avg_fixed_price_ct`, `avg_fixed_price_incl_fees_ct` | Ø fixed energy price, and incl. the prorated base fee |
+| `dynamic_energy_cost_eur`, `fixed_energy_cost_eur` | energy cost in the window |
+| `dynamic_fees_eur`, `fixed_fees_eur` | monthly fees × tracked part of the window / 30.44 days |
+| `dynamic_total_cost_eur`, `fixed_total_cost_eur`, `savings_eur` | totals and their difference |
+
+* Consumption and energy cost are stored per 15-minute slot (in `.storage`, restart-safe).
+  To keep the file small, slots older than 2 days are merged into hours and hours older than
+  35 days into days (UTC). Data older than 366 days is dropped. The 365-day window's start
+  therefore falls into a daily bucket that is counted proportionally.
+* Backfill fills the windows too; *Reset* clears them.
+* The fixed energy cost uses the fixed price that was configured when the energy was priced
+  (backfill: the current one).
 
 ## Backfill
 
@@ -295,6 +326,51 @@ entities:
     name: Dynamic
   - entity: sensor.dynamic_energy_tariff_compare_fixed_total_cost
     name: Fixed
+```
+
+Rolling windows (last 24 h, 30 days, 365 days): average prices and savings, plus a table
+built from the attributes of the `avg_dynamic_price_*` sensors.
+
+```yaml
+type: grid
+columns: 3
+square: false
+cards:
+  - type: tile
+    entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_24h
+    name: Ø dynamic 24 h
+  - type: tile
+    entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_30d
+    name: Ø dynamic 30 days
+  - type: tile
+    entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_365d
+    name: Ø dynamic 365 days
+  - type: tile
+    entity: sensor.dynamic_energy_tariff_compare_savings_24h
+    name: Saved 24 h
+  - type: tile
+    entity: sensor.dynamic_energy_tariff_compare_savings_30d
+    name: Saved 30 days
+  - type: tile
+    entity: sensor.dynamic_energy_tariff_compare_savings_365d
+    name: Saved 365 days
+```
+
+```yaml
+type: markdown
+title: Rolling windows
+content: |
+  {%- macro v(e, k) %}{% set x = state_attr(e, k) %}{{ '–' if x is none else x }}{% endmacro %}
+  {%- set w = ['sensor.dynamic_energy_tariff_compare_avg_dynamic_price_24h', 'sensor.dynamic_energy_tariff_compare_avg_dynamic_price_30d', 'sensor.dynamic_energy_tariff_compare_avg_dynamic_price_365d'] %}
+  | | 24 h | 30 days | 365 days |
+  |:--|--:|--:|--:|
+  | Consumption (kWh) |{% for e in w %} {{ v(e, 'consumption_kwh') }} |{% endfor %}
+  | Ø dynamic energy (ct/kWh) |{% for e in w %} {{ v(e, 'avg_dynamic_price_ct') }} |{% endfor %}
+  | Ø dynamic incl. fees (ct/kWh) |{% for e in w %} {{ v(e, 'avg_dynamic_price_incl_fees_ct') }} |{% endfor %}
+  | Ø fixed incl. fees (ct/kWh) |{% for e in w %} {{ v(e, 'avg_fixed_price_incl_fees_ct') }} |{% endfor %}
+  | Dynamic cost (€) |{% for e in w %} {{ v(e, 'dynamic_total_cost_eur') }} |{% endfor %}
+  | Fixed cost (€) |{% for e in w %} {{ v(e, 'fixed_total_cost_eur') }} |{% endfor %}
+  | **Savings (€)** |{% for e in w %} **{{ v(e, 'savings_eur') }}** |{% endfor %}
 ```
 
 ### 2. ApexCharts: today/tomorrow 15-min price vs. fixed price

@@ -104,6 +104,13 @@ async def test_backfill_prices_from_sensor_statistics(
     assert mgr.acc.totals.dynamic_energy_cost_eur == pytest.approx(0.20 + 0.30 + 0.40 + 0.50)
     assert mgr.acc.totals.fixed_energy_cost_eur == pytest.approx(1.20)
     assert mgr.acc.totals.tracking_start <= START.timestamp()
+    # rolling windows are filled by the backfill too
+    for key in ("24h", "30d", "365d"):
+        w = mgr.window_stats(key)
+        assert w.priced_kwh == pytest.approx(4.0)
+        assert w.dynamic_energy_cost_eur == pytest.approx(1.40)
+        assert w.avg_dynamic_price_ct == pytest.approx(35.0)
+        assert w.fixed_energy_cost_eur == pytest.approx(1.20)
 
 
 async def test_backfill_reports_missing_price_history(recorder_mock, hass: HomeAssistant, freezer) -> None:

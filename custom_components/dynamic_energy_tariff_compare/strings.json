@@ -145,6 +145,24 @@
       },
       "pending_energy": {
         "name": "Energy waiting for price"
+      },
+      "avg_dynamic_price_24h": {
+        "name": "Average dynamic energy price (last 24 h)"
+      },
+      "avg_dynamic_price_30d": {
+        "name": "Average dynamic energy price (last 30 days)"
+      },
+      "avg_dynamic_price_365d": {
+        "name": "Average dynamic energy price (last 365 days)"
+      },
+      "savings_24h": {
+        "name": "Savings (last 24 h)"
+      },
+      "savings_30d": {
+        "name": "Savings (last 30 days)"
+      },
+      "savings_365d": {
+        "name": "Savings (last 365 days)"
       }
     },
     "button": {
