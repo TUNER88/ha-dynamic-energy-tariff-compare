@@ -76,7 +76,8 @@ can be changed later via *Configure*, including the sensors.
 |---|---|---|
 | Provider name | Optional, for display only (device / entry name). Entity IDs don't change | – |
 | Grid import energy sensor | `total_increasing` meter, e.g. EDL21 *Positive active energy total* / OBIS 1.8.0. Any `device_class: energy` sensor; the unit (Wh, kWh, MWh, GWh) is converted automatically | – |
-| Price sensor | **Required.** Final all-in price per kWh, see [price data](#recommended-integrations-for-price-data). Units €/kWh, ct/kWh, €/MWh (also `EUR / kWh`, `Cent/kWh`, …) | – |
+| Price sensor | **Required.** Final all-in price per kWh, see [price data](#recommended-integrations-for-price-data) | – |
+| Price unit | *Auto-detect* uses the sensor's `unit_of_measurement` (€/kWh, ct/kWh, €/MWh, also `EUR / kWh`, `Cent/kWh`, …). Without a usable unit the value decides: below 2 → €/kWh, 2–200 → ct/kWh, above 200 → €/MWh (a warning is logged). Select the unit manually if that's wrong | Auto-detect |
 | Fixed tariff energy price | your current Arbeitspreis, ct/kWh gross | 32.00 |
 | Fixed tariff base fee | your current Grundpreis, €/month gross | 12.00 |
 | Dynamic tariff monthly fee | the dynamic provider's base fee, €/month gross. If the grid base fee / metering of the dynamic tariff differs from your fixed tariff, add the difference here | 5.99 |
@@ -117,13 +118,41 @@ quarter hours.
 | Integration | Install | 15-min support | What this integration reads | Use as all-in price? |
 |---|---|---|---|---|
 | [Tibber](https://www.home-assistant.io/integrations/tibber/) (core) | built in | n/a | current state (price of your Tibber contract) | yes, **only if you already have a Tibber account** |
+| [Tibber Pricing DE](https://github.com/cyberjunky/home-assistant-tibber_pricing_de) (`cyberjunky/home-assistant-tibber_pricing_de`) | HACS (custom repository) | no, **hourly** | attribute `prices` = today's hours `[{timestamp, price}]` of the *Current Price* sensor | yes: Tibber's per-kWh price for your postcode incl. energy, taxes/levies, grid fee and VAT. No Tibber account needed. See [notes](#tibber-pricing-de-no-account) |
 | [EPEX Spot](https://github.com/mampfes/ha_epex_spot) (`mampfes/ha_epex_spot`) | HACS | yes, selectable 15 or 60 min since v4.0.0 | attribute `data` = `[{start_time, end_time, price_per_kwh}]` | use the *Total price* sensor with your surcharges and tax configured in EPEX Spot |
 | [Nord Pool](https://github.com/custom-components/nordpool) (`custom-components/nordpool`) | HACS | quarter-hour price updates since v0.0.18 | attributes `raw_today` / `raw_tomorrow` | only with your additional costs configured (`additional_costs` template) |
 | [Nord Pool](https://www.home-assistant.io/integrations/nordpool/) (core) | built in | yes, the docs say it switches to the 15-min MTU automatically | current state only | no, spot price without VAT and other costs; wrap it in a template sensor that adds them |
 
+### Tibber Pricing DE (no account)
+
+Pick **`sensor.<name>_current_price`** (*Tibber Pricing DE Current Price*). It is the only
+entity with the `prices` list; the other entities (next hour, highest/lowest today and their
+hours) are not needed. Notes from its source code (v1.0.0) and the Tibber API it reads:
+
+* `price` = Tibber's `priceIncludingVat` = energy (`power`, the spot price without markup) +
+  `taxes` + `grid` incl. VAT, so it is the final per-kWh price. Monthly fees are separate.
+* The entity has **no unit** (it isn't a sensor entity with a unit); the value is €/kWh. Auto-detect
+  handles this, or set *Price unit* to €/kWh.
+* The list is hourly, with local times and without an offset. Each hour is applied to its four quarter hours.
+  Only today is included (no tomorrow).
+* Its state is looked up for *now + 1 h* in the code, so it shows the **next** hour's price.
+  This integration uses the `prices` list instead, which has the correct hours (checked
+  against EPEX day-ahead prices).
+* It has no `state_class`, so Home Assistant keeps no long-term statistics for it. Backfill can
+  only use the recorded states (default 10 days).
+* Its `monthly` attribute lists Tibber's monthly fees for your postcode (Tibber service fee,
+  meter operator, grid base price). If your fixed tariff's base fee covers the same items,
+  enter the `monthly` total (`priceIncludingVat`) as *dynamic tariff monthly fee*.
+
+### Other sensors
+
 Any other sensor also works, e.g. a template sensor that adds your surcharges to a spot price.
-Its current state is used for each slot, and the unit is detected from `unit_of_measurement`
-(€/kWh, ct/kWh, €/MWh). Hourly lists are expanded to four quarter hours.
+Price lists are found in any attribute that holds a list of entries with a time key (`start`,
+`start_time`, `startsAt`, `from`, `time`, `timestamp`, `date` + `hour`, …) and a price key
+(`price`, `total`, `value`, `price_per_kwh`, `priceIncludingVat`, …). Times without an offset are
+read as local time. Entries without an end last until the next entry (max. 1 h), so hourly
+lists are expanded to four quarter hours. Without a list, the sensor's current state is used
+for each slot.
 
 ## Entities
 

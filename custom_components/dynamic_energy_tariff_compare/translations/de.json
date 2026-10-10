@@ -8,6 +8,7 @@
           "provider_name": "Anbietername (optional, z. B. Tibber, Rabot Energy, Octopus)",
           "energy_entity": "Netzbezugs-Energiesensor (z. B. EDL21 Wirkenergie gesamt / OBIS 1.8.0)",
           "price_entity": "Preissensor: Endpreis pro kWh (alles inklusive)",
+          "price_unit": "Preiseinheit",
           "fixed_price_ct": "Festpreistarif: Arbeitspreis (ct/kWh, brutto)",
           "fixed_base_fee_eur_month": "Festpreistarif: Grundpreis (€/Monat, brutto)",
           "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)"
@@ -15,12 +16,13 @@
         "data_description": {
           "provider_name": "Nur für die Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
           "price_entity": "Wähle einen Sensor, der bereits alle Aufschläge enthält, z. B. die Integration deines Anbieters (Tibber, …) oder EPEX Spot mit konfigurierten Aufschlägen. 15-Minuten-Preislisten in Attributen werden genutzt, sonst der aktuelle Zustand. Einheiten: €/kWh, ct/kWh, €/MWh.",
+          "price_unit": "Automatisch nutzt die Einheit des Sensors; hat er keine, entscheidet der Wert (unter 2 → €/kWh, 2–200 → ct/kWh, über 200 → €/MWh). Einheit auswählen, falls die Erkennung falsch ist.",
           "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "Die Einheit \"{unit}\" des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
+      "price_not_numeric": "Der Zustand \"{state}\" des Preissensors ist keine Zahl und es gibt keine Preisliste. Sensor prüfen oder die Preiseinheit manuell auswählen, um trotzdem zu speichern.",
       "price_entity_required": "Bitte einen Preissensor auswählen.",
       "entity_not_found": "Entität nicht gefunden.",
       "unknown": "Unerwarteter Fehler, siehe Home-Assistant-Protokoll."
@@ -38,6 +40,7 @@
           "provider_name": "Anbietername (optional, z. B. Tibber, Rabot Energy, Octopus)",
           "energy_entity": "Netzbezugs-Energiesensor (z. B. EDL21 Wirkenergie gesamt / OBIS 1.8.0)",
           "price_entity": "Preissensor: Endpreis pro kWh (alles inklusive)",
+          "price_unit": "Preiseinheit",
           "fixed_price_ct": "Festpreistarif: Arbeitspreis (ct/kWh, brutto)",
           "fixed_base_fee_eur_month": "Festpreistarif: Grundpreis (€/Monat, brutto)",
           "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)"
@@ -45,15 +48,26 @@
         "data_description": {
           "provider_name": "Nur für die Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
           "price_entity": "Wähle einen Sensor, der bereits alle Aufschläge enthält, z. B. die Integration deines Anbieters (Tibber, …) oder EPEX Spot mit konfigurierten Aufschlägen. 15-Minuten-Preislisten in Attributen werden genutzt, sonst der aktuelle Zustand. Einheiten: €/kWh, ct/kWh, €/MWh.",
+          "price_unit": "Automatisch nutzt die Einheit des Sensors; hat er keine, entscheidet der Wert (unter 2 → €/kWh, 2–200 → ct/kWh, über 200 → €/MWh). Einheit auswählen, falls die Erkennung falsch ist.",
           "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "Die Einheit \"{unit}\" des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
+      "price_not_numeric": "Der Zustand \"{state}\" des Preissensors ist keine Zahl und es gibt keine Preisliste. Sensor prüfen oder die Preiseinheit manuell auswählen, um trotzdem zu speichern.",
       "price_entity_required": "Bitte einen Preissensor auswählen.",
       "entity_not_found": "Entität nicht gefunden.",
       "unknown": "Unerwarteter Fehler, siehe Home-Assistant-Protokoll."
+    }
+  },
+  "selector": {
+    "price_unit": {
+      "options": {
+        "auto": "Automatisch erkennen",
+        "eur_kwh": "€/kWh",
+        "ct_kwh": "ct/kWh",
+        "eur_mwh": "€/MWh"
+      }
     }
   },
   "entity": {

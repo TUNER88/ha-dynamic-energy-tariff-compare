@@ -11,6 +11,7 @@ CONF_PRICE_ENTITY = "price_entity"
 CONF_FIXED_PRICE = "fixed_price_ct"
 CONF_FIXED_BASE_FEE = "fixed_base_fee_eur_month"
 CONF_PROVIDER_MONTHLY_FEE = "provider_monthly_fee_eur"
+CONF_PRICE_UNIT = "price_unit"  # "auto" or a manual unit (EUR/kWh, ct/kWh, EUR/MWh)
 
 # Options removed in config entry version 2 (0.3.0). The price sensor is now
 # always treated as the final all-in price per kWh.
@@ -28,6 +29,7 @@ LEGACY_KEYS = (
 # of their own tariffs.
 DEFAULTS: dict[str, float | str] = {
     CONF_PROVIDER_NAME: "",
+    CONF_PRICE_UNIT: "auto",
     CONF_FIXED_PRICE: 32.0,
     CONF_FIXED_BASE_FEE: 12.0,
     CONF_PROVIDER_MONTHLY_FEE: 5.99,

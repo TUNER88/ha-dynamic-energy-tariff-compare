@@ -194,3 +194,70 @@ def test_backfill_hourly_with_15min_prices_and_merge():
     calc.merge_backfill(live, back, T0)
     assert live.tracking_start == T0 and live.energy_kwh == pytest.approx(4.0)
     assert live.backfilled_kwh == pytest.approx(3.0)
+
+
+BERLIN = __import__("zoneinfo").ZoneInfo("Europe/Berlin")
+
+
+def test_tibber_pricing_de_prices_list_naive_local_hourly():
+    attrs = {
+        "prices": [
+            {"timestamp": "2026-10-10 12:00:00", "price": 0.32, "priceComponents": []},
+            {"timestamp": "2026-10-10 13:00:00", "price": 0.33, "priceComponents": []},
+        ],
+        "price_components": [{"type": "power", "priceIncludingVat": 0.01}],
+        "today": {"priceIncludingVat": 0.2236},
+    }
+    m = calc.parse_price_attributes(attrs, None, BERLIN)  # no unit -> heuristic EUR/kWh
+    assert sorted(m) == [T0 + 900 * i for i in range(8)]  # 12:00 local = 10:00 UTC
+    assert m[T0] == pytest.approx(32.0) and m[T0 + 2700] == pytest.approx(32.0)
+    assert m[T0 + 3600] == pytest.approx(33.0) and m[T0 + 3600 + 2700] == pytest.approx(33.0)
+
+
+def test_tibber_api_style_date_hour_minute_and_generic_attribute():
+    attrs = {
+        "whatever_list": [
+            {"date": "2026-10-10", "hour": 12, "minute": 0, "priceExcludingVat": 0.1, "priceIncludingVat": 0.25},
+            {"date": "2026-10-10", "hour": 12, "minute": 15, "priceExcludingVat": 0.1, "priceIncludingVat": 0.26},
+        ]
+    }
+    m = calc.parse_price_attributes(attrs, None, BERLIN)
+    assert m == {T0: pytest.approx(25.0), T0 + 900: pytest.approx(26.0)}
+
+
+def test_generic_scan_ignores_lists_without_time_or_price():
+    attrs = {"components": [{"type": "grid", "share": 0.3}], "hours": [{"start": "x"}], "levels": [1, 2]}
+    assert calc.parse_price_attributes(attrs, None) == {}
+
+
+def test_list_heuristic_ct_and_mwh_and_override():
+    items = [{"start": "2026-10-10T10:00:00Z", "value": v} for v in (25.0,)]
+    assert calc.parse_price_attributes({"x": items}, None)[T0] == pytest.approx(25.0)  # ct/kWh
+    items = [{"start": "2026-10-10T10:00:00Z", "value": 250.0}]
+    assert calc.parse_price_attributes({"x": items}, None)[T0] == pytest.approx(25.0)  # EUR/MWh
+    assert calc.parse_price_attributes({"x": items}, None, factor_override=1.0)[T0] == pytest.approx(250.0)
+
+
+@pytest.mark.parametrize(
+    ("value", "factor"), [(0.2874, 100.0), (-0.05, 100.0), (1.99, 100.0), (28.74, 1.0), (200, 1.0), (287.4, 0.1)]
+)
+def test_guess_price_factor(value, factor):
+    assert calc.guess_price_factor([value]) == factor
+
+
+def test_state_price_factor_priority():
+    assert calc.state_price_factor("ct/kWh", 0.3) == (1.0, False)
+    assert calc.state_price_factor(None, 0.3) == (100.0, True)
+    assert calc.state_price_factor("—", 30.0) == (1.0, True)
+    assert calc.state_price_factor("EUR/kWh", 30.0, override=1.0) == (1.0, False)
+    assert calc.state_price_factor(None, None) == (None, False)
+    assert calc.override_factor("auto") is None
+    assert calc.override_factor("eur_mwh") == pytest.approx(0.1)
+    assert calc.override_factor(None) is None
+
+
+def test_naive_times_default_utc_and_bad_values_ignored():
+    assert calc.to_ts("2026-10-10 10:00:00") == T0
+    assert calc.to_ts(True) is None
+    attrs = {"prices": [{"timestamp": "garbage", "price": 1}, {"timestamp": "2026-10-10T10:00:00Z", "price": "n/a"}, "x"]}
+    assert calc.parse_price_attributes(attrs, None) == {}

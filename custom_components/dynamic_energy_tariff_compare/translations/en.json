@@ -8,6 +8,7 @@
           "provider_name": "Provider name (optional, e.g. Tibber, Rabot Energy, Octopus)",
           "energy_entity": "Grid import energy sensor (e.g. EDL21 total active energy / OBIS 1.8.0)",
           "price_entity": "Price sensor: final all-in price per kWh",
+          "price_unit": "Price unit",
           "fixed_price_ct": "Fixed tariff: energy price (ct/kWh, gross)",
           "fixed_base_fee_eur_month": "Fixed tariff: base fee (€/month, gross)",
           "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)"
@@ -15,12 +16,13 @@
         "data_description": {
           "provider_name": "Only used for display (device and entry name). Entity IDs stay the same.",
           "price_entity": "Pick a sensor that already includes all surcharges, e.g. your provider's integration (Tibber, …) or EPEX Spot with surcharges configured. 15-min price lists in attributes are used when present, otherwise the current state. Units: €/kWh, ct/kWh, €/MWh.",
+          "price_unit": "Auto-detect uses the sensor's unit; if it has none, the value decides (below 2 → €/kWh, 2–200 → ct/kWh, above 200 → €/MWh). Select the unit if auto-detection is wrong.",
           "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "The price sensor's unit \"{unit}\" is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
+      "price_not_numeric": "The price sensor's state \"{state}\" is not a number and it has no price list. Check the sensor, or select the price unit manually to save anyway.",
       "price_entity_required": "Select a price sensor.",
       "entity_not_found": "Entity not found.",
       "unknown": "Unexpected error, see the Home Assistant log."
@@ -38,6 +40,7 @@
           "provider_name": "Provider name (optional, e.g. Tibber, Rabot Energy, Octopus)",
           "energy_entity": "Grid import energy sensor (e.g. EDL21 total active energy / OBIS 1.8.0)",
           "price_entity": "Price sensor: final all-in price per kWh",
+          "price_unit": "Price unit",
           "fixed_price_ct": "Fixed tariff: energy price (ct/kWh, gross)",
           "fixed_base_fee_eur_month": "Fixed tariff: base fee (€/month, gross)",
           "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)"
@@ -45,15 +48,26 @@
         "data_description": {
           "provider_name": "Only used for display (device and entry name). Entity IDs stay the same.",
           "price_entity": "Pick a sensor that already includes all surcharges, e.g. your provider's integration (Tibber, …) or EPEX Spot with surcharges configured. 15-min price lists in attributes are used when present, otherwise the current state. Units: €/kWh, ct/kWh, €/MWh.",
+          "price_unit": "Auto-detect uses the sensor's unit; if it has none, the value decides (below 2 → €/kWh, 2–200 → ct/kWh, above 200 → €/MWh). Select the unit if auto-detection is wrong.",
           "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "The price sensor's unit \"{unit}\" is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
+      "price_not_numeric": "The price sensor's state \"{state}\" is not a number and it has no price list. Check the sensor, or select the price unit manually to save anyway.",
       "price_entity_required": "Select a price sensor.",
       "entity_not_found": "Entity not found.",
       "unknown": "Unexpected error, see the Home Assistant log."
+    }
+  },
+  "selector": {
+    "price_unit": {
+      "options": {
+        "auto": "Auto-detect",
+        "eur_kwh": "€/kWh",
+        "ct_kwh": "ct/kWh",
+        "eur_mwh": "€/MWh"
+      }
     }
   },
   "entity": {
