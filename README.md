@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon.png" alt="Dynamic Energy Tariff Compare icon" width="128" height="128">
+</p>
+
 # Dynamic Energy Tariff Compare for Home Assistant
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories/)
@@ -55,6 +59,13 @@ type *Integration* → install **Dynamic Energy Tariff Compare** → restart Hom
 Download `dynamic_energy_tariff_compare.zip` from the
 [latest release](https://github.com/TUNER88/ha-dynamic-energy-tariff-compare/releases/latest) and unpack it into
 `<config>/custom_components/dynamic_energy_tariff_compare/`. Then restart Home Assistant.
+
+The integration ships its own icon and logo in
+`custom_components/dynamic_energy_tariff_compare/brand/`. Home Assistant **2026.3 or newer**
+shows them natively in *Settings → Devices & services*
+([developer docs](https://developers.home-assistant.io/docs/core/integration/brand_images/)).
+Older versions show a placeholder; everything else works the same. The HACS dashboard
+itself may still show a placeholder until HACS supports local brand folders.
 
 ### Set up
 
