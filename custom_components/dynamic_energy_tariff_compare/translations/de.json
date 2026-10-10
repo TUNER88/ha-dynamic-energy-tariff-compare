@@ -20,7 +20,7 @@
       }
     },
     "error": {
-      "unknown_price_unit": "Die Einheit '{unit}' des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
+      "unknown_price_unit": "Die Einheit \"{unit}\" des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
       "price_entity_required": "Bitte einen Preissensor auswählen.",
       "entity_not_found": "Entität nicht gefunden.",
       "unknown": "Unerwarteter Fehler, siehe Home-Assistant-Protokoll."
@@ -50,7 +50,7 @@
       }
     },
     "error": {
-      "unknown_price_unit": "Die Einheit '{unit}' des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
+      "unknown_price_unit": "Die Einheit \"{unit}\" des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
       "price_entity_required": "Bitte einen Preissensor auswählen.",
       "entity_not_found": "Entität nicht gefunden.",
       "unknown": "Unerwarteter Fehler, siehe Home-Assistant-Protokoll."

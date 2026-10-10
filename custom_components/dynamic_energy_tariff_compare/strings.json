@@ -20,7 +20,7 @@
       }
     },
     "error": {
-      "unknown_price_unit": "The price sensor's unit '{unit}' is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
+      "unknown_price_unit": "The price sensor's unit \"{unit}\" is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
       "price_entity_required": "Select a price sensor.",
       "entity_not_found": "Entity not found.",
       "unknown": "Unexpected error, see the Home Assistant log."
@@ -50,7 +50,7 @@
       }
     },
     "error": {
-      "unknown_price_unit": "The price sensor's unit '{unit}' is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
+      "unknown_price_unit": "The price sensor's unit \"{unit}\" is not supported (use €/kWh, ct/kWh or €/MWh) and it has no price list attributes.",
       "price_entity_required": "Select a price sensor.",
       "entity_not_found": "Entity not found.",
       "unknown": "Unexpected error, see the Home Assistant log."
