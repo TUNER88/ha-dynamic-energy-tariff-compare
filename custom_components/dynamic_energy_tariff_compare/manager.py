@@ -26,6 +26,7 @@ from .const import (
     CONF_FIXED_BASE_FEE,
     CONF_FIXED_PRICE,
     CONF_PRICE_ENTITY,
+    CONF_PRICE_UNIT,
     CONF_PROVIDER_MONTHLY_FEE,
     DEFAULTS,
     DOMAIN,
@@ -85,6 +86,8 @@ class DynamicEnergyTariffCompareManager:
         self.params = params_from_config(self.cfg)
         self.energy_entity: str = self.cfg[CONF_ENERGY_ENTITY]
         self.price_entity: str | None = self.cfg.get(CONF_PRICE_ENTITY) or None
+        self.unit_override: float | None = calc.override_factor(self.cfg.get(CONF_PRICE_UNIT))
+        self._warned_guess = False
         self.store: Store[dict[str, Any]] = Store(
             hass, STORAGE_VERSION, f"{DOMAIN}.{entry.entry_id}"
         )
@@ -201,7 +204,9 @@ class DynamicEnergyTariffCompareManager:
             return
         unit = state.attributes.get(ATTR_UNIT_OF_MEASUREMENT)
         try:
-            attr_prices = calc.parse_price_attributes(dict(state.attributes), unit)
+            attr_prices = calc.parse_price_attributes(
+                dict(state.attributes), unit, dt_util.get_default_time_zone(), self.unit_override
+            )
         except Exception:  # noqa: BLE001 - never break on odd attributes
             _LOGGER.debug("Could not parse price attributes of %s", self.price_entity, exc_info=True)
             attr_prices = {}
@@ -215,15 +220,25 @@ class DynamicEnergyTariffCompareManager:
                 value = float(state.state)
             except (TypeError, ValueError):
                 value = None
-            factor = calc.price_factor_to_ct_kwh(unit)
+            factor, guessed = calc.state_price_factor(unit, value, self.unit_override)
+            if guessed and not self._warned_guess:
+                self._warned_guess = True
+                _LOGGER.warning(
+                    "%s has no usable unit (%r); assuming %s from the value %s. "
+                    "Select the price unit in the integration options if this is wrong",
+                    self.price_entity,
+                    unit,
+                    {100.0: "EUR/kWh", 1.0: "ct/kWh", 0.1: "EUR/MWh"}.get(factor, factor),
+                    value,
+                )
             if value is not None and factor is not None:
                 slot = calc.slot_start(dt_util.utcnow().timestamp())
                 if slot not in self._attr_slots:
                     self.prices[slot] = value * factor
                     if not attr_prices:
                         self.price_source = f"{self.price_entity} (state)"
-            elif value is not None and factor is None and not attr_prices:
-                self.last_price_error = f"Unknown price unit '{unit}' on {self.price_entity}"
+            elif value is None and not attr_prices:
+                self.last_price_error = f"{self.price_entity} state {state.state!r} is not a number"
         self._prune_prices()
         if self.acc.resolve_pending(self.price_lookup, dt_util.utcnow().timestamp()):
             self._schedule_save()

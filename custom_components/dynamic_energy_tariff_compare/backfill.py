@@ -144,16 +144,20 @@ async def _price_history(
             continue
         unit = state.attributes.get(ATTR_UNIT_OF_MEASUREMENT)
         try:
-            from_attrs.update(calc.parse_price_attributes(dict(state.attributes), unit))
+            from_attrs.update(
+                calc.parse_price_attributes(
+                    dict(state.attributes), unit, dt_util.get_default_time_zone(), mgr.unit_override
+                )
+            )
         except Exception:  # noqa: BLE001 - odd attributes must not break backfill
             _LOGGER.debug("Unparsable price attributes in history of %s", entity, exc_info=True)
         if state.state in (STATE_UNKNOWN, STATE_UNAVAILABLE):
             continue
-        factor = calc.price_factor_to_ct_kwh(unit)
         try:
             value = float(state.state)
         except (TypeError, ValueError):
             continue
+        factor, _guessed = calc.state_price_factor(unit, value, mgr.unit_override)
         if factor is not None:
             seen_unit = unit
             timeline.append((state.last_changed.timestamp(), value * factor))
@@ -173,7 +177,15 @@ async def _price_history(
     if stat_unit is None:
         current = hass.states.get(entity)
         stat_unit = (current.attributes.get(ATTR_UNIT_OF_MEASUREMENT) if current else None) or seen_unit
-    factor = calc.price_factor_to_ct_kwh(stat_unit)
+    factor = mgr.unit_override or calc.price_factor_to_ct_kwh(stat_unit)
+    if entity in meta and factor is None:
+        # no unit at all: guess from the recorded means
+        probe = await instance.async_add_executor_job(
+            statistics_during_period, hass, start, end, {entity}, "hour", None, {"mean"}
+        )
+        factor = calc.guess_price_factor(
+            r["mean"] for r in probe.get(entity, []) if r.get("mean") is not None
+        )
     if entity in meta and factor is not None:
         added = 0
         for period, length in (("5minute", 300), ("hour", 3600)):

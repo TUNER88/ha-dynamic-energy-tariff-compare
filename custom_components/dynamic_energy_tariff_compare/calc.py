@@ -8,7 +8,7 @@ coincide with Europe/Berlin quarter hours.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone, tzinfo
 from bisect import bisect_left, bisect_right
 import math
 from typing import Any, Iterable
@@ -21,13 +21,18 @@ SECONDS_PER_MONTH = 365.25 / 12 * 86400
 # ---------------------------------------------------------------------------
 
 
-def to_ts(value: Any) -> float | None:
-    """Convert datetime / ISO string / number to POSIX seconds."""
-    if value is None:
+def to_ts(value: Any, tz: tzinfo | None = None) -> float | None:
+    """Convert datetime / ISO string / number to POSIX seconds.
+
+    Naive datetimes/strings are interpreted in `tz` (default UTC); price lists
+    without an offset (e.g. "2026-10-10 14:00:00") are usually local time.
+    """
+    if value is None or isinstance(value, bool):
         return None
+    naive_tz = tz or timezone.utc
     if isinstance(value, datetime):
         if value.tzinfo is None:
-            value = value.replace(tzinfo=timezone.utc)
+            value = value.replace(tzinfo=naive_tz)
         return value.timestamp()
     if isinstance(value, (int, float)):
         # Heuristic: milliseconds
@@ -43,7 +48,7 @@ def to_ts(value: Any) -> float | None:
         except ValueError:
             return None
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
+            dt = dt.replace(tzinfo=naive_tz)
         return dt.timestamp()
     return None
 
@@ -122,34 +127,143 @@ def energy_factor_to_kwh(unit: str | None) -> float:
 # Price list parsing from sensor attributes
 # ---------------------------------------------------------------------------
 
-_START_KEYS = ("start_time", "start", "startsAt", "starts_at", "time", "from", "datetime")
-_END_KEYS = ("end_time", "end", "endsAt", "ends_at", "to", "till")
-# key -> fixed unit (None = use sensor unit)
+_START_KEYS = (
+    "start_time", "start", "startsAt", "starts_at", "startTime", "start_at", "valid_from",
+    "from", "time", "timestamp", "datetime", "date_time", "begin", "period_start",
+)
+_END_KEYS = ("end_time", "end", "endsAt", "ends_at", "endTime", "end_at", "valid_to", "to", "till", "until")
+# key -> fixed unit (None = use the sensor's unit / override / heuristic).
+# Gross / all-in values first: the price sensor is the final price.
 _VALUE_KEYS: tuple[tuple[str, str | None], ...] = (
     ("price_ct_per_kwh", "ct/kWh"),
     ("price_eur_per_mwh", "EUR/MWh"),
+    ("priceIncludingVat", None),
+    ("price_including_vat", None),
+    ("price_incl_vat", None),
+    ("value_inc_vat", None),
+    ("total_price", None),
+    ("totalPrice", None),
     ("price_per_kwh", None),
     ("total", None),
     ("price", None),
     ("value", None),
     ("energy", None),
+    ("cost", None),
+    ("rate", None),
 )
+# Attributes that are scanned first; any other attribute holding a list of
+# dicts with a time-like and a price-like key is scanned afterwards.
 _LIST_ATTRS = (
     "data",  # EPEX Spot (mampfes)
     "raw_today",  # custom nordpool
     "raw_tomorrow",
-    "today",  # Tibber-style lists / others
+    "prices",  # Tibber Pricing DE (cyberjunky) and others
+    "today",
     "tomorrow",
-    "prices",
     "prices_today",
     "prices_tomorrow",
     "forecast",
 )
+MAX_ITEM_SECONDS = 3600  # longest interval a single list entry may cover
 
 
-def _expand(start: float, end: float | None, ct: float, out: dict[int, float]) -> None:
+PRICE_UNIT_AUTO = "auto"
+# option key -> unit (keys must be translation-key slugs)
+PRICE_UNIT_OPTIONS: dict[str, str | None] = {
+    PRICE_UNIT_AUTO: None,
+    "eur_kwh": "EUR/kWh",
+    "ct_kwh": "ct/kWh",
+    "eur_mwh": "EUR/MWh",
+}
+PRICE_UNIT_CHOICES = tuple(PRICE_UNIT_OPTIONS)
+
+
+def override_factor(choice: Any) -> float | None:
+    """Factor for a manually selected price unit; None for auto-detect."""
+    if not isinstance(choice, str) or choice == PRICE_UNIT_AUTO:
+        return None
+    return price_factor_to_ct_kwh(PRICE_UNIT_OPTIONS.get(choice, choice))
+
+
+def state_price_factor(unit: Any, value: float | None, override: float | None = None) -> tuple[float | None, bool]:
+    """Factor for a sensor state: manual unit > detected unit > heuristic.
+
+    Returns (factor, guessed).
+    """
+    if override is not None:
+        return override, False
+    factor = price_factor_to_ct_kwh(unit)
+    if factor is not None:
+        return factor, False
+    if value is None:
+        return None, False
+    return guess_price_factor([value]), True
+
+
+def guess_price_factor(values: Iterable[float]) -> float | None:
+    """Plausibility heuristic for prices without a usable unit.
+
+    Typical all-in prices are 0.05-1 EUR/kWh, 5-100 ct/kWh or 50-1000 EUR/MWh.
+    Median |value| < 2 -> EUR/kWh, 2..200 -> ct/kWh, > 200 -> EUR/MWh.
+    Returns the factor to ct/kWh, or None if there is no value.
+    """
+    vals = sorted(abs(float(v)) for v in values if v is not None and math.isfinite(float(v)))
+    if not vals:
+        return None
+    median = vals[len(vals) // 2]
+    if median < 2:
+        return 100.0
+    if median <= 200:
+        return 1.0
+    return 0.1
+
+
+def _item_start(item: dict[str, Any], tz: tzinfo | None) -> float | None:
+    for key in _START_KEYS:
+        if key in item:
+            ts = to_ts(item[key], tz)
+            if ts is not None:
+                return ts
+    # Tibber API style: {"date": "2026-10-10", "hour": 14, "minute": 15}
+    if "date" in item and "hour" in item:
+        try:
+            day = datetime.fromisoformat(str(item["date"]))
+            dt = day.replace(tzinfo=None) + timedelta(
+                hours=int(item["hour"]), minutes=int(item.get("minute") or 0)
+            )
+        except (TypeError, ValueError):
+            return None
+        return to_ts(dt, tz)
+    if "date" in item:
+        return to_ts(item["date"], tz)
+    return None
+
+
+def _item_value(item: dict[str, Any]) -> tuple[float, str | None] | None:
+    for vkey, vunit in _VALUE_KEYS:
+        if vkey in item and item[vkey] is not None and not isinstance(item[vkey], bool):
+            try:
+                val = float(item[vkey])
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(val):
+                return val, vunit
+    return None
+
+
+def _looks_like_price_list(items: Any) -> bool:
+    if not isinstance(items, list) or not items:
+        return False
+    first = next((i for i in items if isinstance(i, dict)), None)
+    if first is None:
+        return False
+    has_time = any(k in first for k in _START_KEYS) or ("date" in first and "hour" in first)
+    return has_time and _item_value(first) is not None
+
+
+def _expand(start: float, end: float, ct: float, out: dict[int, float]) -> None:
     s = slot_start(start)
-    if end is None or end - start <= SLOT_SECONDS:
+    if end - start <= SLOT_SECONDS:
         out[s] = ct
         return
     t = s
@@ -158,55 +272,84 @@ def _expand(start: float, end: float | None, ct: float, out: dict[int, float]) -
         t += SLOT_SECONDS
 
 
-def parse_price_attributes(attrs: dict[str, Any] | None, sensor_unit: str | None) -> dict[int, float]:
+def parse_price_attributes(
+    attrs: dict[str, Any] | None,
+    sensor_unit: str | None,
+    tz: tzinfo | None = None,
+    factor_override: float | None = None,
+) -> dict[int, float]:
     """Extract a {slot_start: ct/kWh} map from a price sensor's attributes.
 
-    Supported layouts:
+    Supported layouts (and anything similar):
       * EPEX Spot: data=[{start_time, end_time, price_per_kwh|price_ct_per_kwh|price_eur_per_mwh}]
       * Nord Pool custom: raw_today/raw_tomorrow=[{start, end, value}]
       * Tibber-like: today/tomorrow=[{startsAt, total}]
-    Hourly entries are expanded to four 15-minute slots.
+      * Tibber Pricing DE: prices=[{timestamp: "2026-10-10 14:00:00" (local), price}]
+      * Tibber API style: [{date, hour, minute, priceIncludingVat}]
+    Entries without an end last until the next entry (max. 1 h), so hourly
+    lists are expanded to four 15-minute slots. Naive times are read in `tz`.
+    Unit: factor_override > sensor/attribute unit > plausibility heuristic.
+    Never raises on odd data.
     """
     out: dict[int, float] = {}
-    if not attrs:
+    if not isinstance(attrs, dict) or not attrs:
         return out
-    sensor_factor = price_factor_to_ct_kwh(sensor_unit)
-    attr_unit = attrs.get("unit_of_measurement") or attrs.get("unit")
-    if isinstance(attr_unit, str):
-        f = price_factor_to_ct_kwh(attr_unit)
-        if f is not None and sensor_factor is None:
-            sensor_factor = f
+    factor = factor_override
+    if factor is None:
+        factor = price_factor_to_ct_kwh(sensor_unit)
+    if factor is None:
+        attr_unit = attrs.get("unit_of_measurement") or attrs.get("unit")
+        factor = price_factor_to_ct_kwh(attr_unit)
     # custom nordpool: price_in_cents flag + currency + unit 'kWh'
-    if sensor_factor is None and "price_in_cents" in attrs:
+    if factor is None and "price_in_cents" in attrs:
         energy_unit = str(attrs.get("unit", "kWh"))
         base = "ct" if attrs.get("price_in_cents") else "EUR"
-        sensor_factor = price_factor_to_ct_kwh(f"{base}/{energy_unit}")
+        factor = price_factor_to_ct_kwh(f"{base}/{energy_unit}")
 
-    for key in _LIST_ATTRS:
+    keys = [k for k in _LIST_ATTRS if k in attrs]
+    keys += [k for k in attrs if k not in _LIST_ATTRS and _looks_like_price_list(attrs[k])]
+
+    # (start, end|None, value, fixed unit)
+    entries: list[tuple[float, float | None, float, str | None]] = []
+    for key in keys:
         items = attrs.get(key)
         if not isinstance(items, list):
             continue
         for item in items:
             if not isinstance(item, dict):
                 continue
-            start = next((to_ts(item[k]) for k in _START_KEYS if k in item), None)
-            if start is None:
+            try:
+                start = _item_start(item, tz)
+                if start is None:
+                    continue
+                end = next((to_ts(item[k], tz) for k in _END_KEYS if k in item), None)
+                value = _item_value(item)
+            except Exception:  # noqa: BLE001 - tolerate odd entries
                 continue
-            end = next((to_ts(item[k]) for k in _END_KEYS if k in item), None)
-            ct = None
-            for vkey, vunit in _VALUE_KEYS:
-                if vkey in item and item[vkey] is not None:
-                    try:
-                        val = float(item[vkey])
-                    except (TypeError, ValueError):
-                        continue
-                    factor = price_factor_to_ct_kwh(vunit) if vunit else sensor_factor
-                    if factor is None:
-                        factor = 100.0  # assume EUR/kWh
-                    ct = val * factor
-                    break
-            if ct is not None:
-                _expand(start, end, ct, out)
+            if value is None:
+                continue
+            entries.append((start, end, value[0], value[1]))
+    if not entries:
+        return out
+
+    if factor is None:
+        factor = guess_price_factor(v for _, _, v, u in entries if u is None)
+
+    entries.sort(key=lambda e: e[0])
+    starts = [e[0] for e in entries]
+    gaps = sorted(b - a for a, b in zip(starts, starts[1:], strict=False) if b > a)
+    typical = min(gaps[len(gaps) // 2], MAX_ITEM_SECONDS) if gaps else MAX_ITEM_SECONDS
+    for i, (start, end, val, vunit) in enumerate(entries):
+        f = price_factor_to_ct_kwh(vunit) if vunit else factor
+        if f is None:
+            continue
+        if end is None or end <= start:
+            nxt = next((s for s in starts[i + 1 :] if s > start), None)
+            end = start + typical
+            if nxt is not None and nxt - start <= MAX_ITEM_SECONDS:
+                end = nxt
+        end = min(end, start + MAX_ITEM_SECONDS)
+        _expand(start, end, val * f, out)
     return out
 
 

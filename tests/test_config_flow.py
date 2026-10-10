@@ -47,6 +47,7 @@ USER_INPUT = {
     "provider_name": "Tibber",
     "energy_entity": ENERGY,
     "price_entity": PRICE,
+    "price_unit": "auto",
     "fixed_price_ct": 32.0,
     "fixed_base_fee_eur_month": 14.01,
     "provider_monthly_fee_eur": 5.99,
@@ -101,14 +102,11 @@ async def test_user_flow_tibber_edl21_wh(hass: HomeAssistant, client) -> None:
 
 
 @pytest.mark.parametrize(
-    ("unit", "ok"),
-    [
-        ("EUR/kWh", True), ("€/kWh", True), ("ct/kWh", True), ("Cent/kWh", True),
-        ("EUR/MWh", True), ("EUR / kWh", True), ("c/kWh", True), ("SEK/kWh", False),
-        ("kWh", False), (None, False),
-    ],
+    "unit",
+    ["EUR/kWh", "€/kWh", "ct/kWh", "Cent/kWh", "EUR/MWh", "EUR / kWh", "c/kWh", "SEK/kWh", "kWh", "—", None],
 )
-async def test_units_never_break_flow(hass: HomeAssistant, client, unit, ok) -> None:
+async def test_any_unit_with_numeric_state_is_accepted(hass: HomeAssistant, client, unit) -> None:
+    """A missing or odd unit never blocks the form (v0.3.0 regression)."""
     attrs = {k: v for k, v in TIBBER_ATTRS.items() if k != "unit_of_measurement"}
     if unit is not None:
         attrs["unit_of_measurement"] = unit
@@ -116,17 +114,20 @@ async def test_units_never_break_flow(hass: HomeAssistant, client, unit, ok) -> 
     form = await _start(client)
     status, res = await _submit(client, form["flow_id"], USER_INPUT)
     assert status == HTTPStatus.OK, res
-    if ok:
-        assert res["type"] == "create_entry", res
-        return
-    assert res["type"] == "form"
-    assert res["errors"] == {"price_entity": "unknown_price_unit"}
-    assert res["description_placeholders"]["unit"] == (unit or "—")
-    # the same flow is still alive and accepts a corrected sensor
-    hass.states.async_set("sensor.good_price", "29.1", {"unit_of_measurement": "ct/kWh"})
-    status, res = await _submit(client, form["flow_id"], {**USER_INPUT, "price_entity": "sensor.good_price"})
-    assert status == HTTPStatus.OK, res
     assert res["type"] == "create_entry", res
+
+
+async def test_non_numeric_state_asks_for_manual_unit(hass: HomeAssistant, client) -> None:
+    hass.states.async_set(PRICE, "cheap", {"friendly_name": "odd"})
+    form = await _start(client)
+    status, res = await _submit(client, form["flow_id"], USER_INPUT)
+    assert status == HTTPStatus.OK, res
+    assert res["type"] == "form"
+    assert res["errors"] == {"price_unit": "price_not_numeric"}
+    assert res["description_placeholders"]["state"] == "cheap"
+    status, res = await _submit(client, form["flow_id"], {**USER_INPUT, "price_unit": "ct_kwh"})
+    assert res["type"] == "create_entry", res
+    assert hass.config_entries.async_entries(DOMAIN)[0].data["price_unit"] == "ct_kwh"
 
 
 @pytest.mark.parametrize("state", ["unavailable", "unknown"])
@@ -162,7 +163,7 @@ async def test_missing_price_entity_is_form_error(hass: HomeAssistant, client) -
 async def test_unexpected_error_becomes_form_error(hass: HomeAssistant, client) -> None:
     form = await _start(client)
     with patch(
-        "custom_components.dynamic_energy_tariff_compare.config_flow.calc.price_factor_to_ct_kwh",
+        "custom_components.dynamic_energy_tariff_compare.config_flow.calc.override_factor",
         side_effect=RuntimeError("boom"),
     ):
         status, res = await _submit(client, form["flow_id"], USER_INPUT)
@@ -209,7 +210,7 @@ async def test_legacy_v1_entry_migrates_and_options_flow_works(hass: HomeAssista
     assert entry.runtime_data.params.fixed_price_ct == 33.5
 
 
-async def test_options_flow_unknown_unit_is_form_error(hass: HomeAssistant, client) -> None:
+async def test_options_flow_odd_unit_is_accepted(hass: HomeAssistant, client) -> None:
     entry = MockConfigEntry(domain=DOMAIN, version=2, unique_id=ENERGY, data=USER_INPUT)
     entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(entry.entry_id)
@@ -217,11 +218,13 @@ async def test_options_flow_unknown_unit_is_form_error(hass: HomeAssistant, clie
     hass.states.async_set("sensor.weird", "5", {"unit_of_measurement": "SEK/kWh"})
     path = "/api/config/config_entries/options/flow"
     form = await _start(client, path, entry.entry_id)
-    status, res = await _submit(client, form["flow_id"], {**USER_INPUT, "price_entity": "sensor.weird"}, path)
+    status, res = await _submit(
+        client, form["flow_id"], {**USER_INPUT, "price_entity": "sensor.weird", "price_unit": "eur_kwh"}, path
+    )
     assert status == HTTPStatus.OK, res
-    assert res["errors"] == {"price_entity": "unknown_price_unit"}
-    status, res = await _submit(client, form["flow_id"], USER_INPUT, path)
     assert res["type"] == "create_entry", res
+    await hass.async_block_till_done()
+    assert entry.runtime_data.unit_override == 100.0
 
 
 async def test_entry_without_price_sensor_still_loads(hass: HomeAssistant) -> None:
@@ -268,3 +271,68 @@ async def test_double_submit_does_not_end_in_invalid_flow(hass: HomeAssistant, c
     assert "create_entry" in types, results
     assert "abort" not in types, results
     assert len(hass.config_entries.async_entries(DOMAIN)) == 1
+
+
+# --- Tibber Pricing DE (cyberjunky/home-assistant-tibber_pricing_de 1.0.0) -------
+# Mirrors the real "Current Price" entity: a plain Entity (no SensorEntity), so
+# there is NO unit_of_measurement and no state_class; device_class monetary.
+# Attributes: `prices` = today's hourly list with naive local timestamps and
+# priceIncludingVat (energy + taxes/levies + grid fee, incl. VAT), `price_components`
+# (always None: the lookup key carries "+02:00" and never matches), `today` and
+# `monthly` dicts from the Tibber price-overview API. The state is looked up for
+# "now + 1 h", i.e. it shows the NEXT hour's price.
+TPDE = "sensor.tibber_pricing_de_current_price"
+
+
+def _tpde_attrs() -> dict:
+    components = [
+        {"type": "power", "priceExcludingVat": 0.0168, "priceIncludingVat": 0.02},
+        {"type": "taxes", "priceExcludingVat": 0.0812, "priceIncludingVat": 0.0967},
+        {"type": "grid", "priceExcludingVat": 0.0556, "priceIncludingVat": 0.066164},
+    ]
+    prices = [
+        {
+            "timestamp": f"2026-10-10 {h:02d}:00:00",
+            "price": round(0.20 + h / 100, 4),
+            "priceComponents": components,
+        }
+        for h in range(24)
+    ]
+    return {
+        "prices": prices,
+        "price_components": None,
+        "today": {"priceExcludingVat": 0.1879, "priceIncludingVat": 0.2236, "priceComponents": components},
+        "monthly": {
+            "priceExcludingVat": 13.14,
+            "priceIncludingVat": 15.64,
+            "priceComponents": [
+                {"type": "tibber service fee", "priceExcludingVat": 5.03, "priceIncludingVat": 5.99},
+                {"type": "meter operator", "priceExcludingVat": 0.81, "priceIncludingVat": 0.96},
+            ],
+        },
+        "device_class": "monetary",
+        "icon": "mdi:currency-eur",
+        "friendly_name": "Tibber Pricing DE Current Price",
+    }
+
+
+async def test_tibber_pricing_de_sensor(hass: HomeAssistant, freezer) -> None:
+    from datetime import datetime, timezone  # noqa: PLC0415
+
+    await hass.config.async_set_time_zone("Europe/Berlin")
+    freezer.move_to(datetime(2026, 10, 10, 10, 5, tzinfo=timezone.utc))  # 12:05 local
+    hass.states.async_set(ENERGY, "12345678", EDL21_ATTRS)
+    hass.states.async_set(TPDE, "0.33", _tpde_attrs())  # state = 13:00 price (next hour)
+    result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": "user"})
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {**USER_INPUT, "price_entity": TPDE}
+    )
+    assert result["type"] == "create_entry", result
+    await hass.async_block_till_done()
+    mgr = hass.config_entries.async_entries(DOMAIN)[0].runtime_data
+    # current slot uses the list entry for 12:00 local (0.32 EUR/kWh), not the state
+    assert mgr.current_slot_price() == pytest.approx(32.0)
+    # hourly list -> 4 quarter-hour slots per hour, today complete
+    assert len(mgr.price_list()["today"]) == 96
+    state = hass.states.get("sensor.dynamic_energy_tariff_compare_current_dynamic_price")
+    assert float(state.state) == pytest.approx(32.0)

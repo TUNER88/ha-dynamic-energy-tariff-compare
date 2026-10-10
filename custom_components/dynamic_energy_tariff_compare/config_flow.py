@@ -17,6 +17,7 @@ from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResu
 from homeassistant.const import ATTR_UNIT_OF_MEASUREMENT, STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import entity_registry as er, selector
+from homeassistant.util import dt as dt_util
 
 from . import calc
 from .const import (
@@ -24,6 +25,7 @@ from .const import (
     CONF_FIXED_BASE_FEE,
     CONF_FIXED_PRICE,
     CONF_PRICE_ENTITY,
+    CONF_PRICE_UNIT,
     CONF_PROVIDER_MONTHLY_FEE,
     CONF_PROVIDER_NAME,
     DEFAULTS,
@@ -40,7 +42,7 @@ _NUM_SPECS: dict[str, tuple[float, float, float, str]] = {
     CONF_FIXED_BASE_FEE: (0, 200, 0.01, "€/month"),
     CONF_PROVIDER_MONTHLY_FEE: (0, 100, 0.01, "€/month"),
 }
-CONFIG_KEYS = (CONF_PROVIDER_NAME, CONF_ENERGY_ENTITY, CONF_PRICE_ENTITY, *NUMBER_KEYS)
+CONFIG_KEYS = (CONF_PROVIDER_NAME, CONF_ENERGY_ENTITY, CONF_PRICE_ENTITY, CONF_PRICE_UNIT, *NUMBER_KEYS)
 
 
 def _num(key: str) -> selector.NumberSelector:
@@ -64,6 +66,10 @@ def _entity_default(value: Any) -> Any:
     return value if isinstance(value, str) and value else vol.UNDEFINED
 
 
+def _unit_choice(value: Any) -> str:
+    return value if value in calc.PRICE_UNIT_CHOICES else calc.PRICE_UNIT_AUTO
+
+
 def build_schema(current: dict[str, Any] | None) -> vol.Schema:
     """Schema shared by config and options flow. Tolerates any stored values."""
     cfg = {**DEFAULTS, **(current or {})}
@@ -81,6 +87,13 @@ def build_schema(current: dict[str, Any] | None) -> vol.Schema:
         vol.Required(
             CONF_PRICE_ENTITY, default=_entity_default(cfg.get(CONF_PRICE_ENTITY))
         ): selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor")),
+        vol.Required(CONF_PRICE_UNIT, default=_unit_choice(cfg.get(CONF_PRICE_UNIT))): selector.SelectSelector(
+            selector.SelectSelectorConfig(
+                options=list(calc.PRICE_UNIT_CHOICES),
+                translation_key=CONF_PRICE_UNIT,
+                mode=selector.SelectSelectorMode.DROPDOWN,
+            )
+        ),
     }
     for key in NUMBER_KEYS:
         schema[vol.Required(key, default=_safe_float(cfg.get(key), DEFAULTS[key]))] = _num(key)
@@ -91,6 +104,7 @@ def clean_input(user_input: dict[str, Any]) -> dict[str, Any]:
     """Keep only current keys, normalise types."""
     data: dict[str, Any] = {k: user_input[k] for k in CONFIG_KEYS if k in user_input}
     data[CONF_PROVIDER_NAME] = str(user_input.get(CONF_PROVIDER_NAME) or "").strip()
+    data[CONF_PRICE_UNIT] = _unit_choice(user_input.get(CONF_PRICE_UNIT))
     for key in NUMBER_KEYS:
         data[key] = _safe_float(user_input.get(key), DEFAULTS[key])
     return data
@@ -99,7 +113,7 @@ def clean_input(user_input: dict[str, Any]) -> dict[str, Any]:
 def validate(hass: HomeAssistant, user_input: dict[str, Any]) -> tuple[dict[str, str], dict[str, str]]:
     """Return (errors, description_placeholders). Never raises."""
     errors: dict[str, str] = {}
-    placeholders: dict[str, str] = {"unit": ""}
+    placeholders: dict[str, str] = {"state": ""}
     try:
         energy = user_input.get(CONF_ENERGY_ENTITY)
         if not energy:
@@ -114,20 +128,31 @@ def validate(hass: HomeAssistant, user_input: dict[str, Any]) -> tuple[dict[str,
                 errors[CONF_PRICE_ENTITY] = "entity_not_found"
             # registered but not (yet) providing a state: accept, it may come up later
             return errors, placeholders
-        unit = state.attributes.get(ATTR_UNIT_OF_MEASUREMENT)
-        if calc.price_factor_to_ct_kwh(unit) is not None:
+        # Never block on a missing/odd unit: a manual unit, a recognised unit,
+        # a parsable price list or a numeric state (plausibility heuristic) is enough.
+        if calc.override_factor(user_input.get(CONF_PRICE_UNIT)) is not None:
             return errors, placeholders
+        if state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN):
+            return errors, placeholders  # resolved at runtime
         try:
-            has_list = bool(calc.parse_price_attributes(dict(state.attributes), unit))
+            float(state.state)
+            return errors, placeholders
+        except (TypeError, ValueError):
+            pass
+        try:
+            has_list = bool(
+                calc.parse_price_attributes(
+                    dict(state.attributes),
+                    state.attributes.get(ATTR_UNIT_OF_MEASUREMENT),
+                    dt_util.get_default_time_zone(),
+                )
+            )
         except Exception:  # noqa: BLE001
             has_list = False
         if has_list:
             return errors, placeholders
-        if state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN) and unit is None:
-            # unavailable sensors often lose their unit; accept and resolve at runtime
-            return errors, placeholders
-        placeholders["unit"] = str(unit) if unit else "—"
-        errors[CONF_PRICE_ENTITY] = "unknown_price_unit"
+        placeholders["state"] = str(state.state)[:40]
+        errors[CONF_PRICE_UNIT] = "price_not_numeric"
     except Exception:  # noqa: BLE001 - never let the flow die
         _LOGGER.exception("Unexpected error while validating the configuration")
         errors["base"] = "unknown"
@@ -148,7 +173,7 @@ class DynamicEnergyTariffCompareConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
-        placeholders: dict[str, str] = {"unit": ""}
+        placeholders: dict[str, str] = {"state": ""}
         if user_input is not None and self._finishing:
             # A second submit (double click / Enter) arrived while the first one is
             # still creating and setting up the entry. Answering it with an abort
@@ -199,7 +224,7 @@ class DynamicEnergyTariffCompareOptionsFlow(OptionsFlow):
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
-        placeholders: dict[str, str] = {"unit": ""}
+        placeholders: dict[str, str] = {"state": ""}
         if user_input is not None and not self._finishing:
             errors, placeholders = validate(self.hass, user_input)
             if not errors:

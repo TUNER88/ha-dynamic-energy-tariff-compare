@@ -60,15 +60,14 @@ async def test_config_flow(hass: HomeAssistant) -> None:
     assert result["data"][CONF_ENERGY_ENTITY] == ENERGY
 
 
-async def test_config_flow_bad_price_unit_legacy(hass: HomeAssistant) -> None:
+async def test_config_flow_odd_price_unit_accepted(hass: HomeAssistant) -> None:
     hass.states.async_set(ENERGY, "1000", ENERGY_ATTRS)
     hass.states.async_set("sensor.weird", "5", {"unit_of_measurement": "SEK/kWh"})
     result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": config_entries.SOURCE_USER})
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], _options(price_entity="sensor.weird")
     )
-    assert result["type"] is FlowResultType.FORM
-    assert result["errors"] == {CONF_PRICE_ENTITY: "unknown_price_unit"}
+    assert result["type"] is FlowResultType.CREATE_ENTRY  # odd units never block
 
 
 async def _setup(hass: HomeAssistant, **kw) -> MockConfigEntry:
