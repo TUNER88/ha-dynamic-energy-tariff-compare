@@ -1,4 +1,4 @@
-"""Buttons for Tibber Compare."""
+"""Buttons for Dynamic Energy Tariff Compare."""
 
 from __future__ import annotations
 
@@ -7,22 +7,23 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from . import TibberCompareConfigEntry
+from . import DynamicEnergyTariffCompareConfigEntry
 from .const import DEFAULT_BACKFILL_DAYS
-from .entity import TibberCompareEntity
+from .entity import DynamicEnergyTariffCompareEntity, reserve_entity_ids
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: TibberCompareConfigEntry,
+    entry: DynamicEnergyTariffCompareConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up buttons."""
     m = entry.runtime_data
+    reserve_entity_ids(hass, entry, "button", ["backfill", "reset"])
     async_add_entities([BackfillButton(m, "backfill"), ResetButton(m, "reset")])
 
 
-class BackfillButton(TibberCompareEntity, ButtonEntity):
+class BackfillButton(DynamicEnergyTariffCompareEntity, ButtonEntity):
     """Backfill DEFAULT_BACKFILL_DAYS days from recorder statistics."""
 
     _attr_entity_category = EntityCategory.CONFIG
@@ -31,7 +32,7 @@ class BackfillButton(TibberCompareEntity, ButtonEntity):
         await self.manager.async_backfill(DEFAULT_BACKFILL_DAYS)
 
 
-class ResetButton(TibberCompareEntity, ButtonEntity):
+class ResetButton(DynamicEnergyTariffCompareEntity, ButtonEntity):
     """Reset all accumulated totals."""
 
     _attr_entity_category = EntityCategory.CONFIG

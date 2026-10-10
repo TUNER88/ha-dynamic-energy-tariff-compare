@@ -34,8 +34,8 @@ from .const import (
     CONF_NETWORK_FEE,
     CONF_PRICE_ENTITY,
     CONF_PRICE_IS_FINAL,
-    CONF_TIBBER_MARKUP,
-    CONF_TIBBER_MONTHLY_FEE,
+    CONF_PROVIDER_MARKUP,
+    CONF_PROVIDER_MONTHLY_FEE,
     CONF_USE_ENERGY_CHARTS,
     CONF_VAT,
     DEFAULTS,
@@ -65,11 +65,11 @@ def params_from_config(cfg: dict[str, Any]) -> calc.TariffParams:
     return calc.TariffParams(
         fixed_price_ct=float(cfg[CONF_FIXED_PRICE]),
         fixed_base_fee_eur_month=float(cfg[CONF_FIXED_BASE_FEE]),
-        tibber_markup_ct=float(cfg[CONF_TIBBER_MARKUP]),
+        provider_markup_ct=float(cfg[CONF_PROVIDER_MARKUP]),
         network_fee_ct=float(cfg[CONF_NETWORK_FEE]),
         levies_ct=float(cfg[CONF_LEVIES]),
         vat_percent=float(cfg[CONF_VAT]),
-        tibber_monthly_fee_eur=float(cfg[CONF_TIBBER_MONTHLY_FEE]),
+        provider_monthly_fee_eur=float(cfg[CONF_PROVIDER_MONTHLY_FEE]),
         grid_base_fee_eur_month=float(cfg[CONF_GRID_BASE_FEE]),
         price_is_final=bool(cfg.get(CONF_PRICE_IS_FINAL, False)) and bool(cfg.get(CONF_PRICE_ENTITY)),
     )
@@ -95,7 +95,7 @@ async def async_fetch_energy_charts(
     return calc.parse_energy_charts(payload)
 
 
-class TibberCompareManager:
+class DynamicEnergyTariffCompareManager:
     """Owns state for one config entry."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:

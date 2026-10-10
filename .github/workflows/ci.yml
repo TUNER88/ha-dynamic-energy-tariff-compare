@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Ruff & pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          # Home Assistant 2026.10 requires Python >= 3.14.2
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements_test.txt
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip ruff pyyaml -r requirements_test.txt
+      - name: Ruff
+        run: ruff check .
+      - name: Validate example YAML
+        run: python -c "import sys, yaml; [yaml.safe_load(open(f)) for f in sys.argv[1:]]" examples/*.yaml
+      - name: Pytest
+        run: python -m pytest -q
+
+  hassfest:
+    name: Hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # Custom integrations are not listed in home-assistant/brands
+          ignore: brands

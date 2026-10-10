@@ -1,0 +1,25 @@
+# Add to configuration.yaml (or a package) and restart Home Assistant.
+# Creates sensor.dynamic_energy_tariff_compare_dynamic_monthly, sensor.dynamic_energy_tariff_compare_fixed_monthly,
+# sensor.dynamic_energy_tariff_compare_savings_monthly and daily counterparts.
+utility_meter:
+  dynamic_energy_tariff_compare_dynamic_monthly:
+    name: Dynamic Energy Tariff Compare dynamic monthly
+    source: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+    cycle: monthly
+  dynamic_energy_tariff_compare_fixed_monthly:
+    name: Dynamic Energy Tariff Compare Fixed monthly
+    source: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+    cycle: monthly
+  dynamic_energy_tariff_compare_savings_monthly:
+    name: Dynamic Energy Tariff Compare Savings monthly
+    source: sensor.dynamic_energy_tariff_compare_savings
+    cycle: monthly
+    net_consumption: true  # savings can also go down
+  dynamic_energy_tariff_compare_dynamic_daily:
+    name: Dynamic Energy Tariff Compare dynamic daily
+    source: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+    cycle: daily
+  dynamic_energy_tariff_compare_fixed_daily:
+    name: Dynamic Energy Tariff Compare Fixed daily
+    source: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+    cycle: daily

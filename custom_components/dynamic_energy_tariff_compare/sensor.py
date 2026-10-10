@@ -1,4 +1,4 @@
-"""Sensors for Tibber Compare."""
+"""Sensors for Dynamic Energy Tariff Compare."""
 
 from __future__ import annotations
 
@@ -17,10 +17,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
-from . import TibberCompareConfigEntry
+from . import DynamicEnergyTariffCompareConfigEntry
 from . import calc
-from .entity import TibberCompareEntity
-from .manager import TibberCompareManager
+from .entity import DynamicEnergyTariffCompareEntity, reserve_entity_ids
+from .manager import DynamicEnergyTariffCompareManager
 
 CT_KWH = "ct/kWh"
 EUR = "EUR"
@@ -28,27 +28,27 @@ EUR = "EUR"
 
 @dataclass(frozen=True, kw_only=True)
 class TCSensorDescription(SensorEntityDescription):
-    """Describes a Tibber Compare sensor."""
+    """Describes a Dynamic Energy Tariff Compare sensor."""
 
-    value_fn: Callable[[TibberCompareManager], Any]
-    attr_fn: Callable[[TibberCompareManager], dict[str, Any] | None] = lambda m: None
+    value_fn: Callable[[DynamicEnergyTariffCompareManager], Any]
+    attr_fn: Callable[[DynamicEnergyTariffCompareManager], dict[str, Any] | None] = lambda m: None
 
 
 def _r(value: float | None, nd: int = 4) -> float | None:
     return None if value is None else round(value, nd)
 
 
-def _current_source(m: TibberCompareManager) -> float | None:
+def _current_source(m: DynamicEnergyTariffCompareManager) -> float | None:
     p = m.current_slot_price()
     return None if p is None else round(p[0], 3)
 
 
-def _current_effective(m: TibberCompareManager) -> float | None:
+def _current_effective(m: DynamicEnergyTariffCompareManager) -> float | None:
     p = m.current_slot_price()
     return None if p is None else round(calc.effective_price_ct(p[0], m.params, p[1]), 3)
 
 
-def _source_attrs(m: TibberCompareManager) -> dict[str, Any]:
+def _source_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
     p = m.current_slot_price()
     return {
         "source": m.price_source,
@@ -61,14 +61,14 @@ def _source_attrs(m: TibberCompareManager) -> dict[str, Any]:
     }
 
 
-def _effective_attrs(m: TibberCompareManager) -> dict[str, Any]:
+def _effective_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
     p = m.params
     return {
         "formula": "final price as delivered"
         if p.price_is_final
         else "spot * (1 + VAT) + markup + network fee + levies",
         "vat_percent": p.vat_percent,
-        "tibber_markup_ct": p.tibber_markup_ct,
+        "provider_markup_ct": p.provider_markup_ct,
         "network_fee_ct": p.network_fee_ct,
         "levies_ct": p.levies_ct,
         "fixed_price_ct": p.fixed_price_ct,
@@ -76,7 +76,7 @@ def _effective_attrs(m: TibberCompareManager) -> dict[str, Any]:
     }
 
 
-def _period_attrs(m: TibberCompareManager) -> dict[str, Any]:
+def _period_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
     t = m.acc.totals
     now = m.now_ts()
     months = m.acc.elapsed_months(now)
@@ -88,7 +88,7 @@ def _period_attrs(m: TibberCompareManager) -> dict[str, Any]:
         "months_tracked": round(months, 3),
         "savings_per_month_eur": round(savings / months, 2) if months > 0.03 else None,
         "projected_savings_per_year_eur": round(savings / months * 12, 2) if months > 0.03 else None,
-        "tibber_total_cost_eur": round(m.acc.tibber_total_cost(now), 2),
+        "dynamic_total_cost_eur": round(m.acc.dynamic_total_cost(now), 2),
         "fixed_total_cost_eur": round(m.acc.fixed_total_cost(now), 2),
         "pending_unpriced_kwh": round(m.acc.pending_kwh, 3),
         "backfilled_kwh": round(t.backfilled_kwh, 3),
@@ -96,7 +96,7 @@ def _period_attrs(m: TibberCompareManager) -> dict[str, Any]:
     }
 
 
-def _avg_spot(m: TibberCompareManager) -> float | None:
+def _avg_spot(m: DynamicEnergyTariffCompareManager) -> float | None:
     t = m.acc.totals
     if t.priced_energy_kwh <= 0 or m.params.price_is_final:
         return None
@@ -113,7 +113,7 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         attr_fn=_source_attrs,
     ),
     TCSensorDescription(
-        key="current_tibber_price",
+        key="current_dynamic_price",
         native_unit_of_measurement=CT_KWH,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
@@ -121,12 +121,12 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         attr_fn=_effective_attrs,
     ),
     TCSensorDescription(
-        key="tibber_energy_cost",
+        key="dynamic_energy_cost",
         native_unit_of_measurement=EUR,
         device_class=SensorDeviceClass.MONETARY,
         state_class=SensorStateClass.TOTAL,
         suggested_display_precision=2,
-        value_fn=lambda m: _r(m.acc.totals.tibber_energy_cost_eur),
+        value_fn=lambda m: _r(m.acc.totals.dynamic_energy_cost_eur),
     ),
     TCSensorDescription(
         key="fixed_energy_cost",
@@ -137,12 +137,12 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         value_fn=lambda m: _r(m.acc.totals.fixed_energy_cost_eur),
     ),
     TCSensorDescription(
-        key="tibber_total_cost",
+        key="dynamic_total_cost",
         native_unit_of_measurement=EUR,
         device_class=SensorDeviceClass.MONETARY,
         state_class=SensorStateClass.TOTAL,
         suggested_display_precision=2,
-        value_fn=lambda m: _r(m.acc.tibber_total_cost(m.now_ts())),
+        value_fn=lambda m: _r(m.acc.dynamic_total_cost(m.now_ts())),
     ),
     TCSensorDescription(
         key="fixed_total_cost",
@@ -171,19 +171,19 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         attr_fn=lambda m: {"priced_kwh": round(m.acc.totals.priced_energy_kwh, 3)},
     ),
     TCSensorDescription(
-        key="avg_tibber_price",
+        key="avg_dynamic_price",
         native_unit_of_measurement=CT_KWH,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
-        value_fn=lambda m: _r(m.acc.avg_tibber_price_ct(), 3),
+        value_fn=lambda m: _r(m.acc.avg_dynamic_price_ct(), 3),
         attr_fn=lambda m: {"consumption_weighted_spot_ct": _avg_spot(m)},
     ),
     TCSensorDescription(
-        key="avg_tibber_price_incl_fees",
+        key="avg_dynamic_price_incl_fees",
         native_unit_of_measurement=CT_KWH,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
-        value_fn=lambda m: _r(m.acc.avg_tibber_price_incl_fees_ct(m.now_ts()), 3),
+        value_fn=lambda m: _r(m.acc.avg_dynamic_price_incl_fees_ct(m.now_ts()), 3),
     ),
     TCSensorDescription(
         key="avg_fixed_price_incl_fees",
@@ -205,22 +205,23 @@ SENSORS: tuple[TCSensorDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: TibberCompareConfigEntry,
+    entry: DynamicEnergyTariffCompareConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up sensors."""
     manager = entry.runtime_data
+    reserve_entity_ids(hass, entry, "sensor", [d.key for d in SENSORS])
     async_add_entities(TCSensor(manager, d) for d in SENSORS)
 
 
-class TCSensor(TibberCompareEntity, SensorEntity):
-    """Tibber Compare sensor."""
+class TCSensor(DynamicEnergyTariffCompareEntity, SensorEntity):
+    """Dynamic Energy Tariff Compare sensor."""
 
     entity_description: TCSensorDescription
     # Price lists are large; keep them out of the recorder database
     _unrecorded_attributes = frozenset({"today", "tomorrow", "last_backfill"})
 
-    def __init__(self, manager: TibberCompareManager, description: TCSensorDescription) -> None:
+    def __init__(self, manager: DynamicEnergyTariffCompareManager, description: TCSensorDescription) -> None:
         super().__init__(manager, description.key)
         self.entity_description = description
 

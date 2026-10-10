@@ -1,4 +1,4 @@
-"""Pure calculation logic for Tibber Compare (no Home Assistant imports).
+"""Pure calculation logic for Dynamic Energy Tariff Compare (no Home Assistant imports).
 
 All timestamps handled here are timezone-aware datetimes or POSIX seconds (UTC).
 Slots are 15-minute market time units (MTU) aligned to UTC quarter hours, which
@@ -134,7 +134,7 @@ _LIST_ATTRS = (
     "data",  # EPEX Spot (mampfes)
     "raw_today",  # custom nordpool
     "raw_tomorrow",
-    "today",  # tibber custom / others
+    "today",  # Tibber-style lists / others
     "tomorrow",
     "prices",
     "prices_today",
@@ -248,17 +248,17 @@ class TariffParams:
 
     fixed_price_ct: float = 32.0  # current tariff Arbeitspreis, gross
     fixed_base_fee_eur_month: float = 12.0  # current tariff Grundpreis, gross
-    tibber_markup_ct: float = 2.15  # Tibber Aufschlag, gross
+    provider_markup_ct: float = 2.15  # provider markup on the spot price, gross (example value)
     network_fee_ct: float = 9.0  # Netzentgelt Arbeitspreis (+ Messstelle var.), gross
     levies_ct: float = 7.5  # Stromsteuer + Konzessionsabgabe + Umlagen, gross
     vat_percent: float = 19.0  # applied to the raw spot price
-    tibber_monthly_fee_eur: float = 5.99  # gross
+    provider_monthly_fee_eur: float = 5.99  # gross
     grid_base_fee_eur_month: float = 8.0  # Netz-Grundpreis + Messstellenbetrieb, gross
     price_is_final: bool = False  # price source already all-in (no surcharges)
 
 
 def effective_price_ct(spot_ct: float, params: TariffParams, is_final: bool | None = None) -> float:
-    """Effective Tibber energy price in ct/kWh gross for one slot.
+    """Effective dynamic-tariff energy price in ct/kWh gross for one slot.
 
     raw:   spot_net * (1 + VAT) + markup + network fee + levies   (all add-ons gross)
     final: price as delivered by the source
@@ -268,7 +268,7 @@ def effective_price_ct(spot_ct: float, params: TariffParams, is_final: bool | No
         return spot_ct
     return (
         spot_ct * (1 + params.vat_percent / 100.0)
-        + params.tibber_markup_ct
+        + params.provider_markup_ct
         + params.network_fee_ct
         + params.levies_ct
     )
@@ -285,7 +285,7 @@ class Totals:
 
     energy_kwh: float = 0.0
     priced_energy_kwh: float = 0.0
-    tibber_energy_cost_eur: float = 0.0
+    dynamic_energy_cost_eur: float = 0.0
     fixed_energy_cost_eur: float = 0.0
     spot_weighted_ct_kwh_sum: float = 0.0  # sum(kWh * spot ct) for priced energy
     tracking_start: float | None = None  # POSIX seconds; earliest covered time
@@ -366,7 +366,7 @@ class Accumulator:
         eff = effective_price_ct(ct, self.params, is_final)
         t = self.totals
         t.priced_energy_kwh += kwh
-        t.tibber_energy_cost_eur += kwh * eff / 100.0
+        t.dynamic_energy_cost_eur += kwh * eff / 100.0
         if not is_final:
             t.spot_weighted_ct_kwh_sum += kwh * ct
         return True
@@ -375,7 +375,7 @@ class Accumulator:
         """Try to price pending energy. Returns number of resolved entries.
 
         Entries older than MAX_PENDING_AGE are priced with the nearest known
-        price via price_lookup fallback or dropped from Tibber costing.
+        price via price_lookup fallback or dropped from dynamic-tariff costing.
         """
         t = self.totals
         still: list[list[float]] = []
@@ -401,11 +401,11 @@ class Accumulator:
             return 0.0
         return max(0.0, now_ts - start) / SECONDS_PER_MONTH
 
-    def tibber_total_cost(self, now_ts: float) -> float:
+    def dynamic_total_cost(self, now_ts: float) -> float:
         p = self.params
         months = self.elapsed_months(now_ts)
-        return self.totals.tibber_energy_cost_eur + months * (
-            p.tibber_monthly_fee_eur + p.grid_base_fee_eur_month
+        return self.totals.dynamic_energy_cost_eur + months * (
+            p.provider_monthly_fee_eur + p.grid_base_fee_eur_month
         )
 
     def fixed_total_cost(self, now_ts: float) -> float:
@@ -413,25 +413,25 @@ class Accumulator:
         return self.totals.fixed_energy_cost_eur + months * self.params.fixed_base_fee_eur_month
 
     def savings(self, now_ts: float) -> float:
-        """Positive = Tibber would have been cheaper.
+        """Positive = the dynamic tariff would have been cheaper.
 
         Fixed-tariff energy cost of still-pending (unpriced) energy is excluded
         so both sides compare the same kWh.
         """
         pending_fixed = self.pending_kwh * self.params.fixed_price_ct / 100.0
-        return (self.fixed_total_cost(now_ts) - pending_fixed) - self.tibber_total_cost(now_ts)
+        return (self.fixed_total_cost(now_ts) - pending_fixed) - self.dynamic_total_cost(now_ts)
 
-    def avg_tibber_price_ct(self) -> float | None:
+    def avg_dynamic_price_ct(self) -> float | None:
         t = self.totals
         if t.priced_energy_kwh <= 0:
             return None
-        return t.tibber_energy_cost_eur / t.priced_energy_kwh * 100.0
+        return t.dynamic_energy_cost_eur / t.priced_energy_kwh * 100.0
 
-    def avg_tibber_price_incl_fees_ct(self, now_ts: float) -> float | None:
+    def avg_dynamic_price_incl_fees_ct(self, now_ts: float) -> float | None:
         t = self.totals
         if t.priced_energy_kwh <= 0:
             return None
-        return self.tibber_total_cost(now_ts) / t.priced_energy_kwh * 100.0
+        return self.dynamic_total_cost(now_ts) / t.priced_energy_kwh * 100.0
 
     def avg_fixed_price_incl_fees_ct(self, now_ts: float) -> float | None:
         t = self.totals
@@ -507,7 +507,7 @@ def merge_backfill(live: Totals, back: Totals, backfill_start: float) -> None:
     """Merge backfill totals into live totals (in place)."""
     live.energy_kwh += back.energy_kwh
     live.priced_energy_kwh += back.priced_energy_kwh
-    live.tibber_energy_cost_eur += back.tibber_energy_cost_eur
+    live.dynamic_energy_cost_eur += back.dynamic_energy_cost_eur
     live.fixed_energy_cost_eur += back.fixed_energy_cost_eur
     live.spot_weighted_ct_kwh_sum += back.spot_weighted_ct_kwh_sum
     live.backfilled_kwh += back.energy_kwh

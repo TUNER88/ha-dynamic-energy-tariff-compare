@@ -1,0 +1,18 @@
+{
+  "domain": "dynamic_energy_tariff_compare",
+  "name": "Dynamic Energy Tariff Compare",
+  "after_dependencies": [
+    "recorder"
+  ],
+  "codeowners": [
+    "@TUNER88"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/TUNER88/ha-dynamic-energy-tariff-compare",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/TUNER88/ha-dynamic-energy-tariff-compare/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

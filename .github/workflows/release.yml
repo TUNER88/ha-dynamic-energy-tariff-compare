@@ -1,0 +1,90 @@
+name: Release
+
+# Publishes a GitHub release (tag + dynamic_energy_tariff_compare.zip) every time a PR is merged
+# into main. The version is derived from the latest tag and the PR's labels or
+# conventional-commit title; nothing is committed back to main.
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build & publish release
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       !contains(github.event.pull_request.labels.*.name, 'skip-release'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Determine next version
+        id: version
+        env:
+          PR_LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          INPUT_BUMP: ${{ inputs.bump }}
+        run: |
+          LATEST_TAG="$(git tag --list 'v*' --sort=-v:refname | head -n1)"
+          echo "Latest tag: ${LATEST_TAG:-<none>}"
+          VERSION="$(python .github/scripts/next_version.py \
+            --latest-tag "${LATEST_TAG}" \
+            --manifest custom_components/dynamic_energy_tariff_compare/manifest.json \
+            --labels "${PR_LABELS:-[]}" \
+            --title "${PR_TITLE}" \
+            --bump "${INPUT_BUMP}")"
+          echo "Next version: ${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Build dynamic_energy_tariff_compare.zip
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          mkdir -p build
+          cp -r custom_components/dynamic_energy_tariff_compare/. build/
+          find build -name '__pycache__' -prune -exec rm -rf {} +
+          python - <<'PY'
+          import json, os
+          path = "build/manifest.json"
+          manifest = json.load(open(path))
+          manifest["version"] = os.environ["VERSION"]
+          with open(path, "w") as f:
+              json.dump(manifest, f, indent=2)
+              f.write("\n")
+          PY
+          (cd build && zip -r ../dynamic_energy_tariff_compare.zip .)
+          unzip -l dynamic_energy_tariff_compare.zip
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          TARGET: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+        run: |
+          gh release create "v${VERSION}" dynamic_energy_tariff_compare.zip \
+            --target "${TARGET}" \
+            --title "v${VERSION}" \
+            --generate-notes

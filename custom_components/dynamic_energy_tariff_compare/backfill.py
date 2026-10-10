@@ -15,7 +15,7 @@ from homeassistant.util import dt as dt_util
 from . import calc
 
 if TYPE_CHECKING:
-    from .manager import TibberCompareManager
+    from .manager import DynamicEnergyTariffCompareManager
 
 _LOGGER = logging.getLogger(__name__)
 EC_CHUNK = timedelta(days=31)
@@ -28,7 +28,7 @@ def _row_ts(value: Any) -> float:
 
 
 async def _energy_buckets(
-    mgr: TibberCompareManager, start: datetime, end: datetime
+    mgr: DynamicEnergyTariffCompareManager, start: datetime, end: datetime
 ) -> tuple[list[tuple[float, float, float]], dict[str, Any]]:
     """Return [(start, end, kWh)] using 5-min stats where available, else hourly."""
     from homeassistant.components.recorder import get_instance  # noqa: PLC0415
@@ -99,7 +99,7 @@ async def _energy_buckets(
 
 
 async def _price_history(
-    mgr: TibberCompareManager, start: datetime, end: datetime
+    mgr: DynamicEnergyTariffCompareManager, start: datetime, end: datetime
 ) -> dict[int, float]:
     """Prices of the selected price sensor from recorder history (ct/kWh)."""
     from homeassistant.components.recorder import get_instance  # noqa: PLC0415
@@ -144,7 +144,7 @@ async def _price_history(
     return from_states
 
 
-async def async_run_backfill(mgr: TibberCompareManager, days: int) -> dict[str, Any]:
+async def async_run_backfill(mgr: DynamicEnergyTariffCompareManager, days: int) -> dict[str, Any]:
     """Backfill `days` days before the currently covered period."""
     from .manager import async_fetch_energy_charts  # noqa: PLC0415
 
@@ -203,12 +203,12 @@ async def async_run_backfill(mgr: TibberCompareManager, days: int) -> dict[str, 
         "to": dt_util.as_local(end).isoformat(),
         "energy_kwh": round(back.energy_kwh, 3),
         "unpriced_kwh_skipped": round(unpriced, 3),
-        "tibber_energy_cost_eur": round(back.tibber_energy_cost_eur, 2),
+        "dynamic_energy_cost_eur": round(back.dynamic_energy_cost_eur, 2),
         "fixed_energy_cost_eur": round(back.fixed_energy_cost_eur, 2),
         "price_slots_from_sensor_history": sensor_slots,
         "price_slots_from_energy_charts": ec_slots,
         "energy_charts_error": ec_error,
         **info,
     }
-    _LOGGER.info("Tibber Compare backfill result: %s", result)
+    _LOGGER.info("Dynamic Energy Tariff Compare backfill result: %s", result)
     return result

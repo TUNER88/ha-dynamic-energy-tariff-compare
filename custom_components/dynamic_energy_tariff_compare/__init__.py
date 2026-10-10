@@ -1,4 +1,4 @@
-"""Tibber Compare: estimate Tibber dynamic tariff costs vs. a fixed tariff."""
+"""Dynamic Energy Tariff Compare: estimate dynamic (spot-price) electricity tariff costs vs. a fixed tariff."""
 
 from __future__ import annotations
 
@@ -11,11 +11,11 @@ from homeassistant.exceptions import ServiceValidationError
 import homeassistant.helpers.config_validation as cv
 
 from .const import ATTR_DAYS, ATTR_ENTRY_ID, DEFAULT_BACKFILL_DAYS, DOMAIN, SERVICE_BACKFILL, SERVICE_RESET
-from .manager import TibberCompareManager
+from .manager import DynamicEnergyTariffCompareManager
 
 PLATFORMS = [Platform.SENSOR, Platform.BUTTON]
 
-type TibberCompareConfigEntry = ConfigEntry[TibberCompareManager]
+type DynamicEnergyTariffCompareConfigEntry = ConfigEntry[DynamicEnergyTariffCompareManager]
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
@@ -30,14 +30,14 @@ BACKFILL_SCHEMA = vol.Schema(
 RESET_SCHEMA = vol.Schema({vol.Optional(ATTR_ENTRY_ID): cv.string})
 
 
-def _managers(hass: HomeAssistant, entry_id: str | None) -> list[TibberCompareManager]:
+def _managers(hass: HomeAssistant, entry_id: str | None) -> list[DynamicEnergyTariffCompareManager]:
     entries = [
         e
         for e in hass.config_entries.async_loaded_entries(DOMAIN)
         if entry_id is None or e.entry_id == entry_id
     ]
     if not entries:
-        raise ServiceValidationError("No matching Tibber Compare entry is loaded")
+        raise ServiceValidationError("No matching Dynamic Energy Tariff Compare entry is loaded")
     return [e.runtime_data for e in entries]
 
 
@@ -65,9 +65,9 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: TibberCompareConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: DynamicEnergyTariffCompareConfigEntry) -> bool:
     """Set up from a config entry."""
-    manager = TibberCompareManager(hass, entry)
+    manager = DynamicEnergyTariffCompareManager(hass, entry)
     await manager.async_start()
     entry.runtime_data = manager
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
@@ -79,7 +79,7 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> Non
     await hass.config_entries.async_reload(entry.entry_id)
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: TibberCompareConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: DynamicEnergyTariffCompareConfigEntry) -> bool:
     """Unload a config entry."""
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unloaded:

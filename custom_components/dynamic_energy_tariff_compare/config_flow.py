@@ -1,4 +1,4 @@
-"""Config and options flow for Tibber Compare."""
+"""Config and options flow for Dynamic Energy Tariff Compare."""
 
 from __future__ import annotations
 
@@ -22,8 +22,9 @@ from .const import (
     CONF_NETWORK_FEE,
     CONF_PRICE_ENTITY,
     CONF_PRICE_IS_FINAL,
-    CONF_TIBBER_MARKUP,
-    CONF_TIBBER_MONTHLY_FEE,
+    CONF_PROVIDER_NAME,
+    CONF_PROVIDER_MARKUP,
+    CONF_PROVIDER_MONTHLY_FEE,
     CONF_USE_ENERGY_CHARTS,
     CONF_VAT,
     DEFAULTS,
@@ -33,11 +34,11 @@ from .const import (
 _NUM_SPECS: dict[str, tuple[float, float, float, str]] = {
     CONF_FIXED_PRICE: (0, 200, 0.01, "ct/kWh"),
     CONF_FIXED_BASE_FEE: (0, 200, 0.01, "€/month"),
-    CONF_TIBBER_MARKUP: (-10, 50, 0.01, "ct/kWh"),
+    CONF_PROVIDER_MARKUP: (-10, 50, 0.01, "ct/kWh"),
     CONF_NETWORK_FEE: (0, 50, 0.01, "ct/kWh"),
     CONF_LEVIES: (0, 50, 0.01, "ct/kWh"),
     CONF_VAT: (0, 50, 0.1, "%"),
-    CONF_TIBBER_MONTHLY_FEE: (0, 50, 0.01, "€/month"),
+    CONF_PROVIDER_MONTHLY_FEE: (0, 50, 0.01, "€/month"),
     CONF_GRID_BASE_FEE: (0, 100, 0.01, "€/month"),
 }
 
@@ -56,6 +57,10 @@ def build_schema(current: dict[str, Any]) -> vol.Schema:
     """Schema shared by config and options flow."""
     cfg = {**DEFAULTS, **current}
     schema: dict[Any, Any] = {
+        vol.Optional(
+            CONF_PROVIDER_NAME,
+            description={"suggested_value": cfg.get(CONF_PROVIDER_NAME) or None},
+        ): selector.TextSelector(),
         vol.Required(
             CONF_ENERGY_ENTITY, default=cfg.get(CONF_ENERGY_ENTITY, vol.UNDEFINED)
         ): selector.EntitySelector(
@@ -89,7 +94,7 @@ def validate(hass: HomeAssistant, user_input: dict[str, Any]) -> dict[str, str]:
     return errors
 
 
-class TibberCompareConfigFlow(ConfigFlow, domain=DOMAIN):
+class DynamicEnergyTariffCompareConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow."""
 
     VERSION = 1
@@ -101,7 +106,9 @@ class TibberCompareConfigFlow(ConfigFlow, domain=DOMAIN):
             if not errors:
                 await self.async_set_unique_id(user_input[CONF_ENERGY_ENTITY])
                 self._abort_if_unique_id_configured()
-                return self.async_create_entry(title="Tibber Compare", data=user_input)
+                provider = (user_input.get(CONF_PROVIDER_NAME) or "").strip()
+                title = f"Dynamic Energy Tariff Compare ({provider})" if provider else "Dynamic Energy Tariff Compare"
+                return self.async_create_entry(title=title, data=user_input)
         return self.async_show_form(
             step_id="user",
             data_schema=build_schema(user_input or {}),
@@ -111,10 +118,10 @@ class TibberCompareConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
-        return TibberCompareOptionsFlow()
+        return DynamicEnergyTariffCompareOptionsFlow()
 
 
-class TibberCompareOptionsFlow(OptionsFlow):
+class DynamicEnergyTariffCompareOptionsFlow(OptionsFlow):
     """Options flow: everything (incl. sensors) can be changed."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
@@ -124,6 +131,7 @@ class TibberCompareOptionsFlow(OptionsFlow):
             if not errors:
                 if CONF_PRICE_ENTITY not in user_input:
                     user_input[CONF_PRICE_ENTITY] = None  # cleared in UI
+                user_input.setdefault(CONF_PROVIDER_NAME, "")
                 return self.async_create_entry(data=user_input)
         current = {**self.config_entry.data, **self.config_entry.options, **(user_input or {})}
         return self.async_show_form(

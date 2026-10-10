@@ -11,7 +11,7 @@ import pytest
 
 _spec = importlib.util.spec_from_file_location(
     "tc_calc",
-    Path(__file__).parents[1] / "custom_components" / "tibber_compare" / "calc.py",
+    Path(__file__).parents[1] / "custom_components" / "dynamic_energy_tariff_compare" / "calc.py",
 )
 calc = importlib.util.module_from_spec(_spec)
 sys.modules["tc_calc"] = calc
@@ -64,7 +64,7 @@ def test_energy_units():
 
 
 def test_effective_price_raw_and_final():
-    p = calc.TariffParams(tibber_markup_ct=2.0, network_fee_ct=9.0, levies_ct=7.0, vat_percent=19)
+    p = calc.TariffParams(provider_markup_ct=2.0, network_fee_ct=9.0, levies_ct=7.0, vat_percent=19)
     assert calc.effective_price_ct(10.0, p) == pytest.approx(11.9 + 18.0)
     assert calc.effective_price_ct(-5.0, p) == pytest.approx(-5.95 + 18.0)
     assert calc.effective_price_ct(30.0, p, is_final=True) == 30.0
@@ -111,7 +111,7 @@ def _lookup(prices):
 
 
 def test_accumulator_basic_and_split():
-    p = calc.TariffParams(fixed_price_ct=30, tibber_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
+    p = calc.TariffParams(fixed_price_ct=30, provider_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
     acc = calc.Accumulator(p)
     prices = {T0: 10.0, T0 + 900: 20.0}
     look = _lookup(prices)
@@ -119,9 +119,9 @@ def test_accumulator_basic_and_split():
     acc.process_reading(1002.0, T0 + 1350, look)  # 1 kWh in each slot
     t = acc.totals
     assert t.energy_kwh == pytest.approx(2.0)
-    assert t.tibber_energy_cost_eur == pytest.approx(0.30)
+    assert t.dynamic_energy_cost_eur == pytest.approx(0.30)
     assert t.fixed_energy_cost_eur == pytest.approx(0.60)
-    assert acc.avg_tibber_price_ct() == pytest.approx(15.0)
+    assert acc.avg_dynamic_price_ct() == pytest.approx(15.0)
 
 
 def test_accumulator_reset_and_negative_delta_ignored():
@@ -135,8 +135,8 @@ def test_accumulator_reset_and_negative_delta_ignored():
 
 
 def test_pending_resolution_and_savings_exclude_pending():
-    p = calc.TariffParams(fixed_price_ct=30, fixed_base_fee_eur_month=0, tibber_monthly_fee_eur=0,
-                          grid_base_fee_eur_month=0, tibber_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
+    p = calc.TariffParams(fixed_price_ct=30, fixed_base_fee_eur_month=0, provider_monthly_fee_eur=0,
+                          grid_base_fee_eur_month=0, provider_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
     acc = calc.Accumulator(p)
     prices: dict[int, float] = {}
     look = _lookup(prices)
@@ -151,11 +151,11 @@ def test_pending_resolution_and_savings_exclude_pending():
 
 
 def test_monthly_fees_prorated():
-    p = calc.TariffParams(fixed_base_fee_eur_month=12, tibber_monthly_fee_eur=6, grid_base_fee_eur_month=8)
+    p = calc.TariffParams(fixed_base_fee_eur_month=12, provider_monthly_fee_eur=6, grid_base_fee_eur_month=8)
     acc = calc.Accumulator(p, calc.Totals(tracking_start=T0))
     now = T0 + calc.SECONDS_PER_MONTH
     assert acc.fixed_total_cost(now) == pytest.approx(12)
-    assert acc.tibber_total_cost(now) == pytest.approx(14)
+    assert acc.dynamic_total_cost(now) == pytest.approx(14)
     assert acc.savings(now) == pytest.approx(-2)
 
 
@@ -177,12 +177,12 @@ def test_state_timeline_time_weighted():
 
 
 def test_backfill_hourly_with_15min_prices_and_merge():
-    p = calc.TariffParams(fixed_price_ct=30, tibber_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
+    p = calc.TariffParams(fixed_price_ct=30, provider_markup_ct=0, network_fee_ct=0, levies_ct=0, vat_percent=0)
     prices = {T0: 0.0, T0 + 900: 10.0, T0 + 1800: 20.0}  # last quarter missing
     back = calc.backfill_energy([(T0, T0 + 3600, 4.0)], _lookup(prices), p)
     assert back.priced_energy_kwh == pytest.approx(3.0)
     assert back.energy_kwh == pytest.approx(3.0)  # unpriced excluded from both sides
-    assert back.tibber_energy_cost_eur == pytest.approx(0.30)
+    assert back.dynamic_energy_cost_eur == pytest.approx(0.30)
     assert back.fixed_energy_cost_eur == pytest.approx(0.90)
     live = calc.Totals(energy_kwh=1, tracking_start=T0 + 3600)
     calc.merge_backfill(live, back, T0)

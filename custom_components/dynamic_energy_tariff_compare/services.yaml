@@ -4,7 +4,7 @@ backfill:
       required: false
       selector:
         config_entry:
-          integration: tibber_compare
+          integration: dynamic_energy_tariff_compare
     days:
       required: false
       default: 30
@@ -20,4 +20,4 @@ reset:
       required: false
       selector:
         config_entry:
-          integration: tibber_compare
+          integration: dynamic_energy_tariff_compare
