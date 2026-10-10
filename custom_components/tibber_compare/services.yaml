@@ -1,0 +1,23 @@
+backfill:
+  fields:
+    entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: tibber_compare
+    days:
+      required: false
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 730
+          unit_of_measurement: days
+          mode: box
+reset:
+  fields:
+    entry_id:
+      required: false
+      selector:
+        config_entry:
+          integration: tibber_compare

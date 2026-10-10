@@ -1,0 +1,143 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tibber Compare",
+        "description": "Vergleicht Tibbers dynamischen 15-Minuten-Tarif mit deinem Festpreis. Alle ct/kWh-Werte brutto (inkl. 19 % MwSt.), außer dem Börsenpreis, auf den die MwSt. aufgeschlagen wird. Lokale Werte für deine PLZ auf tibber.com prüfen.",
+        "data": {
+          "energy_entity": "Netzbezugs-Zähler (kWh, z. B. EDL21 Gesamtwirkenergie / OBIS 1.8.0)",
+          "price_entity": "Preissensor (optional: EPEX Spot, Nord Pool, Tibber, …)",
+          "price_is_final": "Preissensor ist bereits der Endpreis (keine MwSt./Aufschläge addieren)",
+          "use_energy_charts": "DE-LU-Spotpreise von energy-charts.info laden, wenn kein Preissensor gewählt ist",
+          "fixed_price_ct": "Aktueller Festpreis-Tarif: Arbeitspreis (ct/kWh, brutto)",
+          "fixed_base_fee_eur_month": "Aktueller Festpreis-Tarif: Grundpreis (€/Monat, brutto)",
+          "tibber_markup_ct": "Tibber-Aufschlag (ct/kWh, brutto)",
+          "network_fee_ct": "Netzentgelt Arbeitspreis (ct/kWh, brutto)",
+          "levies_ct": "Steuern & Abgaben: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, brutto)",
+          "vat_percent": "MwSt. auf den Börsenpreis (%)",
+          "tibber_monthly_fee_eur": "Tibber Grundgebühr (€/Monat, brutto)",
+          "grid_base_fee_eur_month": "Netz-Grundpreis + Messstellenbetrieb (€/Monat, brutto) für Tibber"
+        },
+        "data_description": {
+          "price_entity": "Leer lassen, um energy-charts.info zu nutzen. 15-Minuten-Preislisten werden aus Attributen gelesen (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …), sonst wird der aktuelle Zustand je Slot verwendet. Einheit wird aus unit_of_measurement erkannt (€/kWh, ct/kWh, €/MWh).",
+          "price_is_final": "Aus: Sensor liefert den reinen (netto) Börsenpreis -> MwSt., Aufschlag, Netzentgelt und Abgaben werden addiert. An: z. B. Tibber-Integration oder EPEX Spot mit konfigurierten Aufschlägen -> unverändert verwendet.",
+          "tibber_markup_ct": "Mit dem Preisrechner auf tibber.com für deine PLZ prüfen.",
+          "network_fee_ct": "Hängt vom Netzbetreiber / der PLZ ab. Siehe Preisaufschlüsselung auf tibber.com."
+        }
+      }
+    },
+    "error": {
+      "unknown_price_unit": "Der Preissensor hat keine erkannte Einheit (€/kWh, ct/kWh, €/MWh) und keine Preisliste in den Attributen.",
+      "no_price_source": "Preissensor wählen oder energy-charts.info aktivieren."
+    },
+    "abort": {
+      "already_configured": "Dieser Energiesensor ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tibber Compare Optionen",
+        "description": "Geänderte Tarifwerte gelten nur für neuen Verbrauch. Mit Reset (und Backfill) neu berechnen.",
+        "data": {
+          "energy_entity": "Netzbezugs-Zähler (kWh, z. B. EDL21 Gesamtwirkenergie / OBIS 1.8.0)",
+          "price_entity": "Preissensor (optional: EPEX Spot, Nord Pool, Tibber, …)",
+          "price_is_final": "Preissensor ist bereits der Endpreis (keine MwSt./Aufschläge addieren)",
+          "use_energy_charts": "DE-LU-Spotpreise von energy-charts.info laden, wenn kein Preissensor gewählt ist",
+          "fixed_price_ct": "Aktueller Festpreis-Tarif: Arbeitspreis (ct/kWh, brutto)",
+          "fixed_base_fee_eur_month": "Aktueller Festpreis-Tarif: Grundpreis (€/Monat, brutto)",
+          "tibber_markup_ct": "Tibber-Aufschlag (ct/kWh, brutto)",
+          "network_fee_ct": "Netzentgelt Arbeitspreis (ct/kWh, brutto)",
+          "levies_ct": "Steuern & Abgaben: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, brutto)",
+          "vat_percent": "MwSt. auf den Börsenpreis (%)",
+          "tibber_monthly_fee_eur": "Tibber Grundgebühr (€/Monat, brutto)",
+          "grid_base_fee_eur_month": "Netz-Grundpreis + Messstellenbetrieb (€/Monat, brutto) für Tibber"
+        },
+        "data_description": {
+          "price_entity": "Leer lassen, um energy-charts.info zu nutzen. 15-Minuten-Preislisten werden aus Attributen gelesen (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …), sonst wird der aktuelle Zustand je Slot verwendet. Einheit wird aus unit_of_measurement erkannt (€/kWh, ct/kWh, €/MWh).",
+          "price_is_final": "Aus: Sensor liefert den reinen (netto) Börsenpreis -> MwSt., Aufschlag, Netzentgelt und Abgaben werden addiert. An: z. B. Tibber-Integration oder EPEX Spot mit konfigurierten Aufschlägen -> unverändert verwendet.",
+          "tibber_markup_ct": "Mit dem Preisrechner auf tibber.com für deine PLZ prüfen.",
+          "network_fee_ct": "Hängt vom Netzbetreiber / der PLZ ab. Siehe Preisaufschlüsselung auf tibber.com."
+        }
+      }
+    },
+    "error": {
+      "unknown_price_unit": "Der Preissensor hat keine erkannte Einheit (€/kWh, ct/kWh, €/MWh) und keine Preisliste in den Attributen.",
+      "no_price_source": "Preissensor wählen oder energy-charts.info aktivieren."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_spot_price": {
+        "name": "Aktueller Preis (Quelle)"
+      },
+      "current_tibber_price": {
+        "name": "Aktueller Tibber-Preis (effektiv)"
+      },
+      "tibber_energy_cost": {
+        "name": "Tibber Energiekosten"
+      },
+      "fixed_energy_cost": {
+        "name": "Festpreis Energiekosten"
+      },
+      "tibber_total_cost": {
+        "name": "Tibber Gesamtkosten inkl. Grundgebühren"
+      },
+      "fixed_total_cost": {
+        "name": "Festpreis Gesamtkosten inkl. Grundpreis"
+      },
+      "savings": {
+        "name": "Ersparnis mit Tibber"
+      },
+      "consumption": {
+        "name": "Erfasster Verbrauch"
+      },
+      "avg_tibber_price": {
+        "name": "Ø Tibber-Arbeitspreis"
+      },
+      "avg_tibber_price_incl_fees": {
+        "name": "Ø Tibber-Preis inkl. Gebühren"
+      },
+      "avg_fixed_price_incl_fees": {
+        "name": "Ø Festpreis inkl. Grundpreis"
+      },
+      "pending_energy": {
+        "name": "Energie ohne Preis (wartend)"
+      }
+    },
+    "button": {
+      "backfill": {
+        "name": "30 Tage aus Historie nachberechnen"
+      },
+      "reset": {
+        "name": "Statistik zurücksetzen"
+      }
+    }
+  },
+  "services": {
+    "backfill": {
+      "name": "Aus Historie nachberechnen",
+      "description": "Berechnet Kosten für den Zeitraum vor Beginn der Erfassung aus den Recorder-Statistiken (5-Min-Kurzzeitstatistik wo vorhanden, sonst stündlich).",
+      "fields": {
+        "entry_id": {
+          "name": "Entry",
+          "description": "Eintrag (Standard: alle)"
+        },
+        "days": {
+          "name": "Tage",
+          "description": "Wie viele Tage vor dem aktuellen Erfassungsbeginn"
+        }
+      }
+    },
+    "reset": {
+      "name": "Reset",
+      "description": "Alle Summen zurücksetzen.",
+      "fields": {
+        "entry_id": {
+          "name": "Entry",
+          "description": "Eintrag (Standard: alle)"
+        }
+      }
+    }
+  }
+}

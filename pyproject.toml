@@ -1,0 +1,17 @@
+[project]
+name = "ha-tibber-compare"
+version = "0.0.0"  # not used; the release version comes from git tags (see CONTRIBUTING.md)
+requires-python = ">=3.14"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]

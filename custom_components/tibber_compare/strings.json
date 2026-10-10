@@ -1,0 +1,143 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tibber Compare",
+        "description": "Compare Tibber's dynamic 15-min tariff with your fixed tariff. All ct/kWh values are gross (incl. 19 % VAT), except the spot price, which gets VAT applied. Check your local values on tibber.com for your postcode.",
+        "data": {
+          "energy_entity": "Grid import energy sensor (kWh, e.g. EDL21 total active energy / OBIS 1.8.0)",
+          "price_entity": "Price sensor (optional: EPEX Spot, Nord Pool, Tibber, …)",
+          "price_is_final": "Price sensor already is the final all-in price (no VAT/surcharges added)",
+          "use_energy_charts": "Fetch DE-LU spot prices from energy-charts.info if no price sensor is selected",
+          "fixed_price_ct": "Current fixed tariff: energy price (ct/kWh, gross)",
+          "fixed_base_fee_eur_month": "Current fixed tariff: base fee (€/month, gross)",
+          "tibber_markup_ct": "Tibber markup (ct/kWh, gross)",
+          "network_fee_ct": "Grid fee / Netzentgelt Arbeitspreis (ct/kWh, gross)",
+          "levies_ct": "Taxes & levies: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, gross)",
+          "vat_percent": "VAT applied to the spot price (%)",
+          "tibber_monthly_fee_eur": "Tibber monthly fee (€/month, gross)",
+          "grid_base_fee_eur_month": "Grid base fee + metering (€/month, gross) for the Tibber calculation"
+        },
+        "data_description": {
+          "price_entity": "Leave empty to use energy-charts.info. 15-min price lists are read from attributes (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …); otherwise the current state is used per slot. Unit is detected from unit_of_measurement (€/kWh, ct/kWh, €/MWh).",
+          "price_is_final": "Off: sensor is the raw (net) spot price -> VAT, markup, grid fee and levies are added. On: e.g. Tibber integration or EPEX Spot with surcharges configured -> used as is.",
+          "tibber_markup_ct": "Check tibber.com price calculator for your postcode.",
+          "network_fee_ct": "Depends on your grid operator / postcode. See the price breakdown on tibber.com."
+        }
+      }
+    },
+    "error": {
+      "unknown_price_unit": "The price sensor has no recognised unit (€/kWh, ct/kWh, €/MWh) and no price list attributes.",
+      "no_price_source": "Select a price sensor or enable energy-charts.info."
+    },
+    "abort": {
+      "already_configured": "This energy sensor is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tibber Compare options",
+        "description": "Changed tariff values apply to new consumption only. Use the Reset button (and Backfill) to recalculate.",
+        "data": {
+          "energy_entity": "Grid import energy sensor (kWh, e.g. EDL21 total active energy / OBIS 1.8.0)",
+          "price_entity": "Price sensor (optional: EPEX Spot, Nord Pool, Tibber, …)",
+          "price_is_final": "Price sensor already is the final all-in price (no VAT/surcharges added)",
+          "use_energy_charts": "Fetch DE-LU spot prices from energy-charts.info if no price sensor is selected",
+          "fixed_price_ct": "Current fixed tariff: energy price (ct/kWh, gross)",
+          "fixed_base_fee_eur_month": "Current fixed tariff: base fee (€/month, gross)",
+          "tibber_markup_ct": "Tibber markup (ct/kWh, gross)",
+          "network_fee_ct": "Grid fee / Netzentgelt Arbeitspreis (ct/kWh, gross)",
+          "levies_ct": "Taxes & levies: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, gross)",
+          "vat_percent": "VAT applied to the spot price (%)",
+          "tibber_monthly_fee_eur": "Tibber monthly fee (€/month, gross)",
+          "grid_base_fee_eur_month": "Grid base fee + metering (€/month, gross) for the Tibber calculation"
+        },
+        "data_description": {
+          "price_entity": "Leave empty to use energy-charts.info. 15-min price lists are read from attributes (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …); otherwise the current state is used per slot. Unit is detected from unit_of_measurement (€/kWh, ct/kWh, €/MWh).",
+          "price_is_final": "Off: sensor is the raw (net) spot price -> VAT, markup, grid fee and levies are added. On: e.g. Tibber integration or EPEX Spot with surcharges configured -> used as is.",
+          "tibber_markup_ct": "Check tibber.com price calculator for your postcode.",
+          "network_fee_ct": "Depends on your grid operator / postcode. See the price breakdown on tibber.com."
+        }
+      }
+    },
+    "error": {
+      "unknown_price_unit": "The price sensor has no recognised unit (€/kWh, ct/kWh, €/MWh) and no price list attributes.",
+      "no_price_source": "Select a price sensor or enable energy-charts.info."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_spot_price": {
+        "name": "Current price (source)"
+      },
+      "current_tibber_price": {
+        "name": "Current Tibber price (effective)"
+      },
+      "tibber_energy_cost": {
+        "name": "Tibber energy cost"
+      },
+      "fixed_energy_cost": {
+        "name": "Fixed tariff energy cost"
+      },
+      "tibber_total_cost": {
+        "name": "Tibber total cost incl. fees"
+      },
+      "fixed_total_cost": {
+        "name": "Fixed tariff total cost incl. fees"
+      },
+      "savings": {
+        "name": "Savings with Tibber"
+      },
+      "consumption": {
+        "name": "Tracked consumption"
+      },
+      "avg_tibber_price": {
+        "name": "Average Tibber energy price"
+      },
+      "avg_tibber_price_incl_fees": {
+        "name": "Average Tibber price incl. fees"
+      },
+      "avg_fixed_price_incl_fees": {
+        "name": "Average fixed price incl. fees"
+      },
+      "pending_energy": {
+        "name": "Energy waiting for price"
+      }
+    },
+    "button": {
+      "backfill": {
+        "name": "Backfill 30 days from history"
+      },
+      "reset": {
+        "name": "Reset statistics"
+      }
+    }
+  },
+  "services": {
+    "backfill": {
+      "name": "Backfill from history",
+      "description": "Calculates costs for the period before tracking started from recorder statistics (5-min short-term stats where available, else hourly).",
+      "fields": {
+        "entry_id": {
+          "name": "Entry",
+          "description": "Config entry (default: all)"
+        },
+        "days": {
+          "name": "Days",
+          "description": "How many days before the current tracking start"
+        }
+      }
+    },
+    "reset": {
+      "name": "Reset",
+      "description": "Reset all accumulated totals.",
+      "fields": {
+        "entry_id": {
+          "name": "Entry",
+          "description": "Config entry (default: all)"
+        }
+      }
+    }
+  }
+}
