@@ -163,6 +163,18 @@
       },
       "savings_365d": {
         "name": "Savings (last 365 days)"
+      },
+      "savings_percent": {
+        "name": "Savings with dynamic tariff (%)"
+      },
+      "savings_percent_24h": {
+        "name": "Savings % (last 24 h)"
+      },
+      "savings_percent_30d": {
+        "name": "Savings % (last 30 days)"
+      },
+      "savings_percent_365d": {
+        "name": "Savings % (last 365 days)"
       }
     },
     "button": {

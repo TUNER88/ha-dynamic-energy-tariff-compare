@@ -66,6 +66,55 @@ views:
             entity: sensor.dynamic_energy_tariff_compare_savings_365d
             name: Saved 365 days
 
+      - type: grid
+        columns: 4
+        square: false
+        cards:
+          - type: gauge
+            entity: sensor.dynamic_energy_tariff_compare_savings_percent
+            name: Saved total
+            unit: "%"
+            min: -50
+            max: 50
+            needle: true
+            severity:
+              green: 0     # dynamic cheaper
+              yellow: -5
+              red: -50     # dynamic more expensive
+          - type: gauge
+            entity: sensor.dynamic_energy_tariff_compare_savings_percent_24h
+            name: Saved 24 h
+            unit: "%"
+            min: -50
+            max: 50
+            needle: true
+            severity:
+              green: 0     # dynamic cheaper
+              yellow: -5
+              red: -50     # dynamic more expensive
+          - type: gauge
+            entity: sensor.dynamic_energy_tariff_compare_savings_percent_30d
+            name: Saved 30 days
+            unit: "%"
+            min: -50
+            max: 50
+            needle: true
+            severity:
+              green: 0     # dynamic cheaper
+              yellow: -5
+              red: -50     # dynamic more expensive
+          - type: gauge
+            entity: sensor.dynamic_energy_tariff_compare_savings_percent_365d
+            name: Saved 365 days
+            unit: "%"
+            min: -50
+            max: 50
+            needle: true
+            severity:
+              green: 0     # dynamic cheaper
+              yellow: -5
+              red: -50     # dynamic more expensive
+
       - type: markdown
         title: Rolling windows
         content: |
@@ -80,6 +129,8 @@ views:
           | Dynamic cost (€) |{% for e in w %} {{ v(e, 'dynamic_total_cost_eur') }} |{% endfor %}
           | Fixed cost (€) |{% for e in w %} {{ v(e, 'fixed_total_cost_eur') }} |{% endfor %}
           | **Savings (€)** |{% for e in w %} **{{ v(e, 'savings_eur') }}** |{% endfor %}
+          | Savings (%) |{% for e in w %} {{ v(e, 'savings_percent') }} |{% endfor %}
+          | Savings, energy only (%) |{% for e in w %} {{ v(e, 'energy_savings_percent') }} |{% endfor %}
 
       - type: grid
         columns: 3

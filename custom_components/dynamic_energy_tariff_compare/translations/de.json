@@ -163,6 +163,18 @@
       },
       "savings_365d": {
         "name": "Ersparnis (letzte 365 Tage)"
+      },
+      "savings_percent": {
+        "name": "Ersparnis mit dynamischem Tarif (%)"
+      },
+      "savings_percent_24h": {
+        "name": "Ersparnis % (letzte 24 h)"
+      },
+      "savings_percent_30d": {
+        "name": "Ersparnis % (letzte 30 Tage)"
+      },
+      "savings_percent_365d": {
+        "name": "Ersparnis % (letzte 365 Tage)"
       }
     },
     "button": {
