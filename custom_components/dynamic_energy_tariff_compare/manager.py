@@ -15,6 +15,7 @@ from homeassistant.helpers.event import (
     async_call_later,
     async_track_state_change_event,
     async_track_time_change,
+    async_track_time_interval,
 )
 from homeassistant.helpers.storage import Store
 from homeassistant.util import dt as dt_util
@@ -25,12 +26,15 @@ from .const import (
     CONF_ENERGY_ENTITY,
     CONF_FIXED_BASE_FEE,
     CONF_FIXED_PRICE,
+    CONF_POSTCODE,
     CONF_PRICE_ENTITY,
+    CONF_PRICE_SOURCE,
     CONF_PRICE_UNIT,
     CONF_PROVIDER_MONTHLY_FEE,
     DEFAULTS,
     DOMAIN,
     LEGACY_KEYS,
+    PRICE_SOURCE_TIBBER_DE,
     SIGNAL_UPDATE,
     STORAGE_VERSION,
 )
@@ -38,6 +42,10 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 PRICE_KEEP_SECONDS = 4 * 86400
+# Prices fetched from Tibber are archived so later backfills can use them
+# (the API itself only serves yesterday, today and tomorrow).
+TIBBER_ARCHIVE_SECONDS = 400 * 86400
+TIBBER_REFRESH = timedelta(minutes=30)
 STATE_ONLY_LOOKBACK_SLOTS = 4  # state-only sources: reuse price up to 1 h back
 WRITE_DEBOUNCE = 5.0
 
@@ -85,7 +93,13 @@ class DynamicEnergyTariffCompareManager:
         self.cfg = entry_config(entry)
         self.params = params_from_config(self.cfg)
         self.energy_entity: str = self.cfg[CONF_ENERGY_ENTITY]
-        self.price_entity: str | None = self.cfg.get(CONF_PRICE_ENTITY) or None
+        self.tibber = self.cfg.get(CONF_PRICE_SOURCE) == PRICE_SOURCE_TIBBER_DE
+        self.postcode: str | None = calc.valid_postcode(self.cfg.get(CONF_POSTCODE)) if self.tibber else None
+        self.price_entity: str | None = None if self.tibber else (self.cfg.get(CONF_PRICE_ENTITY) or None)
+        self.price_keep = TIBBER_ARCHIVE_SECONDS if self.tibber else PRICE_KEEP_SECONDS
+        self.components: dict[int, dict[str, float]] = {}  # Tibber price components per slot
+        self.monthly_fees: dict[str, Any] | None = None
+        self.last_price_fetch: datetime | None = None
         self.unit_override: float | None = calc.override_factor(self.cfg.get(CONF_PRICE_UNIT))
         self._warned_guess = False
         self.store: Store[dict[str, Any]] = Store(
@@ -118,7 +132,14 @@ class DynamicEnergyTariffCompareManager:
             self.acc.totals.last_value = None
             self.acc.totals.last_ts = None
 
-        if not self.price_entity:
+        if self.tibber:
+            self._unsubs.append(
+                async_track_time_interval(self.hass, self._handle_tibber_refresh, TIBBER_REFRESH)
+            )
+            self.entry.async_create_background_task(
+                self.hass, self.async_refresh_tibber(), f"{DOMAIN} initial Tibber fetch"
+            )
+        elif not self.price_entity:
             self.last_price_error = (
                 "No price sensor selected. Open the integration's options and select one."
             )
@@ -155,7 +176,7 @@ class DynamicEnergyTariffCompareManager:
     # ---------------------------------------------------------------- storage
     @callback
     def _data_to_save(self) -> dict[str, Any]:
-        cutoff = dt_util.utcnow().timestamp() - PRICE_KEEP_SECONDS
+        cutoff = dt_util.utcnow().timestamp() - self.price_keep
         return {
             "totals": self.acc.totals.to_dict(),
             "energy_entity": self.energy_entity,
@@ -244,12 +265,46 @@ class DynamicEnergyTariffCompareManager:
             self._schedule_save()
         self._notify()
 
+    async def async_refresh_tibber(self) -> None:
+        """Fetch Tibber Germany prices for the configured postcode."""
+        from .tibber_de import TibberLookupError, async_fetch_parsed  # noqa: PLC0415
+
+        if not self.postcode:
+            self.last_price_error = "No valid postcode configured"
+            return
+        try:
+            overview = await async_fetch_parsed(self.hass, self.postcode)
+        except TibberLookupError as err:
+            self.last_price_error = f"Tibber price lookup failed: {err}"
+            _LOGGER.warning("Tibber price lookup for %s failed: %s", self.postcode, err)
+            self._notify(immediate=True)
+            return
+        self.last_price_error = None
+        self.last_price_fetch = dt_util.utcnow()
+        self.prices.update(overview.prices)
+        self.components = overview.components
+        self.monthly_fees = {
+            "total_eur": overview.monthly_fee_eur,
+            **{k.replace(" ", "_"): v for k, v in overview.monthly_components.items()},
+        }
+        self.price_source = f"Tibber Germany (postcode {self.postcode})"
+        self._prune_prices()
+        self.acc.resolve_pending(self.price_lookup, dt_util.utcnow().timestamp())
+        self._schedule_save()
+        self._notify(immediate=True)
+
+    async def _handle_tibber_refresh(self, _now: datetime) -> None:
+        await self.async_refresh_tibber()
+
+    def current_components(self) -> dict[str, float] | None:
+        return self.components.get(calc.slot_start(self.now_ts()))
+
     @callback
     def _handle_price_event(self, event: Event[EventStateChangedData]) -> None:
         self._ingest_price_state(event.data["new_state"])
 
     def _prune_prices(self) -> None:
-        cutoff = dt_util.utcnow().timestamp() - PRICE_KEEP_SECONDS
+        cutoff = dt_util.utcnow().timestamp() - self.price_keep
         for slot in [s for s in self.prices if s < cutoff]:
             del self.prices[slot]
             self._attr_slots.discard(slot)

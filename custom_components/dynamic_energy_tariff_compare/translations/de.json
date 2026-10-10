@@ -3,6 +3,39 @@
     "step": {
       "user": {
         "title": "Dynamic Energy Tariff Compare",
+        "description": "Woher sollen die dynamischen Preise kommen?",
+        "menu_options": {
+          "tibber": "Tibber Deutschland per Postleitzahl (eingebaut, empfohlen)",
+          "sensor": "Vorhandener Preissensor (beliebiger Anbieter)"
+        }
+      },
+      "tibber": {
+        "title": "Tibber Deutschland",
+        "description": "Die Preise werden alle 30 Minuten für deine Postleitzahl von tibber.com abgerufen (gestern, heute und morgen, je Viertelstunde).",
+        "data": {
+          "provider_name": "Anbietername (optional, z. B. Tibber, Rabot Energy, Octopus)",
+          "postcode": "Postleitzahl (Deutschland)",
+          "energy_entity": "Netzbezugs-Energiesensor (z. B. EDL21 Wirkenergie gesamt / OBIS 1.8.0)"
+        },
+        "data_description": {
+          "provider_name": "Nur für die Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
+          "postcode": "Für diese Postleitzahl wird Tibbers öffentlicher Preisrechner abgefragt: 15-Minuten-Endpreise inkl. Energie, Steuern/Umlagen, Netzentgelt und MwSt. Kein Tibber-Konto nötig."
+        }
+      },
+      "tibber_fees": {
+        "title": "Tarifwerte",
+        "description": "Tibber-Preis für PLZ {postcode} gerade: {price} ct/kWh ({components}). Tibber-Monatsgebühren: {monthly} € ({monthly_components}); diese Summe ist als Grundgebühr des dynamischen Tarifs vorausgefüllt. Trage deinen aktuellen Festpreistarif ein.",
+        "data": {
+          "fixed_price_ct": "Festpreistarif: Arbeitspreis (ct/kWh, brutto)",
+          "fixed_base_fee_eur_month": "Festpreistarif: Grundpreis (€/Monat, brutto)",
+          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)"
+        },
+        "data_description": {
+          "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel."
+        }
+      },
+      "sensor": {
+        "title": "Dynamic Energy Tariff Compare",
         "description": "Vergleicht einen dynamischen Stromtarif (Tibber, Rabot Energy, Octopus, …) mit deinem Festpreistarif. Der Preissensor muss den ENDPREIS pro kWh liefern (inkl. Netzentgelt, Steuern, Umlagen, MwSt. und Anbieteraufschlag). Die Vorgabewerte sind nur Beispiele.",
         "data": {
           "provider_name": "Anbietername (optional, z. B. Tibber, Rabot Energy, Octopus)",
@@ -22,6 +55,9 @@
       }
     },
     "error": {
+      "invalid_postcode": "Unbekannte oder ungültige deutsche Postleitzahl (5 Ziffern).",
+      "cannot_connect": "tibber.com ist nicht erreichbar. Bitte später erneut versuchen.",
+      "no_prices": "Tibber hat für diese Postleitzahl keine Preise geliefert.",
       "price_not_numeric": "Der Zustand \"{state}\" des Preissensors ist keine Zahl und es gibt keine Preisliste. Sensor prüfen oder die Preiseinheit manuell auswählen, um trotzdem zu speichern.",
       "price_entity_required": "Bitte einen Preissensor auswählen.",
       "entity_not_found": "Entität nicht gefunden.",
@@ -43,17 +79,22 @@
           "price_unit": "Preiseinheit",
           "fixed_price_ct": "Festpreistarif: Arbeitspreis (ct/kWh, brutto)",
           "fixed_base_fee_eur_month": "Festpreistarif: Grundpreis (€/Monat, brutto)",
-          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)"
+          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)",
+          "postcode": "Postleitzahl (Deutschland)"
         },
         "data_description": {
           "provider_name": "Nur für die Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
           "price_entity": "Wähle einen Sensor, der bereits alle Aufschläge enthält, z. B. die Integration deines Anbieters (Tibber, …) oder EPEX Spot mit konfigurierten Aufschlägen. 15-Minuten-Preislisten in Attributen werden genutzt, sonst der aktuelle Zustand. Einheiten: €/kWh, ct/kWh, €/MWh.",
           "price_unit": "Automatisch nutzt die Einheit des Sensors; hat er keine, entscheidet der Wert (unter 2 → €/kWh, 2–200 → ct/kWh, über 200 → €/MWh). Einheit auswählen, falls die Erkennung falsch ist.",
-          "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel."
+          "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel.",
+          "postcode": "Für diese Postleitzahl wird Tibbers öffentlicher Preisrechner abgefragt: 15-Minuten-Endpreise inkl. Energie, Steuern/Umlagen, Netzentgelt und MwSt. Kein Tibber-Konto nötig."
         }
       }
     },
     "error": {
+      "invalid_postcode": "Unbekannte oder ungültige deutsche Postleitzahl (5 Ziffern).",
+      "cannot_connect": "tibber.com ist nicht erreichbar. Bitte später erneut versuchen.",
+      "no_prices": "Tibber hat für diese Postleitzahl keine Preise geliefert.",
       "price_not_numeric": "Der Zustand \"{state}\" des Preissensors ist keine Zahl und es gibt keine Preisliste. Sensor prüfen oder die Preiseinheit manuell auswählen, um trotzdem zu speichern.",
       "price_entity_required": "Bitte einen Preissensor auswählen.",
       "entity_not_found": "Entität nicht gefunden.",

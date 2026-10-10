@@ -43,13 +43,20 @@ def _current_price(m: DynamicEnergyTariffCompareManager) -> float | None:
 
 
 def _price_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
-    return {
+    attrs: dict[str, Any] = {
         "source": m.price_source,
         "price_entity": m.price_entity,
         "last_error": m.last_price_error,
         "fixed_price_ct": m.params.fixed_price_ct,
-        **m.price_list(),
     }
+    if m.tibber:
+        comps = m.current_components()
+        attrs["postcode"] = m.postcode
+        attrs["components_ct"] = {k: round(v, 3) for k, v in comps.items()} if comps else None
+        attrs["tibber_monthly_fees_eur"] = m.monthly_fees
+        attrs["last_price_fetch"] = m.last_price_fetch.isoformat() if m.last_price_fetch else None
+    attrs.update(m.price_list())
+    return attrs
 
 
 def _period_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:

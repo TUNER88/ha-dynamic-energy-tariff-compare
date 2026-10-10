@@ -354,6 +354,92 @@ def parse_price_attributes(
 
 
 # ---------------------------------------------------------------------------
+# Tibber Germany price overview (tibber.com/de/api/lookup/price-overview)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class TibberOverview:
+    """Parsed Tibber price overview for one postcode."""
+
+    prices: dict[int, float] = field(default_factory=dict)  # slot -> ct/kWh all-in incl. VAT
+    components: dict[int, dict[str, float]] = field(default_factory=dict)  # slot -> type -> ct/kWh
+    monthly_fee_eur: float | None = None  # total monthly fees incl. VAT
+    monthly_components: dict[str, float] = field(default_factory=dict)  # type -> EUR/month
+    tomorrow_available: bool = False
+
+
+def _tibber_entries(energy: dict[str, Any], day: str) -> list[dict[str, Any]]:
+    quarter = energy.get(f"{day}QuarterHours")
+    if isinstance(quarter, list) and quarter:
+        return [dict(e, _len=SLOT_SECONDS) for e in quarter if isinstance(e, dict)]
+    hours = energy.get(f"{day}Hours")
+    if isinstance(hours, list):
+        return [dict(e, _len=3600) for e in hours if isinstance(e, dict)]
+    return []
+
+
+def parse_tibber_overview(payload: Any, tz: tzinfo) -> TibberOverview:
+    """Parse the price-overview payload. Never raises on odd data.
+
+    Entries carry local `date`, `hour`, `minute`; `priceIncludingVat` (EUR/kWh)
+    is power (spot incl. VAT, no markup) + taxes/levies + grid fee. Entries
+    without a `power` component are placeholders (spot not published yet) and
+    are skipped. Repeated local times (DST end) get fold=1.
+    """
+    out = TibberOverview()
+    if not isinstance(payload, dict):
+        return out
+    energy = payload.get("energy") if isinstance(payload.get("energy"), dict) else {}
+    for day in ("yesterday", "today", "tomorrow"):
+        seen: set[tuple[str, int, int]] = set()
+        for e in _tibber_entries(energy, day):
+            try:
+                comps = {
+                    str(c["type"]): float(c["priceIncludingVat"]) * 100.0
+                    for c in e.get("priceComponents") or []
+                    if isinstance(c, dict) and c.get("priceIncludingVat") is not None
+                }
+                if "power" not in comps:
+                    continue  # placeholder: spot price not known yet
+                key = (str(e["date"]), int(e["hour"]), int(e.get("minute") or 0))
+                d = datetime.fromisoformat(key[0])
+                local = datetime(
+                    d.year, d.month, d.day, key[1], key[2], tzinfo=tz, fold=1 if key in seen else 0
+                )
+                seen.add(key)
+                ct = float(e["priceIncludingVat"]) * 100.0
+            except (KeyError, TypeError, ValueError):
+                continue
+            start = local.timestamp()
+            t = slot_start(start)
+            while t < start + e["_len"]:
+                out.prices[t] = ct
+                out.components[t] = comps
+                t += SLOT_SECONDS
+            if day == "tomorrow":
+                out.tomorrow_available = True
+    fees = payload.get("monthlyFees")
+    if isinstance(fees, dict):
+        try:
+            out.monthly_fee_eur = float(fees["priceIncludingVat"])
+        except (KeyError, TypeError, ValueError):
+            out.monthly_fee_eur = None
+        for c in fees.get("priceComponents") or []:
+            try:
+                out.monthly_components[str(c["type"])] = float(c["priceIncludingVat"])
+            except (KeyError, TypeError, ValueError):
+                continue
+    return out
+
+
+def valid_postcode(value: Any) -> str | None:
+    """Return a normalised German postcode (5 digits) or None."""
+    txt = "".join(str(value or "").split())
+    return txt if len(txt) == 5 and txt.isdigit() else None
+
+
+# ---------------------------------------------------------------------------
 # Tariff
 # ---------------------------------------------------------------------------
 

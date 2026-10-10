@@ -1,0 +1,8383 @@
+{
+ "priceArea": "DE",
+ "currency": "EUR",
+ "annualCompetitorCost": [
+  {
+   "competitorName": "TEAG Thüringer",
+   "competitorType": "default supplier",
+   "assumedConsumption": 2500,
+   "energyTotalExVat": 1048.25,
+   "energyTotal": 1247.5,
+   "fixedFeesExVat": 145.72,
+   "fixedFees": 173.41,
+   "yearlyTotal": 1420.91,
+   "yearlyTotalExVat": 1193.97
+  },
+  {
+   "competitorName": "E.ON",
+   "competitorType": "market leader",
+   "assumedConsumption": 2500,
+   "energyTotalExVat": 755,
+   "energyTotal": 898.5,
+   "fixedFeesExVat": 206.41,
+   "fixedFees": 245.63,
+   "yearlyTotal": 1144.13,
+   "yearlyTotalExVat": 961.41
+  },
+  {
+   "competitorName": "Fuxx",
+   "competitorType": "discount",
+   "assumedConsumption": 2500,
+   "energyTotalExVat": 728.57,
+   "energyTotal": 867,
+   "fixedFeesExVat": 133.34,
+   "fixedFees": 158.67,
+   "yearlyTotal": 1025.67,
+   "yearlyTotalExVat": 861.91
+  }
+ ],
+ "energy": {
+  "todayHours": [
+   {
+    "priceExcludingVat": 0.1536,
+    "priceIncludingVat": 0.1828,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0168,
+      "priceIncludingVat": 0.02
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1524,
+    "priceIncludingVat": 0.1814,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0156,
+      "priceIncludingVat": 0.0185
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1523,
+    "priceIncludingVat": 0.1813,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0155,
+      "priceIncludingVat": 0.0184
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1528,
+    "priceIncludingVat": 0.1819,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.016,
+      "priceIncludingVat": 0.0191
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1548,
+    "priceIncludingVat": 0.1843,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.018,
+      "priceIncludingVat": 0.0214
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1522,
+    "priceIncludingVat": 0.1811,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0153,
+      "priceIncludingVat": 0.0183
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1607,
+    "priceIncludingVat": 0.1912,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0239,
+      "priceIncludingVat": 0.0284
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1809,
+    "priceIncludingVat": 0.2153,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0441,
+      "priceIncludingVat": 0.0524
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1929,
+    "priceIncludingVat": 0.2296,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0561,
+      "priceIncludingVat": 0.0667
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1824,
+    "priceIncludingVat": 0.2171,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0456,
+      "priceIncludingVat": 0.0542
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1619,
+    "priceIncludingVat": 0.1927,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0251,
+      "priceIncludingVat": 0.0299
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1428,
+    "priceIncludingVat": 0.17,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.006,
+      "priceIncludingVat": 0.0071
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1374,
+    "priceIncludingVat": 0.1635,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0006,
+      "priceIncludingVat": 0.0007
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1513,
+    "priceIncludingVat": 0.18,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0144,
+      "priceIncludingVat": 0.0172
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2288,
+    "priceIncludingVat": 0.2723,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.092,
+      "priceIncludingVat": 0.1095
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2756,
+    "priceIncludingVat": 0.328,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1388,
+      "priceIncludingVat": 0.1651
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.3045,
+    "priceIncludingVat": 0.3623,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1676,
+      "priceIncludingVat": 0.1995
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2817,
+    "priceIncludingVat": 0.3352,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1448,
+      "priceIncludingVat": 0.1724
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2624,
+    "priceIncludingVat": 0.3123,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1256,
+      "priceIncludingVat": 0.1494
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2641,
+    "priceIncludingVat": 0.3142,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1272,
+      "priceIncludingVat": 0.1514
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2538,
+    "priceIncludingVat": 0.3021,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.117,
+      "priceIncludingVat": 0.1392
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "date": "2026-10-10"
+   }
+  ],
+  "yesterdayHours": [
+   {
+    "priceExcludingVat": 0.2384,
+    "priceIncludingVat": 0.2837,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1015,
+      "priceIncludingVat": 0.1208
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2261,
+    "priceIncludingVat": 0.2691,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0893,
+      "priceIncludingVat": 0.1063
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2229,
+    "priceIncludingVat": 0.2653,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0861,
+      "priceIncludingVat": 0.1025
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2207,
+    "priceIncludingVat": 0.2627,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0839,
+      "priceIncludingVat": 0.0998
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2219,
+    "priceIncludingVat": 0.264,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.085,
+      "priceIncludingVat": 0.1012
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2319,
+    "priceIncludingVat": 0.276,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.095,
+      "priceIncludingVat": 0.1131
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2535,
+    "priceIncludingVat": 0.3017,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1167,
+      "priceIncludingVat": 0.1388
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2788,
+    "priceIncludingVat": 0.3318,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.142,
+      "priceIncludingVat": 0.169
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2849,
+    "priceIncludingVat": 0.339,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1481,
+      "priceIncludingVat": 0.1762
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2462,
+    "priceIncludingVat": 0.293,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1094,
+      "priceIncludingVat": 0.1302
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2175,
+    "priceIncludingVat": 0.2589,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0807,
+      "priceIncludingVat": 0.096
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1586,
+    "priceIncludingVat": 0.1887,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0218,
+      "priceIncludingVat": 0.0259
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1406,
+    "priceIncludingVat": 0.1674,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0038,
+      "priceIncludingVat": 0.0045
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1428,
+    "priceIncludingVat": 0.17,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.006,
+      "priceIncludingVat": 0.0071
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1474,
+    "priceIncludingVat": 0.1754,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0106,
+      "priceIncludingVat": 0.0126
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1772,
+    "priceIncludingVat": 0.2109,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0404,
+      "priceIncludingVat": 0.0481
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1988,
+    "priceIncludingVat": 0.2365,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0619,
+      "priceIncludingVat": 0.0737
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2218,
+    "priceIncludingVat": 0.264,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.085,
+      "priceIncludingVat": 0.1011
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.243,
+    "priceIncludingVat": 0.2892,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1061,
+      "priceIncludingVat": 0.1263
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2505,
+    "priceIncludingVat": 0.2981,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1136,
+      "priceIncludingVat": 0.1352
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2322,
+    "priceIncludingVat": 0.2763,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0953,
+      "priceIncludingVat": 0.1134
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2197,
+    "priceIncludingVat": 0.2615,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0829,
+      "priceIncludingVat": 0.0987
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.21,
+    "priceIncludingVat": 0.2499,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0731,
+      "priceIncludingVat": 0.087
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1845,
+    "priceIncludingVat": 0.2195,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0476,
+      "priceIncludingVat": 0.0567
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "date": "2026-10-09"
+   }
+  ],
+  "tomorrowHours": [
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "date": "2026-10-11"
+   }
+  ],
+  "todayQuarterHours": [
+   {
+    "priceExcludingVat": 0.1471,
+    "priceIncludingVat": 0.1751,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0103,
+      "priceIncludingVat": 0.0122
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1556,
+    "priceIncludingVat": 0.1852,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0187,
+      "priceIncludingVat": 0.0223
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1582,
+    "priceIncludingVat": 0.1883,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0214,
+      "priceIncludingVat": 0.0254
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1536,
+    "priceIncludingVat": 0.1828,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0167,
+      "priceIncludingVat": 0.0199
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1517,
+    "priceIncludingVat": 0.1806,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0149,
+      "priceIncludingVat": 0.0177
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1493,
+    "priceIncludingVat": 0.1777,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0125,
+      "priceIncludingVat": 0.0149
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1538,
+    "priceIncludingVat": 0.183,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.017,
+      "priceIncludingVat": 0.0202
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1548,
+    "priceIncludingVat": 0.1842,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.018,
+      "priceIncludingVat": 0.0214
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1512,
+    "priceIncludingVat": 0.18,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0144,
+      "priceIncludingVat": 0.0171
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1506,
+    "priceIncludingVat": 0.1792,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0138,
+      "priceIncludingVat": 0.0164
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1521,
+    "priceIncludingVat": 0.1811,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0153,
+      "priceIncludingVat": 0.0182
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1554,
+    "priceIncludingVat": 0.1849,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0185,
+      "priceIncludingVat": 0.0221
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1528,
+    "priceIncludingVat": 0.1818,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0159,
+      "priceIncludingVat": 0.019
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1525,
+    "priceIncludingVat": 0.1815,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0157,
+      "priceIncludingVat": 0.0187
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1525,
+    "priceIncludingVat": 0.1816,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0157,
+      "priceIncludingVat": 0.0187
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1535,
+    "priceIncludingVat": 0.1827,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0167,
+      "priceIncludingVat": 0.0199
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1545,
+    "priceIncludingVat": 0.1838,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0176,
+      "priceIncludingVat": 0.021
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1552,
+    "priceIncludingVat": 0.1847,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0184,
+      "priceIncludingVat": 0.0219
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1552,
+    "priceIncludingVat": 0.1847,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0184,
+      "priceIncludingVat": 0.0219
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1545,
+    "priceIncludingVat": 0.1838,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0176,
+      "priceIncludingVat": 0.021
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1515,
+    "priceIncludingVat": 0.1803,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0146,
+      "priceIncludingVat": 0.0174
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1512,
+    "priceIncludingVat": 0.1799,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0143,
+      "priceIncludingVat": 0.0171
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1513,
+    "priceIncludingVat": 0.18,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0144,
+      "priceIncludingVat": 0.0172
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1548,
+    "priceIncludingVat": 0.1842,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.018,
+      "priceIncludingVat": 0.0214
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1551,
+    "priceIncludingVat": 0.1846,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0182,
+      "priceIncludingVat": 0.0217
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1615,
+    "priceIncludingVat": 0.1922,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0247,
+      "priceIncludingVat": 0.0294
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1626,
+    "priceIncludingVat": 0.1936,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0258,
+      "priceIncludingVat": 0.0307
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1635,
+    "priceIncludingVat": 0.1946,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0267,
+      "priceIncludingVat": 0.0317
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1803,
+    "priceIncludingVat": 0.2146,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0435,
+      "priceIncludingVat": 0.0517
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1818,
+    "priceIncludingVat": 0.2164,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.045,
+      "priceIncludingVat": 0.0536
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1818,
+    "priceIncludingVat": 0.2164,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.045,
+      "priceIncludingVat": 0.0536
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1796,
+    "priceIncludingVat": 0.2138,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0428,
+      "priceIncludingVat": 0.0509
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1916,
+    "priceIncludingVat": 0.2281,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0548,
+      "priceIncludingVat": 0.0652
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1958,
+    "priceIncludingVat": 0.2331,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.059,
+      "priceIncludingVat": 0.0702
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1944,
+    "priceIncludingVat": 0.2314,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0576,
+      "priceIncludingVat": 0.0685
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1897,
+    "priceIncludingVat": 0.2258,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0529,
+      "priceIncludingVat": 0.0629
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1916,
+    "priceIncludingVat": 0.2281,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0548,
+      "priceIncludingVat": 0.0652
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1832,
+    "priceIncludingVat": 0.218,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0463,
+      "priceIncludingVat": 0.0551
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1818,
+    "priceIncludingVat": 0.2164,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.045,
+      "priceIncludingVat": 0.0536
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1729,
+    "priceIncludingVat": 0.2058,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0361,
+      "priceIncludingVat": 0.0429
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1716,
+    "priceIncludingVat": 0.2043,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0348,
+      "priceIncludingVat": 0.0414
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1697,
+    "priceIncludingVat": 0.202,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0329,
+      "priceIncludingVat": 0.0392
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.158,
+    "priceIncludingVat": 0.188,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0212,
+      "priceIncludingVat": 0.0252
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1483,
+    "priceIncludingVat": 0.1765,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0115,
+      "priceIncludingVat": 0.0136
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1531,
+    "priceIncludingVat": 0.1822,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0162,
+      "priceIncludingVat": 0.0193
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1441,
+    "priceIncludingVat": 0.1715,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0073,
+      "priceIncludingVat": 0.0086
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1373,
+    "priceIncludingVat": 0.1635,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0005,
+      "priceIncludingVat": 0.0006
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1388,
+    "priceIncludingVat": 0.1652,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.002,
+      "priceIncludingVat": 0.0024
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1371,
+    "priceIncludingVat": 0.1631,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0002,
+      "priceIncludingVat": 0.0003
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1628,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0,
+      "priceIncludingVat": 0
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1369,
+    "priceIncludingVat": 0.163,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0001,
+      "priceIncludingVat": 0.0001
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1578,
+    "priceIncludingVat": 0.1878,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0209,
+      "priceIncludingVat": 0.0249
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1735,
+    "priceIncludingVat": 0.2065,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0367,
+      "priceIncludingVat": 0.0437
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.1724,
+    "priceIncludingVat": 0.2052,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0356,
+      "priceIncludingVat": 0.0423
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2099,
+    "priceIncludingVat": 0.2498,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0731,
+      "priceIncludingVat": 0.087
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2572,
+    "priceIncludingVat": 0.3061,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1204,
+      "priceIncludingVat": 0.1433
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2758,
+    "priceIncludingVat": 0.3282,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.139,
+      "priceIncludingVat": 0.1654
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2557,
+    "priceIncludingVat": 0.3043,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1189,
+      "priceIncludingVat": 0.1415
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2617,
+    "priceIncludingVat": 0.3115,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1249,
+      "priceIncludingVat": 0.1486
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2741,
+    "priceIncludingVat": 0.3262,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1373,
+      "priceIncludingVat": 0.1634
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.3108,
+    "priceIncludingVat": 0.3699,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.174,
+      "priceIncludingVat": 0.2071
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.3071,
+    "priceIncludingVat": 0.3655,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1703,
+      "priceIncludingVat": 0.2026
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.3038,
+    "priceIncludingVat": 0.3615,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1669,
+      "priceIncludingVat": 0.1986
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.3021,
+    "priceIncludingVat": 0.3595,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1653,
+      "priceIncludingVat": 0.1967
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.3049,
+    "priceIncludingVat": 0.3629,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1681,
+      "priceIncludingVat": 0.2
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2897,
+    "priceIncludingVat": 0.3448,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1529,
+      "priceIncludingVat": 0.182
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2833,
+    "priceIncludingVat": 0.3372,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1465,
+      "priceIncludingVat": 0.1743
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2794,
+    "priceIncludingVat": 0.3325,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1426,
+      "priceIncludingVat": 0.1697
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2742,
+    "priceIncludingVat": 0.3263,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1373,
+      "priceIncludingVat": 0.1634
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2685,
+    "priceIncludingVat": 0.3195,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1316,
+      "priceIncludingVat": 0.1566
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2632,
+    "priceIncludingVat": 0.3132,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1264,
+      "priceIncludingVat": 0.1504
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2618,
+    "priceIncludingVat": 0.3116,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.125,
+      "priceIncludingVat": 0.1487
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2562,
+    "priceIncludingVat": 0.3049,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1194,
+      "priceIncludingVat": 0.142
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2628,
+    "priceIncludingVat": 0.3128,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.126,
+      "priceIncludingVat": 0.15
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2589,
+    "priceIncludingVat": 0.3081,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.122,
+      "priceIncludingVat": 0.1452
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2649,
+    "priceIncludingVat": 0.3153,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1281,
+      "priceIncludingVat": 0.1524
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2696,
+    "priceIncludingVat": 0.3208,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1328,
+      "priceIncludingVat": 0.158
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 45,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2542,
+    "priceIncludingVat": 0.3025,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1173,
+      "priceIncludingVat": 0.1396
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 0,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2542,
+    "priceIncludingVat": 0.3026,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1174,
+      "priceIncludingVat": 0.1397
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 15,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.2558,
+    "priceIncludingVat": 0.3044,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.119,
+      "priceIncludingVat": 0.1416
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 30,
+    "date": "2026-10-10"
+   },
+   {
+    "priceExcludingVat": 0.251,
+    "priceIncludingVat": 0.2988,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1142,
+      "priceIncludingVat": 0.1359
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 45,
+    "date": "2026-10-10"
+   }
+  ],
+  "tomorrowQuarterHours": [
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 45,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 0,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 15,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 30,
+    "date": "2026-10-11"
+   },
+   {
+    "priceExcludingVat": 0.1368,
+    "priceIncludingVat": 0.1629,
+    "priceComponents": [
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 45,
+    "date": "2026-10-11"
+   }
+  ],
+  "yesterdayQuarterHours": [
+   {
+    "priceExcludingVat": 0.2439,
+    "priceIncludingVat": 0.2902,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.107,
+      "priceIncludingVat": 0.1274
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2399,
+    "priceIncludingVat": 0.2854,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.103,
+      "priceIncludingVat": 0.1226
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2368,
+    "priceIncludingVat": 0.2818,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1,
+      "priceIncludingVat": 0.119
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.233,
+    "priceIncludingVat": 0.2773,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0962,
+      "priceIncludingVat": 0.1144
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 0,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2271,
+    "priceIncludingVat": 0.2703,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0903,
+      "priceIncludingVat": 0.1075
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2248,
+    "priceIncludingVat": 0.2675,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.088,
+      "priceIncludingVat": 0.1047
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2271,
+    "priceIncludingVat": 0.2703,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0903,
+      "priceIncludingVat": 0.1075
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2254,
+    "priceIncludingVat": 0.2683,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0886,
+      "priceIncludingVat": 0.1054
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 1,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2237,
+    "priceIncludingVat": 0.2662,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0869,
+      "priceIncludingVat": 0.1034
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2181,
+    "priceIncludingVat": 0.2596,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0813,
+      "priceIncludingVat": 0.0968
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2219,
+    "priceIncludingVat": 0.2641,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0851,
+      "priceIncludingVat": 0.1012
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.228,
+    "priceIncludingVat": 0.2713,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0911,
+      "priceIncludingVat": 0.1085
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 2,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2233,
+    "priceIncludingVat": 0.2657,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0864,
+      "priceIncludingVat": 0.1029
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2198,
+    "priceIncludingVat": 0.2616,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.083,
+      "priceIncludingVat": 0.0988
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2197,
+    "priceIncludingVat": 0.2614,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0828,
+      "priceIncludingVat": 0.0986
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.22,
+    "priceIncludingVat": 0.2618,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0832,
+      "priceIncludingVat": 0.099
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 3,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2196,
+    "priceIncludingVat": 0.2614,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0828,
+      "priceIncludingVat": 0.0985
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.22,
+    "priceIncludingVat": 0.2618,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0832,
+      "priceIncludingVat": 0.099
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2231,
+    "priceIncludingVat": 0.2655,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0863,
+      "priceIncludingVat": 0.1027
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2247,
+    "priceIncludingVat": 0.2675,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0879,
+      "priceIncludingVat": 0.1046
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 4,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2263,
+    "priceIncludingVat": 0.2694,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0895,
+      "priceIncludingVat": 0.1065
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2304,
+    "priceIncludingVat": 0.2742,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0936,
+      "priceIncludingVat": 0.1114
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2297,
+    "priceIncludingVat": 0.2734,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0929,
+      "priceIncludingVat": 0.1105
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.241,
+    "priceIncludingVat": 0.2868,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1042,
+      "priceIncludingVat": 0.124
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 5,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2459,
+    "priceIncludingVat": 0.2926,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.109,
+      "priceIncludingVat": 0.1297
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2515,
+    "priceIncludingVat": 0.2993,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1146,
+      "priceIncludingVat": 0.1364
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.254,
+    "priceIncludingVat": 0.3023,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1171,
+      "priceIncludingVat": 0.1394
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2627,
+    "priceIncludingVat": 0.3127,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1259,
+      "priceIncludingVat": 0.1498
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 6,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2748,
+    "priceIncludingVat": 0.3271,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.138,
+      "priceIncludingVat": 0.1642
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2804,
+    "priceIncludingVat": 0.3337,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1436,
+      "priceIncludingVat": 0.1708
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2825,
+    "priceIncludingVat": 0.3362,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1456,
+      "priceIncludingVat": 0.1733
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2776,
+    "priceIncludingVat": 0.3303,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1407,
+      "priceIncludingVat": 0.1675
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 7,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.3034,
+    "priceIncludingVat": 0.3611,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1666,
+      "priceIncludingVat": 0.1982
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2911,
+    "priceIncludingVat": 0.3464,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1542,
+      "priceIncludingVat": 0.1836
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2825,
+    "priceIncludingVat": 0.3362,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1457,
+      "priceIncludingVat": 0.1734
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2626,
+    "priceIncludingVat": 0.3125,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1257,
+      "priceIncludingVat": 0.1496
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 8,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2713,
+    "priceIncludingVat": 0.3229,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1344,
+      "priceIncludingVat": 0.16
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2601,
+    "priceIncludingVat": 0.3095,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1233,
+      "priceIncludingVat": 0.1467
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2494,
+    "priceIncludingVat": 0.2968,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1126,
+      "priceIncludingVat": 0.134
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2041,
+    "priceIncludingVat": 0.2429,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0673,
+      "priceIncludingVat": 0.0801
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 9,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2542,
+    "priceIncludingVat": 0.3025,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1173,
+      "priceIncludingVat": 0.1396
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2272,
+    "priceIncludingVat": 0.2704,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0904,
+      "priceIncludingVat": 0.1076
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1969,
+    "priceIncludingVat": 0.2344,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0601,
+      "priceIncludingVat": 0.0715
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1918,
+    "priceIncludingVat": 0.2283,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.055,
+      "priceIncludingVat": 0.0654
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 10,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1829,
+    "priceIncludingVat": 0.2177,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0461,
+      "priceIncludingVat": 0.0548
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1632,
+    "priceIncludingVat": 0.1942,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0264,
+      "priceIncludingVat": 0.0314
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1513,
+    "priceIncludingVat": 0.1801,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0145,
+      "priceIncludingVat": 0.0172
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1369,
+    "priceIncludingVat": 0.163,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0001,
+      "priceIncludingVat": 0.0001
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 11,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1502,
+    "priceIncludingVat": 0.1787,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0133,
+      "priceIncludingVat": 0.0159
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.137,
+    "priceIncludingVat": 0.1631,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0002,
+      "priceIncludingVat": 0.0002
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1369,
+    "priceIncludingVat": 0.163,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0001,
+      "priceIncludingVat": 0.0001
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1383,
+    "priceIncludingVat": 0.1646,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0015,
+      "priceIncludingVat": 0.0018
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 12,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1458,
+    "priceIncludingVat": 0.1735,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0089,
+      "priceIncludingVat": 0.0106
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1461,
+    "priceIncludingVat": 0.1739,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0093,
+      "priceIncludingVat": 0.011
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1415,
+    "priceIncludingVat": 0.1684,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0047,
+      "priceIncludingVat": 0.0056
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1379,
+    "priceIncludingVat": 0.1642,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0011,
+      "priceIncludingVat": 0.0013
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 13,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1369,
+    "priceIncludingVat": 0.163,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0001,
+      "priceIncludingVat": 0.0001
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1379,
+    "priceIncludingVat": 0.1642,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0011,
+      "priceIncludingVat": 0.0013
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1501,
+    "priceIncludingVat": 0.1787,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0133,
+      "priceIncludingVat": 0.0158
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1647,
+    "priceIncludingVat": 0.196,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0278,
+      "priceIncludingVat": 0.0331
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 14,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1664,
+    "priceIncludingVat": 0.1981,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0296,
+      "priceIncludingVat": 0.0352
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1692,
+    "priceIncludingVat": 0.2014,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0324,
+      "priceIncludingVat": 0.0386
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1865,
+    "priceIncludingVat": 0.2219,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0496,
+      "priceIncludingVat": 0.059
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1868,
+    "priceIncludingVat": 0.2224,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.05,
+      "priceIncludingVat": 0.0595
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 15,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1878,
+    "priceIncludingVat": 0.2235,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.051,
+      "priceIncludingVat": 0.0607
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.197,
+    "priceIncludingVat": 0.2345,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0602,
+      "priceIncludingVat": 0.0716
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2017,
+    "priceIncludingVat": 0.2401,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0649,
+      "priceIncludingVat": 0.0772
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2085,
+    "priceIncludingVat": 0.2481,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0716,
+      "priceIncludingVat": 0.0852
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 16,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2148,
+    "priceIncludingVat": 0.2557,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.078,
+      "priceIncludingVat": 0.0928
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2218,
+    "priceIncludingVat": 0.264,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.085,
+      "priceIncludingVat": 0.1012
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2246,
+    "priceIncludingVat": 0.2673,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0878,
+      "priceIncludingVat": 0.1044
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2259,
+    "priceIncludingVat": 0.2688,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0891,
+      "priceIncludingVat": 0.106
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 17,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2338,
+    "priceIncludingVat": 0.2783,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.097,
+      "priceIncludingVat": 0.1154
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2368,
+    "priceIncludingVat": 0.2819,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1,
+      "priceIncludingVat": 0.119
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.25,
+    "priceIncludingVat": 0.2975,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1132,
+      "priceIncludingVat": 0.1347
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2512,
+    "priceIncludingVat": 0.299,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1144,
+      "priceIncludingVat": 0.1361
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 18,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2578,
+    "priceIncludingVat": 0.3068,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.121,
+      "priceIncludingVat": 0.144
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2518,
+    "priceIncludingVat": 0.2996,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1149,
+      "priceIncludingVat": 0.1368
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2482,
+    "priceIncludingVat": 0.2954,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1114,
+      "priceIncludingVat": 0.1326
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2441,
+    "priceIncludingVat": 0.2905,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1073,
+      "priceIncludingVat": 0.1276
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 19,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2388,
+    "priceIncludingVat": 0.2842,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.102,
+      "priceIncludingVat": 0.1214
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2308,
+    "priceIncludingVat": 0.2747,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.094,
+      "priceIncludingVat": 0.1119
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2271,
+    "priceIncludingVat": 0.2703,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0903,
+      "priceIncludingVat": 0.1075
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2318,
+    "priceIncludingVat": 0.2759,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.095,
+      "priceIncludingVat": 0.113
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 20,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2337,
+    "priceIncludingVat": 0.2782,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0969,
+      "priceIncludingVat": 0.1153
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2299,
+    "priceIncludingVat": 0.2736,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0931,
+      "priceIncludingVat": 0.1108
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2135,
+    "priceIncludingVat": 0.2541,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0767,
+      "priceIncludingVat": 0.0912
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2018,
+    "priceIncludingVat": 0.2401,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0649,
+      "priceIncludingVat": 0.0773
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 21,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2187,
+    "priceIncludingVat": 0.2603,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0819,
+      "priceIncludingVat": 0.0975
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2089,
+    "priceIncludingVat": 0.2486,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.072,
+      "priceIncludingVat": 0.0857
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2113,
+    "priceIncludingVat": 0.2514,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0744,
+      "priceIncludingVat": 0.0886
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.2009,
+    "priceIncludingVat": 0.2391,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0641,
+      "priceIncludingVat": 0.0763
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 22,
+    "minute": 45,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1937,
+    "priceIncludingVat": 0.2305,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0568,
+      "priceIncludingVat": 0.0677
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 0,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.185,
+    "priceIncludingVat": 0.2202,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0482,
+      "priceIncludingVat": 0.0573
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 15,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1823,
+    "priceIncludingVat": 0.2169,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0454,
+      "priceIncludingVat": 0.0541
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 30,
+    "date": "2026-10-09"
+   },
+   {
+    "priceExcludingVat": 0.1769,
+    "priceIncludingVat": 0.2105,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.04,
+      "priceIncludingVat": 0.0476
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "hour": 23,
+    "minute": 45,
+    "date": "2026-10-09"
+   }
+  ],
+  "last12Months": [
+   {
+    "priceExcludingVat": 0.2183,
+    "priceIncludingVat": 0.2598,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0844,
+      "priceIncludingVat": 0.1004
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0783,
+      "priceIncludingVat": 0.0931
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2025,
+    "month": 10
+   },
+   {
+    "priceExcludingVat": 0.2358,
+    "priceIncludingVat": 0.2806,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1019,
+      "priceIncludingVat": 0.1212
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0783,
+      "priceIncludingVat": 0.0931
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2025,
+    "month": 11
+   },
+   {
+    "priceExcludingVat": 0.2273,
+    "priceIncludingVat": 0.2706,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0935,
+      "priceIncludingVat": 0.1112
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0783,
+      "priceIncludingVat": 0.0931
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2025,
+    "month": 12
+   },
+   {
+    "priceExcludingVat": 0.2469,
+    "priceIncludingVat": 0.2939,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1101,
+      "priceIncludingVat": 0.131
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 1
+   },
+   {
+    "priceExcludingVat": 0.2334,
+    "priceIncludingVat": 0.2778,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0966,
+      "priceIncludingVat": 0.1149
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 2
+   },
+   {
+    "priceExcludingVat": 0.2361,
+    "priceIncludingVat": 0.281,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0993,
+      "priceIncludingVat": 0.1182
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 3
+   },
+   {
+    "priceExcludingVat": 0.2153,
+    "priceIncludingVat": 0.2563,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0785,
+      "priceIncludingVat": 0.0934
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 4
+   },
+   {
+    "priceExcludingVat": 0.2344,
+    "priceIncludingVat": 0.2789,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.0975,
+      "priceIncludingVat": 0.1161
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 5
+   },
+   {
+    "priceExcludingVat": 0.2463,
+    "priceIncludingVat": 0.2932,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1095,
+      "priceIncludingVat": 0.1303
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 6
+   },
+   {
+    "priceExcludingVat": 0.2423,
+    "priceIncludingVat": 0.2883,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1054,
+      "priceIncludingVat": 0.1255
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 7
+   },
+   {
+    "priceExcludingVat": 0.2637,
+    "priceIncludingVat": 0.3139,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1269,
+      "priceIncludingVat": 0.151
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 8
+   },
+   {
+    "priceExcludingVat": 0.2817,
+    "priceIncludingVat": 0.3352,
+    "priceComponents": [
+     {
+      "type": "power",
+      "priceExcludingVat": 0.1448,
+      "priceIncludingVat": 0.1723
+     },
+     {
+      "type": "taxes",
+      "priceExcludingVat": 0.0812,
+      "priceIncludingVat": 0.0967
+     },
+     {
+      "type": "grid",
+      "priceExcludingVat": 0.0556,
+      "priceIncludingVat": 0.066164
+     }
+    ],
+    "year": 2026,
+    "month": 9
+   }
+  ],
+  "today": {
+   "priceExcludingVat": 0.1879,
+   "priceIncludingVat": 0.2236,
+   "priceComponents": [
+    {
+     "type": "power",
+     "priceExcludingVat": 0.0511,
+     "priceIncludingVat": 0.0608
+    },
+    {
+     "type": "taxes",
+     "priceExcludingVat": 0.0812,
+     "priceIncludingVat": 0.0967
+    },
+    {
+     "type": "grid",
+     "priceExcludingVat": 0.0556,
+     "priceIncludingVat": 0.066164
+    }
+   ]
+  },
+  "last30Days": {
+   "priceExcludingVat": 0.2895,
+   "priceIncludingVat": 0.3445,
+   "priceComponents": [
+    {
+     "type": "power",
+     "priceExcludingVat": 0.1527,
+     "priceIncludingVat": 0.1817
+    },
+    {
+     "type": "taxes",
+     "priceExcludingVat": 0.0812,
+     "priceIncludingVat": 0.0967
+    },
+    {
+     "type": "grid",
+     "priceExcludingVat": 0.0556,
+     "priceIncludingVat": 0.066164
+    }
+   ]
+  },
+  "lastMonth": {
+   "priceExcludingVat": 0.2817,
+   "priceIncludingVat": 0.3352,
+   "priceComponents": [
+    {
+     "type": "power",
+     "priceExcludingVat": 0.1448,
+     "priceIncludingVat": 0.1723
+    },
+    {
+     "type": "taxes",
+     "priceExcludingVat": 0.0812,
+     "priceIncludingVat": 0.0967
+    },
+    {
+     "type": "grid",
+     "priceExcludingVat": 0.0556,
+     "priceIncludingVat": 0.066164
+    }
+   ]
+  }
+ },
+ "monthlyFees": {
+  "priceExcludingVat": 13.14,
+  "priceIncludingVat": 15.64,
+  "priceComponents": [
+   {
+    "type": "tibber service fee",
+    "priceExcludingVat": 5.03,
+    "priceIncludingVat": 5.99
+   },
+   {
+    "type": "meter operator",
+    "priceExcludingVat": 0.81,
+    "priceIncludingVat": 0.96
+   },
+   {
+    "type": "grid",
+    "priceExcludingVat": 7.3,
+    "priceIncludingVat": 8.69
+   }
+  ]
+ }
+}

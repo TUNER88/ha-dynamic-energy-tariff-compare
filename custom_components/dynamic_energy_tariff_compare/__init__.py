@@ -94,11 +94,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: DynamicEnergyTariffCompa
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Migrate old config entries.
 
+    v2 -> v3 (0.4.0): price source (Tibber Germany by postcode or price sensor);
+    existing entries keep using their price sensor.
     v1 -> v2 (0.3.0): energy-charts fallback, the "final price" toggle and the
     surcharge fields (markup, grid fee, levies, VAT, grid base fee) were removed.
     The price sensor is now always the final all-in price per kWh.
     """
-    if entry.version > 2:
+    if entry.version > 3:
         return False  # downgraded from a future version
     if entry.version == 1:
         data = {k: v for k, v in entry.data.items() if k not in LEGACY_KEYS}
@@ -111,6 +113,11 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 registry.async_remove(entity_id)
         hass.config_entries.async_update_entry(entry, data=data, options=options, version=2)
         _LOGGER.info("Migrated %s config entry %s to version 2", DOMAIN, entry.entry_id)
+    if entry.version == 2:
+        # v3 (0.4.0): price source choice; existing entries keep their price sensor
+        data = {**entry.data, "price_source": entry.data.get("price_source", "sensor")}
+        hass.config_entries.async_update_entry(entry, data=data, version=3)
+        _LOGGER.info("Migrated %s config entry %s to version 3", DOMAIN, entry.entry_id)
     return True
 
 

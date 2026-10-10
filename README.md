@@ -13,13 +13,15 @@
 
 This integration takes your real consumption from your smart meter (e.g. Home Assistant's
 **EDL21** integration, Wh or kWh) and prices every quarter hour with the **final all-in price**
-of a dynamic tariff, taken from a price sensor you already have. It then compares the result
-with your current **fixed-price tariff**. It works for any dynamic tariff, for example Tibber,
-Rabot Energy, Octopus (dynamicOctopus), tado° Energy (formerly aWATTar) or 1KOMMA5° Dynamic Pulse.
+of a dynamic tariff. It then compares the result with your current **fixed-price tariff**.
 
-* Prices come from a **price integration you already use**: your provider's integration
-  (e.g. Tibber) or EPEX Spot / Nord Pool configured with your surcharges. The price sensor must
-  already contain **everything** (energy, grid fee, taxes, levies, VAT, provider markup).
+* **Tibber Germany, built in:** enter your postcode and the integration fetches Tibber's
+  15-minute all-in prices (energy, taxes/levies, grid fee, VAT) for it. No Tibber account and no
+  other integration needed. See [Tibber Germany by postcode](#tibber-germany-by-postcode-built-in).
+* **Any other dynamic tariff** (Rabot Energy, Octopus dynamicOctopus, tado° Energy, 1KOMMA5°
+  Dynamic Pulse, …) via a **price sensor you already have**: your provider's integration or
+  EPEX Spot / Nord Pool configured with your surcharges. The price sensor must already contain
+  **everything** (energy, grid fee, taxes, levies, VAT, provider markup).
 * 15-minute price lists in the sensor's attributes are used when present (the day-ahead market
   moved to a 15-minute MTU on 1 Oct 2025); otherwise the sensor's current state is used.
 * Each kWh is assigned to the quarter hour in which it was consumed. Readings that span
@@ -32,12 +34,12 @@ Rabot Energy, Octopus (dynamicOctopus), tado° Energy (formerly aWATTar) or 1KOM
 For every 15-minute slot *s* with consumption *E(s)* (kWh):
 
 ```
-dynamic_cost  = Σ E(s) × price_sensor(s)  +  months × dynamic_monthly_fee
+dynamic_cost  = Σ E(s) × price(s)         +  months × dynamic_monthly_fee
 fixed_cost    = Σ E(s) × fixed_price      +  months × fixed_base_fee
 savings       = fixed_cost − dynamic_cost        (positive = dynamic tariff is cheaper)
 ```
 
-* `price_sensor(s)` is taken **as is**: pick a sensor that already includes all surcharges,
+* `price(s)` is Tibber's all-in price for your postcode, or the price sensor's value **as is**: pick a sensor that already includes all surcharges,
   e.g. your provider's integration like Tibber, or EPEX Spot with surcharges configured.
   Nothing is added on top.
 * All values are **gross** (incl. VAT).
@@ -67,8 +69,16 @@ itself may still show a placeholder until HACS supports local brand folders.
 
 ### Set up
 
-*Settings → Devices & services → Add integration → Dynamic Energy Tariff Compare*. All options
-can be changed later via *Configure*, including the sensors.
+*Settings → Devices & services → Add integration → Dynamic Energy Tariff Compare*, then choose
+the price source:
+
+1. **Tibber Germany by postcode** (recommended in Germany): postcode + grid import sensor. The
+   next page shows the current price for your postcode and Tibber's monthly fees, which are
+   prefilled as the dynamic tariff's monthly fee. Enter your fixed tariff.
+2. **Existing price sensor**: any provider, see [price data](#recommended-integrations-for-price-data).
+
+All options can be changed later via *Configure*, including the sensors and the postcode. To
+switch the price source, add a new entry (and delete the old one).
 
 ## Configuration
 
@@ -76,11 +86,12 @@ can be changed later via *Configure*, including the sensors.
 |---|---|---|
 | Provider name | Optional, for display only (device / entry name). Entity IDs don't change | – |
 | Grid import energy sensor | `total_increasing` meter, e.g. EDL21 *Positive active energy total* / OBIS 1.8.0. Any `device_class: energy` sensor; the unit (Wh, kWh, MWh, GWh) is converted automatically | – |
-| Price sensor | **Required.** Final all-in price per kWh, see [price data](#recommended-integrations-for-price-data) | – |
-| Price unit | *Auto-detect* uses the sensor's `unit_of_measurement` (€/kWh, ct/kWh, €/MWh, also `EUR / kWh`, `Cent/kWh`, …). Without a usable unit the value decides: below 2 → €/kWh, 2–200 → ct/kWh, above 200 → €/MWh (a warning is logged). Select the unit manually if that's wrong | Auto-detect |
+| Postcode | *Tibber Germany only.* 5-digit German postcode; checked against Tibber when saved | – |
+| Price sensor | *Price sensor only.* Final all-in price per kWh, see [price data](#recommended-integrations-for-price-data) | – |
+| Price unit | *Price sensor only.* *Auto-detect* uses the sensor's `unit_of_measurement` (€/kWh, ct/kWh, €/MWh, also `EUR / kWh`, `Cent/kWh`, …). Without a usable unit the value decides: below 2 → €/kWh, 2–200 → ct/kWh, above 200 → €/MWh (a warning is logged). Select the unit manually if that's wrong | Auto-detect |
 | Fixed tariff energy price | your current Arbeitspreis, ct/kWh gross | 32.00 |
 | Fixed tariff base fee | your current Grundpreis, €/month gross | 12.00 |
-| Dynamic tariff monthly fee | the dynamic provider's base fee, €/month gross. If the grid base fee / metering of the dynamic tariff differs from your fixed tariff, add the difference here | 5.99 |
+| Dynamic tariff monthly fee | the dynamic provider's base fee, €/month gross. If the grid base fee / metering of the dynamic tariff differs from your fixed tariff, add the difference here. *Tibber Germany:* prefilled with Tibber's monthly fees for your postcode | 5.99 |
 
 > ⚠️ **The defaults are only examples.** Copy the real values from your current contract or
 > bill and from the dynamic provider's price calculator for your postcode (see below).
@@ -93,6 +104,9 @@ can be changed later via *Configure*, including the sensors.
 are dropped; the price sensor is now always treated as the final price. Entries that used the
 energy-charts.info fallback keep loading but need a price sensor: open *Configure* and select one.
 The `current_spot_price` sensor was removed; use `current_dynamic_price`.
+
+**Upgrading from 0.3.x:** existing entries keep using their price sensor. To use the built-in
+Tibber Germany prices instead, add a new entry with *Tibber Germany by postcode*.
 
 ### Finding the values for your postcode
 
@@ -113,7 +127,42 @@ For tariffs billed **hourly** (e.g. tado° HOURLY), select a price sensor with h
 (e.g. EPEX Spot configured for 60 minutes). Each hourly price is then applied to all four
 quarter hours.
 
+## Tibber Germany by postcode (built in)
+
+The integration reads the price data that Tibber's public price calculator on
+[tibber.com/de](https://tibber.com/de) shows for a postcode
+(`https://tibber.com/de/api/lookup/price-overview?postalCode=<postcode>`). No account or token is
+needed. What the response contains (checked Oct 2026, postcode 07646):
+
+* **15-minute prices** (96 per day) for **yesterday, today and tomorrow**, in local time, as
+  `priceIncludingVat` in €/kWh. This is the final per-kWh price.
+* Each price has components, all incl. VAT: `power` (the EPEX day-ahead price incl. VAT, no
+  Tibber markup), `taxes` (taxes and levies) and `grid` (grid fee for the postcode's grid
+  operator). Example for 07646 on 10 Oct 2026, 13:00: 16.29 ct = power 0 + taxes 9.67 +
+  grid 6.62. Taxes and grid differ by postcode.
+* **Monthly fees** for the postcode, e.g. 07646: 15.64 € = Tibber service fee 5.99 + meter
+  operator 0.96 + grid 8.69. The total is prefilled as *dynamic tariff monthly fee*. It matches
+  a fixed tariff's *Grundpreis* that also includes metering and the grid base price, which is
+  usual in Germany.
+* Until the day-ahead prices are published (early afternoon), *tomorrow* only contains
+  placeholders without the `power` part. They are ignored.
+
+How the integration uses it:
+
+* Fetched every **30 minutes** (Tibber's cache is valid until the next full hour), so tomorrow's
+  prices appear in the afternoon.
+* Prices are stored in Home Assistant (`.storage`) for **400 days**, so restarts and later
+  backfills can use every price fetched since installation.
+* The *current dynamic price* sensor shows the price of the current quarter hour with the
+  attributes `components_ct`, `tibber_monthly_fees_eur`, `postcode`, `last_price_fetch` and the
+  `today` / `tomorrow` lists.
+* The endpoint is **not an official API**. Tibber can change or remove it at any time. If a
+  fetch fails, the last prices are kept, the error is shown in the sensor's `last_error`
+  attribute and consumption waits in *pending energy* (up to 3 days) until prices arrive.
+
 ## Recommended integrations for price data
+
+Only needed for the *Existing price sensor* source.
 
 | Integration | Install | 15-min support | What this integration reads | Use as all-in price? |
 |---|---|---|---|---|
@@ -160,7 +209,7 @@ Entity IDs are fixed (also when you set a provider name):
 
 | Entity ID | Unit | Class | Notes |
 |---|---|---|---|
-| `sensor.dynamic_energy_tariff_compare_current_dynamic_price` | ct/kWh | measurement | current all-in price of the price sensor; attributes `today` / `tomorrow` (15-min lists), `fixed_price_ct`, `source`, `last_error` |
+| `sensor.dynamic_energy_tariff_compare_current_dynamic_price` | ct/kWh | measurement | current all-in price; attributes `today` / `tomorrow` (15-min lists), `fixed_price_ct`, `source`, `last_error`; with Tibber Germany also `components_ct`, `tibber_monthly_fees_eur`, `postcode`, `last_price_fetch` |
 | `sensor.dynamic_energy_tariff_compare_dynamic_energy_cost` | EUR | monetary / total | energy only |
 | `sensor.dynamic_energy_tariff_compare_fixed_energy_cost` | EUR | monetary / total | energy only |
 | `sensor.dynamic_energy_tariff_compare_dynamic_total_cost` | EUR | monetary / total | + prorated dynamic monthly fee |
@@ -186,7 +235,11 @@ response_variable: result
 * **Energy:** recorder **5-minute short-term statistics** where they still exist (default
   retention ≈ 10 days), otherwise **hourly long-term statistics**. Hourly energy is spread
   evenly over the four quarter hours, so shifts in usage within an hour are lost.
-* **Prices:** only the selected price sensor's recorder data: recorded states and price-list
+* **Prices (Tibber Germany):** Tibber's endpoint has **no history**; it only serves yesterday,
+  today and tomorrow. Backfill uses the stored prices: yesterday and today right after setup,
+  and every day since installation later on. Older consumption gets `no_price_history` /
+  `unpriced_kwh_skipped`.
+* **Prices (price sensor):** only the selected price sensor's recorder data: recorded states and price-list
   attributes (default retention 10 days), else the sensor's **statistics** (5-minute / hourly
   mean, kept long term if the sensor has a `state_class`, as core Tibber does).
   If no price is recorded for the period, the result says `no_price_history` and nothing is
@@ -345,6 +398,7 @@ The utility meters also give you "this month so far" values for tile cards
 * This is an estimate, not a bill. Providers bill from their own meter data and may have
   extra components (bonuses, price caps, minimum terms).
 * Only grid **import** is compared. Feed-in compensation is not included. Use the 1.8.0 sensor.
+* Tibber Germany: unofficial endpoint (see above); no prices before the day before installation.
 * Reduced grid fees under §14a EnWG (time-variable Netzentgelte, Modul 3) are only covered if
   your price sensor includes them.
 * If a slot's price is missing (price sensor unavailable), its consumption waits up

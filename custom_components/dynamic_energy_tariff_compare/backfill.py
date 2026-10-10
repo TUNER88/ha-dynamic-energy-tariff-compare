@@ -226,13 +226,35 @@ async def async_run_backfill(mgr: DynamicEnergyTariffCompareManager, days: int) 
     first = min(b[0] for b in buckets)
     start = dt_util.utc_from_timestamp(first)
 
-    prices, price_info = await _price_history(mgr, start, end)
+    if mgr.tibber:
+        # Tibber's API only serves yesterday/today/tomorrow: use the archive of
+        # prices fetched so far (refresh first so yesterday is included).
+        await mgr.async_refresh_tibber()
+        lo, hi = start.timestamp(), end.timestamp()
+        prices = {s: ct for s, ct in mgr.prices.items() if lo - calc.SLOT_SECONDS < s < hi}
+        archive_from = min(mgr.prices) if mgr.prices else None
+        price_info: dict[str, Any] = {
+            "price_slots_from_tibber_archive": len(prices),
+            "tibber_archive_from": dt_util.as_local(dt_util.utc_from_timestamp(archive_from)).isoformat()
+            if archive_from
+            else None,
+        }
+        source = mgr.price_source
+    else:
+        prices, price_info = await _price_history(mgr, start, end)
+        source = mgr.price_entity
     if not prices:
         return {
             "status": "no_price_history",
             "message": (
-                f"No recorded price history (states or statistics) found for {mgr.price_entity} "
-                "in the requested period; nothing was backfilled"
+                f"No price history found for {source} in the requested period; nothing was "
+                "backfilled"
+                + (
+                    ". Tibber's public API only provides yesterday, today and tomorrow; "
+                    "older prices are not available"
+                    if mgr.tibber
+                    else ""
+                )
             ),
             **info,
             **price_info,
@@ -244,7 +266,7 @@ async def async_run_backfill(mgr: DynamicEnergyTariffCompareManager, days: int) 
         return {
             "status": "no_price_history",
             "message": (
-                f"Price history of {mgr.price_entity} does not overlap with the recorded "
+                f"Price history of {source} does not overlap with the recorded "
                 "consumption; nothing was backfilled"
             ),
             "unpriced_kwh_skipped": round(unpriced, 3),
@@ -267,7 +289,7 @@ async def async_run_backfill(mgr: DynamicEnergyTariffCompareManager, days: int) 
     }
     if unpriced > 0:
         result["message"] = (
-            f"{round(unpriced, 3)} kWh had no recorded price of {mgr.price_entity} "
+            f"{round(unpriced, 3)} kWh had no recorded price of {source} "
             "and were excluded from both tariffs"
         )
     _LOGGER.info("Dynamic Energy Tariff Compare backfill result: %s", result)
