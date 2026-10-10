@@ -1,7 +1,7 @@
 {
-  "name": "Tibber Compare",
+  "name": "Dynamic Energy Tariff Compare",
   "homeassistant": "2025.6.0",
   "render_readme": true,
   "zip_release": true,
-  "filename": "tibber_compare.zip"
+  "filename": "dynamic_energy_tariff_compare.zip"
 }

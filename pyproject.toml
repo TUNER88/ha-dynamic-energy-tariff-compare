@@ -1,5 +1,5 @@
 [project]
-name = "ha-tibber-compare"
+name = "ha-dynamic-energy-tariff-compare"
 version = "0.0.0"  # not used; the release version comes from git tags (see CONTRIBUTING.md)
 requires-python = ">=3.14"
 

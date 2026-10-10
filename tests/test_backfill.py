@@ -14,7 +14,7 @@ from homeassistant.components.recorder.models import StatisticData, StatisticMea
 from homeassistant.components.recorder.statistics import async_import_statistics
 from homeassistant.core import HomeAssistant
 
-from custom_components.tibber_compare.const import DEFAULTS, DOMAIN
+from custom_components.dynamic_energy_tariff_compare.const import DEFAULTS, DOMAIN
 
 ENERGY = "sensor.edl21_total_active_energy"
 ENERGY_ATTRS = {"device_class": "energy", "unit_of_measurement": "kWh", "state_class": "total_increasing"}
@@ -58,7 +58,7 @@ async def test_backfill_hourly_with_energy_charts(
     entry = MockConfigEntry(
         domain=DOMAIN,
         data={**DEFAULTS, "energy_entity": ENERGY, "price_entity": None, "fixed_price_ct": 30.0,
-              "tibber_markup_ct": 0.0, "network_fee_ct": 0.0, "levies_ct": 0.0, "vat_percent": 0.0},
+              "provider_markup_ct": 0.0, "network_fee_ct": 0.0, "levies_ct": 0.0, "vat_percent": 0.0},
     )
     entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(entry.entry_id)
@@ -73,6 +73,6 @@ async def test_backfill_hourly_with_energy_charts(
     assert res["hourly_buckets"] >= 4
     # 1 kWh per hour, spread 0.25 kWh per quarter -> 0.25 * sum(0..15) ct
     assert mgr.acc.totals.energy_kwh == pytest.approx(4.0)
-    assert mgr.acc.totals.tibber_energy_cost_eur == pytest.approx(0.25 * sum(range(16)) / 100)
+    assert mgr.acc.totals.dynamic_energy_cost_eur == pytest.approx(0.25 * sum(range(16)) / 100)
     assert mgr.acc.totals.fixed_energy_cost_eur == pytest.approx(1.20)
     assert mgr.acc.totals.tracking_start <= START.timestamp()

@@ -1,0 +1,284 @@
+# Dynamic Energy Tariff Compare – ready-to-paste dashboard
+#
+# Settings → Dashboards → Add dashboard → "New dashboard from scratch" → open it →
+# ⋮ → Edit dashboard → ⋮ → Raw configuration editor → replace everything with this file.
+#
+# View 1 ("Overview") uses built-in cards only.
+# View 2 ("Charts") needs the HACS frontend card "ApexCharts Card"
+#   (https://github.com/RomRider/apexcharts-card).
+# The monthly cards need the utility_meter helpers from examples/utility_meter.yaml.
+#
+# Entity IDs are the defaults for an English HA installation. Check
+# Settings → Entities → search "dynamic_energy_tariff_compare" if yours differ.
+
+title: Dynamic Energy Tariff Compare
+views:
+  - title: Overview
+    path: dynamic-tariff-compare
+    icon: mdi:scale-balance
+    cards:
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_savings
+            name: Savings with dynamic tariff
+            icon: mdi:piggy-bank
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_consumption
+            name: Tracked consumption
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price_incl_fees
+            name: Ø dynamic incl. fees
+            icon: mdi:lightning-bolt
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_avg_fixed_price_incl_fees
+            name: Ø fixed incl. fees
+            icon: mdi:lock
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_current_dynamic_price
+            name: Dynamic price now
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_current_spot_price
+            name: Spot price now
+
+      - type: grid
+        columns: 3
+        square: false
+        cards:
+          # needs examples/utility_meter.yaml
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_dynamic_monthly
+            name: Dynamic this month
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_fixed_monthly
+            name: Fixed this month
+          - type: tile
+            entity: sensor.dynamic_energy_tariff_compare_savings_monthly
+            name: Saved this month
+
+      - type: entities
+        title: Comparison details
+        entities:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+            name: Dynamic total (incl. monthly fees)
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+            name: Fixed tariff total (incl. base fee)
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_energy_cost
+            name: Dynamic energy only
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_energy_cost
+            name: Fixed tariff energy only
+          - entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price
+            name: Ø dynamic energy price
+          - type: attribute
+            entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price
+            attribute: consumption_weighted_spot_ct
+            name: Ø spot price (consumption weighted)
+            suffix: ct/kWh
+          - type: attribute
+            entity: sensor.dynamic_energy_tariff_compare_savings
+            attribute: savings_per_month_eur
+            name: Savings per month
+            suffix: €
+          - type: attribute
+            entity: sensor.dynamic_energy_tariff_compare_savings
+            attribute: projected_savings_per_year_eur
+            name: Projected savings per year
+            suffix: €
+          - type: attribute
+            entity: sensor.dynamic_energy_tariff_compare_savings
+            attribute: tracking_since
+            name: Tracking since
+          - entity: sensor.dynamic_energy_tariff_compare_pending_energy
+            name: Energy waiting for a price
+          - type: divider
+          - entity: button.dynamic_energy_tariff_compare_backfill
+          - entity: button.dynamic_energy_tariff_compare_reset
+
+      - type: statistics-graph
+        title: Daily cost – dynamic vs. fixed
+        period: day
+        days_to_show: 30
+        chart_type: bar
+        stat_types: [change]
+        entities:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+            name: Dynamic
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+            name: Fixed
+
+      - type: statistics-graph
+        title: Monthly cost – dynamic vs. fixed
+        period: month
+        days_to_show: 365
+        chart_type: bar
+        stat_types: [change]
+        entities:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+            name: Dynamic
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+            name: Fixed
+
+      - type: statistics-graph
+        title: Monthly cost (utility_meter helpers)
+        period: month
+        days_to_show: 365
+        chart_type: bar
+        stat_types: [change]
+        entities:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_monthly
+            name: Dynamic
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_monthly
+            name: Fixed
+          - entity: sensor.dynamic_energy_tariff_compare_savings_monthly
+            name: Savings
+
+      - type: history-graph
+        title: Cumulative cost
+        hours_to_show: 720
+        entities:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+            name: Dynamic
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+            name: Fixed
+
+  - title: Charts
+    path: dynamic-tariff-compare-charts
+    icon: mdi:chart-bar
+    cards:
+      # 15-min effective dynamic price for today + tomorrow, green when cheaper than
+      # your fixed price, red when more expensive, fixed price as a flat line.
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Dynamic price (15 min) vs. fixed price
+          show_states: true
+          colorize_states: true
+        graph_span: 2d
+        span:
+          start: day
+        now:
+          show: true
+          label: Now
+        yaxis:
+          - decimals: 1
+            apex_config:
+              title:
+                text: ct/kWh
+        apex_config:
+          legend:
+            show: true
+          plotOptions:
+            bar:
+              columnWidth: 95%
+          tooltip:
+            x:
+              format: "dd.MM. HH:mm"
+        series:
+          - entity: sensor.dynamic_energy_tariff_compare_current_dynamic_price
+            name: Dynamic now
+            show:
+              in_chart: false
+          - entity: sensor.dynamic_energy_tariff_compare_current_dynamic_price
+            name: Cheaper than fixed
+            type: column
+            color: "#2e7d32"
+            show:
+              in_header: false
+            data_generator: |
+              const fixed = entity.attributes.fixed_price_ct;
+              return [...(entity.attributes.today || []), ...(entity.attributes.tomorrow || [])]
+                .map(p => [new Date(p.start).getTime(), p.price <= fixed ? p.price : null]);
+          - entity: sensor.dynamic_energy_tariff_compare_current_dynamic_price
+            name: More expensive than fixed
+            type: column
+            color: "#c62828"
+            show:
+              in_header: false
+            data_generator: |
+              const fixed = entity.attributes.fixed_price_ct;
+              return [...(entity.attributes.today || []), ...(entity.attributes.tomorrow || [])]
+                .map(p => [new Date(p.start).getTime(), p.price > fixed ? p.price : null]);
+          - entity: sensor.dynamic_energy_tariff_compare_current_dynamic_price
+            name: Fixed price
+            type: line
+            curve: stepline
+            stroke_width: 2
+            color: "#1565c0"
+            show:
+              in_header: false
+            data_generator: |
+              const fixed = entity.attributes.fixed_price_ct;
+              const start = new Date(); start.setHours(0, 0, 0, 0);
+              return [[start.getTime(), fixed], [start.getTime() + 2 * 86400000, fixed]];
+
+      # Cumulative cost (incl. prorated monthly fees) over the last 30 days
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Cumulative cost – last 30 days
+          show_states: true
+          colorize_states: true
+        graph_span: 30d
+        yaxis:
+          - decimals: 0
+            apex_config:
+              title:
+                text: €
+        series:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_total_cost
+            name: Dynamic
+            color: "#00b4a0"
+            stroke_width: 2
+            statistics:
+              type: state
+              period: hour
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_total_cost
+            name: Fixed
+            color: "#1565c0"
+            stroke_width: 2
+            statistics:
+              type: state
+              period: hour
+          - entity: sensor.dynamic_energy_tariff_compare_savings
+            name: Savings
+            color: "#f9a825"
+            stroke_width: 1
+            statistics:
+              type: state
+              period: hour
+
+      # Monthly bars from the utility_meter helpers (examples/utility_meter.yaml)
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Monthly cost – dynamic vs. fixed
+        graph_span: 365d
+        span:
+          end: month
+        yaxis:
+          - decimals: 0
+            apex_config:
+              title:
+                text: €
+        apex_config:
+          legend:
+            show: true
+        series:
+          - entity: sensor.dynamic_energy_tariff_compare_dynamic_monthly
+            name: Dynamic
+            type: column
+            color: "#00b4a0"
+            statistics:
+              type: change
+              period: month
+              align: start
+          - entity: sensor.dynamic_energy_tariff_compare_fixed_monthly
+            name: Fixed
+            type: column
+            color: "#1565c0"
+            statistics:
+              type: change
+              period: month
+              align: start
