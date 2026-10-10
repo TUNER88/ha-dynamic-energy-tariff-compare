@@ -120,6 +120,8 @@ class DynamicEnergyTariffCompareManager:
     async def async_start(self) -> None:
         data = await self.store.async_load() or {}
         self.acc.totals = calc.Totals.from_dict(data.get("totals"))
+        self.acc.history = calc.SlotHistory.from_dict(data.get("history"))
+        self.acc.history.compact(self.now_ts())
         for item in data.get("prices", []):
             # stored as [slot, ct] (<=0.2 also had an is_final flag)
             try:
@@ -186,6 +188,7 @@ class DynamicEnergyTariffCompareManager:
                 if slot >= cutoff
             ],
             "last_backfill": self.last_backfill,
+            "history": self.acc.history.to_dict(),
         }
 
     @callback
@@ -311,6 +314,8 @@ class DynamicEnergyTariffCompareManager:
 
     @callback
     def _handle_slot_tick(self, now: datetime) -> None:
+        # rolling windows move on even without meter updates
+        self.acc.history.compact(self.now_ts())
         if self.price_entity:
             self._ingest_price_state(self.hass.states.get(self.price_entity))
         self._notify(immediate=True)
@@ -344,6 +349,9 @@ class DynamicEnergyTariffCompareManager:
     def now_ts(self) -> float:
         return dt_util.utcnow().timestamp()
 
+    def window_stats(self, key: str) -> calc.WindowStats:
+        return self.acc.window_stats(calc.WINDOWS[key], self.now_ts())
+
     def current_slot_price(self) -> float | None:
         return self.price_lookup(calc.slot_start(self.now_ts()))
 
@@ -376,6 +384,7 @@ class DynamicEnergyTariffCompareManager:
             tracking_start=self.now_ts(),
             live_start=self.now_ts(),
         )
+        self.acc.history = calc.SlotHistory()
         self.last_backfill = None
         await self.store.async_save(self._data_to_save())
         self._notify(immediate=True)

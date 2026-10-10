@@ -145,6 +145,24 @@
       },
       "pending_energy": {
         "name": "Energie ohne Preis (wartend)"
+      },
+      "avg_dynamic_price_24h": {
+        "name": "Durchschnittlicher dynamischer Arbeitspreis (letzte 24 h)"
+      },
+      "avg_dynamic_price_30d": {
+        "name": "Durchschnittlicher dynamischer Arbeitspreis (letzte 30 Tage)"
+      },
+      "avg_dynamic_price_365d": {
+        "name": "Durchschnittlicher dynamischer Arbeitspreis (letzte 365 Tage)"
+      },
+      "savings_24h": {
+        "name": "Ersparnis (letzte 24 h)"
+      },
+      "savings_30d": {
+        "name": "Ersparnis (letzte 30 Tage)"
+      },
+      "savings_365d": {
+        "name": "Ersparnis (letzte 365 Tage)"
       }
     },
     "button": {

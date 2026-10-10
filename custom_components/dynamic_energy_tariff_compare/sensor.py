@@ -17,7 +17,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
-from . import DynamicEnergyTariffCompareConfigEntry
+from . import DynamicEnergyTariffCompareConfigEntry, calc
 from .entity import DynamicEnergyTariffCompareEntity, reserve_entity_ids
 from .manager import DynamicEnergyTariffCompareManager
 
@@ -77,6 +77,53 @@ def _period_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
         "backfilled_kwh": round(t.backfilled_kwh, 3),
         "last_backfill": m.last_backfill,
     }
+
+
+def _ts_local(ts: float | None) -> str | None:
+    return dt_util.as_local(dt_util.utc_from_timestamp(ts)).isoformat() if ts is not None else None
+
+
+def _window_attrs(m: DynamicEnergyTariffCompareManager, key: str) -> dict[str, Any]:
+    w = m.window_stats(key)
+    return {
+        "window": key,
+        "window_start": _ts_local(w.start_ts),
+        "covered_from": _ts_local(w.covered_from),
+        "consumption_kwh": round(w.priced_kwh, 3),
+        "unpriced_kwh": round(max(0.0, w.energy_kwh - w.priced_kwh), 3),
+        "avg_dynamic_price_ct": _r(w.avg_dynamic_price_ct, 3),
+        "avg_dynamic_price_incl_fees_ct": _r(w.avg_dynamic_price_incl_fees_ct, 3),
+        "avg_fixed_price_ct": _r(w.avg_fixed_price_ct, 3),
+        "avg_fixed_price_incl_fees_ct": _r(w.avg_fixed_price_incl_fees_ct, 3),
+        "dynamic_energy_cost_eur": round(w.dynamic_energy_cost_eur, 2),
+        "fixed_energy_cost_eur": round(w.fixed_energy_cost_eur, 2),
+        "dynamic_fees_eur": round(w.dynamic_fees_eur, 2),
+        "fixed_fees_eur": round(w.fixed_fees_eur, 2),
+        "dynamic_total_cost_eur": round(w.dynamic_total_cost_eur, 2),
+        "fixed_total_cost_eur": round(w.fixed_total_cost_eur, 2),
+        "savings_eur": round(w.savings_eur, 2),
+    }
+
+
+def _window_sensors(key: str) -> tuple[TCSensorDescription, ...]:
+    return (
+        TCSensorDescription(
+            key=f"avg_dynamic_price_{key}",
+            native_unit_of_measurement=CT_KWH,
+            state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=2,
+            value_fn=lambda m: _r(m.window_stats(key).avg_dynamic_price_ct, 3),
+            attr_fn=lambda m: _window_attrs(m, key),
+        ),
+        TCSensorDescription(
+            key=f"savings_{key}",
+            native_unit_of_measurement=EUR,
+            device_class=SensorDeviceClass.MONETARY,
+            suggested_display_precision=2,
+            value_fn=lambda m: _r(m.window_stats(key).savings_eur),
+            attr_fn=lambda m: _window_attrs(m, key),
+        ),
+    )
 
 
 SENSORS: tuple[TCSensorDescription, ...] = (
@@ -167,6 +214,7 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         suggested_display_precision=3,
         value_fn=lambda m: _r(m.acc.pending_kwh),
     ),
+    *(d for key in calc.WINDOWS for d in _window_sensors(key)),
 )
 
 
