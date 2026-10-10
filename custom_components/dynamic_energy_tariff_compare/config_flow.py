@@ -24,18 +24,23 @@ from .const import (
     CONF_ENERGY_ENTITY,
     CONF_FIXED_BASE_FEE,
     CONF_FIXED_PRICE,
+    CONF_POSTCODE,
     CONF_PRICE_ENTITY,
+    CONF_PRICE_SOURCE,
     CONF_PRICE_UNIT,
     CONF_PROVIDER_MONTHLY_FEE,
     CONF_PROVIDER_NAME,
     DEFAULTS,
     DOMAIN,
     NUMBER_KEYS,
+    PRICE_SOURCE_SENSOR,
+    PRICE_SOURCE_TIBBER_DE,
 )
+from .tibber_de import TibberLookupError, async_fetch_parsed
 
 _LOGGER = logging.getLogger(__name__)
 
-CONFIG_VERSION = 2
+CONFIG_VERSION = 3
 
 _NUM_SPECS: dict[str, tuple[float, float, float, str]] = {
     CONF_FIXED_PRICE: (0, 200, 0.01, "ct/kWh"),
@@ -105,6 +110,7 @@ def clean_input(user_input: dict[str, Any]) -> dict[str, Any]:
     data: dict[str, Any] = {k: user_input[k] for k in CONFIG_KEYS if k in user_input}
     data[CONF_PROVIDER_NAME] = str(user_input.get(CONF_PROVIDER_NAME) or "").strip()
     data[CONF_PRICE_UNIT] = _unit_choice(user_input.get(CONF_PRICE_UNIT))
+    data[CONF_PRICE_SOURCE] = PRICE_SOURCE_SENSOR
     for key in NUMBER_KEYS:
         data[key] = _safe_float(user_input.get(key), DEFAULTS[key])
     return data
@@ -163,6 +169,84 @@ def _title(provider: str) -> str:
     return f"Dynamic Energy Tariff Compare ({provider})" if provider else "Dynamic Energy Tariff Compare"
 
 
+def _fee_fields(cfg: dict[str, Any]) -> dict[Any, Any]:
+    return {
+        vol.Required(key, default=_safe_float(cfg.get(key), DEFAULTS[key])): _num(key)
+        for key in NUMBER_KEYS
+    }
+
+
+def build_tibber_schema(current: dict[str, Any] | None, with_fees: bool) -> vol.Schema:
+    """Tibber Germany: postcode instead of a price sensor."""
+    cfg = {**DEFAULTS, CONF_PROVIDER_NAME: "Tibber", **(current or {})}
+    provider = cfg.get(CONF_PROVIDER_NAME)
+    postcode = cfg.get(CONF_POSTCODE)
+    schema: dict[Any, Any] = {
+        vol.Optional(
+            CONF_PROVIDER_NAME,
+            description={"suggested_value": provider if isinstance(provider, str) and provider else None},
+        ): selector.TextSelector(),
+        vol.Required(
+            CONF_POSTCODE, default=str(postcode) if postcode else vol.UNDEFINED
+        ): selector.TextSelector(),
+        vol.Required(
+            CONF_ENERGY_ENTITY, default=_entity_default(cfg.get(CONF_ENERGY_ENTITY))
+        ): selector.EntitySelector(
+            selector.EntitySelectorConfig(domain="sensor", device_class=SensorDeviceClass.ENERGY)
+        ),
+    }
+    if with_fees:
+        schema.update(_fee_fields(cfg))
+    return vol.Schema(schema)
+
+
+def clean_tibber_input(user_input: dict[str, Any], postcode: str) -> dict[str, Any]:
+    data: dict[str, Any] = {
+        CONF_PRICE_SOURCE: PRICE_SOURCE_TIBBER_DE,
+        CONF_PROVIDER_NAME: str(user_input.get(CONF_PROVIDER_NAME) or "").strip(),
+        CONF_POSTCODE: postcode,
+        CONF_ENERGY_ENTITY: user_input.get(CONF_ENERGY_ENTITY),
+    }
+    for key in NUMBER_KEYS:
+        data[key] = _safe_float(user_input.get(key), DEFAULTS[key])
+    return data
+
+
+async def _lookup(hass: HomeAssistant, value: Any) -> tuple[str | None, calc.TibberOverview | None, dict[str, str]]:
+    """Validate a postcode against Tibber. Returns (postcode, overview, errors). Never raises."""
+    code = calc.valid_postcode(value)
+    if code is None:
+        return None, None, {CONF_POSTCODE: "invalid_postcode"}
+    try:
+        overview = await async_fetch_parsed(hass, code)
+    except TibberLookupError as err:
+        return None, None, {CONF_POSTCODE: err.reason}
+    except Exception:  # noqa: BLE001 - never let the flow die
+        _LOGGER.exception("Unexpected error during Tibber lookup")
+        return None, None, {"base": "unknown"}
+    if not overview.prices:
+        return None, None, {CONF_POSTCODE: "no_prices"}
+    return code, overview, {}
+
+
+def _fmt(value: float | None) -> str:
+    return "–" if value is None else f"{value:.2f}".replace(".", ",")
+
+
+def _tibber_placeholders(code: str, overview: calc.TibberOverview) -> dict[str, str]:
+    now_slot = calc.slot_start(dt_util.utcnow().timestamp())
+    price = overview.prices.get(now_slot)
+    comps = overview.components.get(now_slot) or {}
+    monthly = ", ".join(f"{k} {_fmt(v)} €" for k, v in overview.monthly_components.items())
+    return {
+        "postcode": code,
+        "price": _fmt(price),
+        "components": ", ".join(f"{k} {_fmt(v)} ct" for k, v in comps.items()) or "–",
+        "monthly": _fmt(overview.monthly_fee_eur),
+        "monthly_components": monthly or "–",
+    }
+
+
 class DynamicEnergyTariffCompareConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow."""
 
@@ -170,8 +254,54 @@ class DynamicEnergyTariffCompareConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         self._finishing = False
+        self._tibber_data: dict[str, Any] = {}
+        self._overview: calc.TibberOverview | None = None
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Choose the price source."""
+        return self.async_show_menu(step_id="user", menu_options=["tibber", "sensor"])
+
+    # --------------------------------------------------------------- Tibber DE
+    async def async_step_tibber(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if not user_input.get(CONF_ENERGY_ENTITY):
+                errors[CONF_ENERGY_ENTITY] = "entity_not_found"
+            else:
+                code, overview, errors = await _lookup(self.hass, user_input.get(CONF_POSTCODE))
+                if not errors and code and overview:
+                    await self.async_set_unique_id(user_input[CONF_ENERGY_ENTITY])
+                    self._abort_if_unique_id_configured()
+                    self._tibber_data = {**user_input, CONF_POSTCODE: code}
+                    self._overview = overview
+                    return await self.async_step_tibber_fees()
+        return self.async_show_form(
+            step_id="tibber",
+            data_schema=build_tibber_schema(user_input, with_fees=False),
+            errors=errors,
+        )
+
+    async def async_step_tibber_fees(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        overview = self._overview or calc.TibberOverview()
+        code = self._tibber_data.get(CONF_POSTCODE, "")
+        if user_input is not None:
+            if self._finishing:
+                _LOGGER.debug("Ignoring duplicate submit of flow %s", self.flow_id)
+            else:
+                data = clean_tibber_input({**self._tibber_data, **user_input}, code)
+                self._finishing = True
+                return self.async_create_entry(title=_title(data[CONF_PROVIDER_NAME]), data=data)
+        defaults: dict[str, Any] = {}
+        if overview.monthly_fee_eur is not None:
+            defaults[CONF_PROVIDER_MONTHLY_FEE] = round(overview.monthly_fee_eur, 2)
+        return self.async_show_form(
+            step_id="tibber_fees",
+            data_schema=vol.Schema(_fee_fields({**DEFAULTS, **defaults, **(user_input or {})})),
+            description_placeholders=_tibber_placeholders(code, overview),
+        )
+
+    # ------------------------------------------------------------ price sensor
+    async def async_step_sensor(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
         placeholders: dict[str, str] = {"state": ""}
         if user_input is not None and self._finishing:
@@ -182,7 +312,7 @@ class DynamicEnergyTariffCompareConfigFlow(ConfigFlow, domain=DOMAIN):
             # created. Keep the flow alive instead; the first request finishes it.
             _LOGGER.debug("Ignoring duplicate submit of flow %s", self.flow_id)
             return self.async_show_form(
-                step_id="user",
+                step_id="sensor",
                 data_schema=_schema_or_default(user_input),
                 errors=errors,
                 description_placeholders=placeholders,
@@ -196,7 +326,7 @@ class DynamicEnergyTariffCompareConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._finishing = True
                 return self.async_create_entry(title=_title(data[CONF_PROVIDER_NAME]), data=data)
         return self.async_show_form(
-            step_id="user",
+            step_id="sensor",
             data_schema=_schema_or_default(user_input),
             errors=errors,
             description_placeholders=placeholders,
@@ -217,12 +347,15 @@ def _schema_or_default(current: dict[str, Any] | None) -> vol.Schema:
 
 
 class DynamicEnergyTariffCompareOptionsFlow(OptionsFlow):
-    """Options flow: everything (incl. sensors) can be changed."""
+    """Options flow: everything (incl. sensors / postcode) can be changed."""
 
     def __init__(self) -> None:
         self._finishing = False
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        current = {**self.config_entry.data, **self.config_entry.options}
+        if current.get(CONF_PRICE_SOURCE) == PRICE_SOURCE_TIBBER_DE:
+            return await self._async_tibber(current, user_input)
         errors: dict[str, str] = {}
         placeholders: dict[str, str] = {"state": ""}
         if user_input is not None and not self._finishing:
@@ -230,10 +363,31 @@ class DynamicEnergyTariffCompareOptionsFlow(OptionsFlow):
             if not errors:
                 self._finishing = True
                 return self.async_create_entry(data=clean_input(user_input))
-        current = {**self.config_entry.data, **self.config_entry.options, **(user_input or {})}
         return self.async_show_form(
             step_id="init",
-            data_schema=_schema_or_default(current),
+            data_schema=_schema_or_default({**current, **(user_input or {})}),
             errors=errors,
             description_placeholders=placeholders,
+        )
+
+    async def _async_tibber(
+        self, current: dict[str, Any], user_input: dict[str, Any] | None
+    ) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
+        if user_input is not None and not self._finishing:
+            code = calc.valid_postcode(user_input.get(CONF_POSTCODE))
+            if code is None:
+                errors[CONF_POSTCODE] = "invalid_postcode"
+            elif code != calc.valid_postcode(current.get(CONF_POSTCODE)):
+                code, _overview, errors = await _lookup(self.hass, code)
+            if not user_input.get(CONF_ENERGY_ENTITY):
+                errors[CONF_ENERGY_ENTITY] = "entity_not_found"
+            if not errors and code:
+                self._finishing = True
+                return self.async_create_entry(data=clean_tibber_input(user_input, code))
+        return self.async_show_form(
+            step_id="init",
+            data_schema=build_tibber_schema({**current, **(user_input or {})}, with_fees=True),
+            errors=errors,
+            description_placeholders={"state": ""},
         )

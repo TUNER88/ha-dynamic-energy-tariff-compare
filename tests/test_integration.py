@@ -42,7 +42,7 @@ def _epex_attrs() -> dict:
 
 def _options(**kw):
     return {
-        **DEFAULTS,
+        **{k: v for k, v in DEFAULTS.items() if k != "price_source"},
         CONF_ENERGY_ENTITY: ENERGY,
         CONF_PRICE_ENTITY: PRICE,
         "fixed_price_ct": 30.0,
@@ -54,6 +54,8 @@ async def test_config_flow(hass: HomeAssistant) -> None:
     hass.states.async_set(ENERGY, "1000", ENERGY_ATTRS)
     hass.states.async_set(PRICE, "0.1", _epex_attrs())
     result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": config_entries.SOURCE_USER})
+    assert result["type"] is FlowResultType.MENU
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], {"next_step_id": "sensor"})
     assert result["type"] is FlowResultType.FORM
     result = await hass.config_entries.flow.async_configure(result["flow_id"], _options())
     assert result["type"] is FlowResultType.CREATE_ENTRY
@@ -64,6 +66,8 @@ async def test_config_flow_odd_price_unit_accepted(hass: HomeAssistant) -> None:
     hass.states.async_set(ENERGY, "1000", ENERGY_ATTRS)
     hass.states.async_set("sensor.weird", "5", {"unit_of_measurement": "SEK/kWh"})
     result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": config_entries.SOURCE_USER})
+    assert result["type"] is FlowResultType.MENU
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], {"next_step_id": "sensor"})
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], _options(price_entity="sensor.weird")
     )

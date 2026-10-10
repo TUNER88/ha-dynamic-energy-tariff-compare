@@ -118,3 +118,74 @@ async def test_backfill_reports_missing_price_history(recorder_mock, hass: HomeA
     assert PRICE in res["message"]
     assert mgr.acc.totals.energy_kwh == 0
     assert mgr.acc.totals.dynamic_energy_cost_eur == 0
+
+
+# ------------------------------------------------------------ Tibber Germany
+TIBBER_NOW = datetime(2026, 10, 10, 11, 5, tzinfo=timezone.utc)
+
+
+async def _setup_tibber(hass: HomeAssistant, aioclient_mock, payload) -> MockConfigEntry:
+    import json  # noqa: PLC0415
+    from pathlib import Path  # noqa: PLC0415
+
+    from custom_components.dynamic_energy_tariff_compare.const import TIBBER_DE_URL  # noqa: PLC0415
+
+    if payload is None:
+        payload = json.loads((Path(__file__).parent / "fixtures" / "tibber_price_overview_07646.json").read_text())
+    if payload == 404:
+        aioclient_mock.get(TIBBER_DE_URL, status=404)
+    else:
+        aioclient_mock.get(TIBBER_DE_URL, json=payload)
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        version=3,
+        data={
+            "price_source": "tibber_de", "provider_name": "Tibber", "postcode": "07646",
+            "energy_entity": ENERGY, "fixed_price_ct": 30.0,
+            "fixed_base_fee_eur_month": 12.0, "provider_monthly_fee_eur": 15.64,
+        },
+    )
+    entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+    return entry
+
+
+async def test_backfill_tibber_from_archive(recorder_mock, hass: HomeAssistant, freezer, aioclient_mock) -> None:
+    """Yesterday's quarter-hour prices (and older archived ones) price the meter statistics."""
+    import json  # noqa: PLC0415
+    from pathlib import Path  # noqa: PLC0415
+
+    await hass.config.async_set_time_zone("Europe/Berlin")
+    freezer.move_to(TIBBER_NOW)
+    _import_energy(hass, "Wh", 1000.0)  # 2026-10-09 00:00-04:00 UTC = 02:00-06:00 local
+    await async_wait_recording_done(hass)
+    hass.states.async_set(ENERGY, "4100", {**ENERGY_ATTRS, "unit_of_measurement": "Wh"})
+    entry = await _setup_tibber(hass, aioclient_mock, None)
+    mgr = entry.runtime_data
+
+    result = await hass.services.async_call(DOMAIN, "backfill", {"days": 2}, blocking=True, return_response=True)
+    res = result[entry.entry_id]
+    assert res["status"] == "ok", res
+    assert res["price_slots_from_tibber_archive"] >= 16
+    assert res["tibber_archive_from"].startswith("2026-10-09T00:00:00+02:00")
+
+    payload = json.loads((Path(__file__).parent / "fixtures" / "tibber_price_overview_07646.json").read_text())
+    yday = [e["priceIncludingVat"] for e in payload["energy"]["yesterdayQuarterHours"]]
+    expected = sum(yday[8:24]) / 4  # local 02:00-06:00, 1 kWh per hour
+    assert mgr.acc.totals.energy_kwh == pytest.approx(4.0)
+    assert mgr.acc.totals.dynamic_energy_cost_eur == pytest.approx(expected)
+    assert mgr.acc.totals.fixed_energy_cost_eur == pytest.approx(1.20)
+
+
+async def test_backfill_tibber_without_archive(recorder_mock, hass: HomeAssistant, freezer, aioclient_mock) -> None:
+    freezer.move_to(TIBBER_NOW)
+    _import_energy(hass, "kWh", 1.0)
+    await async_wait_recording_done(hass)
+    hass.states.async_set(ENERGY, "104", ENERGY_ATTRS)
+    entry = await _setup_tibber(hass, aioclient_mock, 404)
+    result = await hass.services.async_call(DOMAIN, "backfill", {"days": 2}, blocking=True, return_response=True)
+    res = result[entry.entry_id]
+    assert res["status"] == "no_price_history", res
+    assert "only provides yesterday, today and tomorrow" in res["message"]
+    assert entry.runtime_data.acc.totals.dynamic_energy_cost_eur == 0

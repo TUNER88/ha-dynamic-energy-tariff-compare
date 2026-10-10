@@ -11,6 +11,10 @@ CONF_PRICE_ENTITY = "price_entity"
 CONF_FIXED_PRICE = "fixed_price_ct"
 CONF_FIXED_BASE_FEE = "fixed_base_fee_eur_month"
 CONF_PROVIDER_MONTHLY_FEE = "provider_monthly_fee_eur"
+CONF_PRICE_SOURCE = "price_source"  # PRICE_SOURCE_TIBBER_DE or PRICE_SOURCE_SENSOR
+CONF_POSTCODE = "postcode"
+PRICE_SOURCE_TIBBER_DE = "tibber_de"
+PRICE_SOURCE_SENSOR = "sensor"
 CONF_PRICE_UNIT = "price_unit"  # "auto" or a manual unit (EUR/kWh, ct/kWh, EUR/MWh)
 
 # Options removed in config entry version 2 (0.3.0). The price sensor is now
@@ -29,6 +33,7 @@ LEGACY_KEYS = (
 # of their own tariffs.
 DEFAULTS: dict[str, float | str] = {
     CONF_PROVIDER_NAME: "",
+    CONF_PRICE_SOURCE: "sensor",
     CONF_PRICE_UNIT: "auto",
     CONF_FIXED_PRICE: 32.0,
     CONF_FIXED_BASE_FEE: 12.0,
@@ -40,6 +45,11 @@ NUMBER_KEYS = (
     CONF_FIXED_BASE_FEE,
     CONF_PROVIDER_MONTHLY_FEE,
 )
+
+# Public endpoint behind tibber.com/de's price calculator (no account needed).
+# Returns yesterday/today/tomorrow per quarter hour and hour for a postcode,
+# all-in incl. VAT with components (power, taxes, grid) and monthly fees.
+TIBBER_DE_URL = "https://tibber.com/de/api/lookup/price-overview"
 
 SIGNAL_UPDATE = f"{DOMAIN}_update_{{}}"
 

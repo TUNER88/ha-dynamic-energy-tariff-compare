@@ -77,6 +77,11 @@ async def _start(client, path="/api/config/config_entries/flow", handler=DOMAIN)
     resp = await client.post(path, json={"handler": handler})
     assert resp.status == HTTPStatus.OK, await resp.text()
     data = await resp.json()
+    if data["type"] == "menu":  # config flow: choose the price source first
+        assert data["menu_options"] == ["tibber", "sensor"], data
+        resp = await client.post(f"{path}/{data['flow_id']}", json={"next_step_id": "sensor"})
+        assert resp.status == HTTPStatus.OK, await resp.text()
+        data = await resp.json()
     assert data["type"] == "form", data
     return data
 
@@ -95,8 +100,8 @@ async def test_user_flow_tibber_edl21_wh(hass: HomeAssistant, client) -> None:
     assert res["type"] == "create_entry", res
     assert res["title"] == "Dynamic Energy Tariff Compare (Tibber)"
     entry = hass.config_entries.async_entries(DOMAIN)[0]
-    assert entry.version == 2
-    assert dict(entry.data) == USER_INPUT
+    assert entry.version == 3
+    assert dict(entry.data) == {**USER_INPUT, "price_source": "sensor"}
     await hass.async_block_till_done()
     assert entry.runtime_data.acc.totals.last_value == pytest.approx(12345.678)  # Wh -> kWh
 
@@ -191,7 +196,7 @@ async def test_legacy_v1_entry_migrates_and_options_flow_works(hass: HomeAssista
     )
     assert await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
-    assert entry.version == 2
+    assert entry.version == 3
     assert not set(LEGACY_KEYS) & set(entry.data)
     assert not set(LEGACY_KEYS) & set(entry.options)
     assert "price_entity" not in entry.options  # None from old options dropped
@@ -324,6 +329,7 @@ async def test_tibber_pricing_de_sensor(hass: HomeAssistant, freezer) -> None:
     hass.states.async_set(ENERGY, "12345678", EDL21_ATTRS)
     hass.states.async_set(TPDE, "0.33", _tpde_attrs())  # state = 13:00 price (next hour)
     result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": "user"})
+    result = await hass.config_entries.flow.async_configure(result["flow_id"], {"next_step_id": "sensor"})
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"], {**USER_INPUT, "price_entity": TPDE}
     )

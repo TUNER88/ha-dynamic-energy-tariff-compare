@@ -3,6 +3,39 @@
     "step": {
       "user": {
         "title": "Dynamic Energy Tariff Compare",
+        "description": "Where should the dynamic prices come from?",
+        "menu_options": {
+          "tibber": "Tibber Germany by postcode (built in, recommended)",
+          "sensor": "Existing price sensor (any provider)"
+        }
+      },
+      "tibber": {
+        "title": "Tibber Germany",
+        "description": "Prices are fetched from tibber.com for your postcode every 30 minutes (yesterday, today and tomorrow, per quarter hour).",
+        "data": {
+          "provider_name": "Provider name (optional, e.g. Tibber, Rabot Energy, Octopus)",
+          "postcode": "Postcode (Germany)",
+          "energy_entity": "Grid import energy sensor (e.g. EDL21 total active energy / OBIS 1.8.0)"
+        },
+        "data_description": {
+          "provider_name": "Only used for display (device and entry name). Entity IDs stay the same.",
+          "postcode": "Tibber's public price calculator is queried for this postcode: 15-minute all-in prices incl. energy, taxes/levies, grid fee and VAT. No Tibber account needed."
+        }
+      },
+      "tibber_fees": {
+        "title": "Tariff values",
+        "description": "Tibber price for postcode {postcode} right now: {price} ct/kWh ({components}). Tibber monthly fees: {monthly} € ({monthly_components}); this total is prefilled as the dynamic tariff's monthly fee. Enter your current fixed tariff.",
+        "data": {
+          "fixed_price_ct": "Fixed tariff: energy price (ct/kWh, gross)",
+          "fixed_base_fee_eur_month": "Fixed tariff: base fee (€/month, gross)",
+          "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)"
+        },
+        "data_description": {
+          "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example."
+        }
+      },
+      "sensor": {
+        "title": "Dynamic Energy Tariff Compare",
         "description": "Compare a dynamic electricity tariff (Tibber, Rabot Energy, Octopus, …) with your fixed tariff. The price sensor must deliver the FINAL all-in price per kWh (incl. grid fees, taxes, levies, VAT and provider markup). The defaults are examples only.",
         "data": {
           "provider_name": "Provider name (optional, e.g. Tibber, Rabot Energy, Octopus)",
@@ -22,6 +55,9 @@
       }
     },
     "error": {
+      "invalid_postcode": "Unknown or invalid German postcode (5 digits).",
+      "cannot_connect": "Could not reach tibber.com. Try again later.",
+      "no_prices": "Tibber returned no prices for this postcode.",
       "price_not_numeric": "The price sensor's state \"{state}\" is not a number and it has no price list. Check the sensor, or select the price unit manually to save anyway.",
       "price_entity_required": "Select a price sensor.",
       "entity_not_found": "Entity not found.",
@@ -43,17 +79,22 @@
           "price_unit": "Price unit",
           "fixed_price_ct": "Fixed tariff: energy price (ct/kWh, gross)",
           "fixed_base_fee_eur_month": "Fixed tariff: base fee (€/month, gross)",
-          "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)"
+          "provider_monthly_fee_eur": "Dynamic tariff: monthly fee (€/month, gross)",
+          "postcode": "Postcode (Germany)"
         },
         "data_description": {
           "provider_name": "Only used for display (device and entry name). Entity IDs stay the same.",
           "price_entity": "Pick a sensor that already includes all surcharges, e.g. your provider's integration (Tibber, …) or EPEX Spot with surcharges configured. 15-min price lists in attributes are used when present, otherwise the current state. Units: €/kWh, ct/kWh, €/MWh.",
           "price_unit": "Auto-detect uses the sensor's unit; if it has none, the value decides (below 2 → €/kWh, 2–200 → ct/kWh, above 200 → €/MWh). Select the unit if auto-detection is wrong.",
-          "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example."
+          "provider_monthly_fee_eur": "Monthly fee of the dynamic tariff (provider base fee; add grid base fee/metering here if it differs from your fixed tariff). The default is only an example.",
+          "postcode": "Tibber's public price calculator is queried for this postcode: 15-minute all-in prices incl. energy, taxes/levies, grid fee and VAT. No Tibber account needed."
         }
       }
     },
     "error": {
+      "invalid_postcode": "Unknown or invalid German postcode (5 digits).",
+      "cannot_connect": "Could not reach tibber.com. Try again later.",
+      "no_prices": "Tibber returned no prices for this postcode.",
       "price_not_numeric": "The price sensor's state \"{state}\" is not a number and it has no price list. Check the sensor, or select the price unit manually to save anyway.",
       "price_entity_required": "Select a price sensor.",
       "entity_not_found": "Entity not found.",
