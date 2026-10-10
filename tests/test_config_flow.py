@@ -243,11 +243,25 @@ async def test_double_submit_does_not_end_in_invalid_flow(hass: HomeAssistant, c
     step again, aborted with "already_configured" and removed the flow, so the
     first request answered 404 "Invalid flow specified" although the entry exists.
     """
+    import custom_components.dynamic_energy_tariff_compare as integration  # noqa: PLC0415
+
+    original = integration.async_setup_entry
+
+    async def slow_setup(hass, entry):
+        await asyncio.sleep(0.2)  # first-time setup on real hardware takes a moment
+        return await original(hass, entry)
+
     form = await _start(client)
-    results = await asyncio.gather(
-        _submit(client, form["flow_id"], USER_INPUT),
-        _submit(client, form["flow_id"], USER_INPUT),
-    )
+
+    async def second_submit():
+        await asyncio.sleep(0.05)  # arrives while the first one is still setting up
+        return await _submit(client, form["flow_id"], USER_INPUT)
+
+    with patch.object(integration, "async_setup_entry", slow_setup):
+        results = await asyncio.gather(
+            _submit(client, form["flow_id"], USER_INPUT),
+            second_submit(),
+        )
     statuses = [status for status, _ in results]
     types = [res.get("type") for _, res in results]
     assert HTTPStatus.NOT_FOUND not in statuses, results
