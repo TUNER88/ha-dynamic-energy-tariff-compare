@@ -3,35 +3,27 @@
     "step": {
       "user": {
         "title": "Dynamic Energy Tariff Compare",
-        "description": "Vergleicht einen dynamischen Stromtarif mit 15-Minuten-Börsenpreisen (Tibber, Rabot Energy, Octopus, …) mit deinem Festpreis. Alle ct/kWh-Werte brutto (inkl. MwSt.), außer dem Börsenpreis, auf den die MwSt. aufgeschlagen wird. Die Standardwerte sind nur Beispiele. Trage die Werte deines Anbieters und Netzbetreibers ein.",
+        "description": "Vergleicht einen dynamischen Stromtarif (Tibber, Rabot Energy, Octopus, …) mit deinem Festpreistarif. Der Preissensor muss den ENDPREIS pro kWh liefern (inkl. Netzentgelt, Steuern, Umlagen, MwSt. und Anbieteraufschlag). Die Vorgabewerte sind nur Beispiele.",
         "data": {
           "provider_name": "Anbietername (optional, z. B. Tibber, Rabot Energy, Octopus)",
-          "energy_entity": "Netzbezugs-Zähler (kWh, z. B. EDL21 Gesamtwirkenergie / OBIS 1.8.0)",
-          "price_entity": "Preissensor (optional: EPEX Spot, Nord Pool, Anbieter-Integration, …)",
-          "price_is_final": "Preissensor ist bereits der Endpreis (keine MwSt./Aufschläge addieren)",
-          "use_energy_charts": "DE-LU-Spotpreise von energy-charts.info laden, wenn kein Preissensor gewählt ist",
-          "fixed_price_ct": "Aktueller Festpreis-Tarif: Arbeitspreis (ct/kWh, brutto)",
-          "fixed_base_fee_eur_month": "Aktueller Festpreis-Tarif: Grundpreis (€/Monat, brutto)",
-          "provider_markup_ct": "Dynamischer Tarif: Anbieter-Aufschlag auf den Börsenpreis (ct/kWh, brutto)",
-          "network_fee_ct": "Netzentgelt Arbeitspreis (ct/kWh, brutto)",
-          "levies_ct": "Steuern & Abgaben: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, brutto)",
-          "vat_percent": "MwSt. auf den Börsenpreis (%)",
-          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr des Anbieters (€/Monat, brutto)",
-          "grid_base_fee_eur_month": "Dynamischer Tarif: Netz-Grundpreis + Messstellenbetrieb (€/Monat, brutto)"
+          "energy_entity": "Netzbezugs-Energiesensor (z. B. EDL21 Wirkenergie gesamt / OBIS 1.8.0)",
+          "price_entity": "Preissensor: Endpreis pro kWh (alles inklusive)",
+          "fixed_price_ct": "Festpreistarif: Arbeitspreis (ct/kWh, brutto)",
+          "fixed_base_fee_eur_month": "Festpreistarif: Grundpreis (€/Monat, brutto)",
+          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)"
         },
         "data_description": {
-          "provider_name": "Nur zur Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
-          "price_entity": "Leer lassen, um energy-charts.info zu nutzen. 15-Minuten-Preislisten werden aus Attributen gelesen (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …), sonst wird der aktuelle Zustand je Slot verwendet. Einheit wird aus unit_of_measurement erkannt (€/kWh, ct/kWh, €/MWh).",
-          "price_is_final": "Aus: Sensor liefert den reinen (netto) Börsenpreis -> MwSt., Aufschlag, Netzentgelt und Abgaben werden addiert. An: Sensor enthält bereits alles (z. B. Integration deines Anbieters oder EPEX-Spot-Gesamtpreis mit Aufschlägen) -> unverändert verwendet.",
-          "provider_markup_ct": "Siehe Preisblatt / Tarifrechner deines Anbieters für deine PLZ. Der Standardwert ist nur ein Beispiel.",
-          "network_fee_ct": "Hängt vom Netzbetreiber / der PLZ ab; steht in der Preisaufschlüsselung der meisten Anbieter dynamischer Tarife. Der Standardwert ist nur ein Beispiel.",
-          "provider_monthly_fee_eur": "Der Standardwert ist nur ein Beispiel."
+          "provider_name": "Nur für die Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
+          "price_entity": "Wähle einen Sensor, der bereits alle Aufschläge enthält, z. B. die Integration deines Anbieters (Tibber, …) oder EPEX Spot mit konfigurierten Aufschlägen. 15-Minuten-Preislisten in Attributen werden genutzt, sonst der aktuelle Zustand. Einheiten: €/kWh, ct/kWh, €/MWh.",
+          "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "Der Preissensor hat keine erkannte Einheit (€/kWh, ct/kWh, €/MWh) und keine Preisliste in den Attributen.",
-      "no_price_source": "Preissensor wählen oder energy-charts.info aktivieren."
+      "unknown_price_unit": "Die Einheit \"{unit}\" des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
+      "price_entity_required": "Bitte einen Preissensor auswählen.",
+      "entity_not_found": "Entität nicht gefunden.",
+      "unknown": "Unerwarteter Fehler, siehe Home-Assistant-Protokoll."
     },
     "abort": {
       "already_configured": "Dieser Energiesensor ist bereits eingerichtet."
@@ -41,56 +33,45 @@
     "step": {
       "init": {
         "title": "Dynamic Energy Tariff Compare Optionen",
-        "description": "Geänderte Tarifwerte gelten nur für neuen Verbrauch. Mit Reset (und Backfill) neu berechnen.",
+        "description": "Geänderte Werte gelten nur für neuen Verbrauch. Mit Zurücksetzen (und Nachberechnen) neu berechnen.",
         "data": {
           "provider_name": "Anbietername (optional, z. B. Tibber, Rabot Energy, Octopus)",
-          "energy_entity": "Netzbezugs-Zähler (kWh, z. B. EDL21 Gesamtwirkenergie / OBIS 1.8.0)",
-          "price_entity": "Preissensor (optional: EPEX Spot, Nord Pool, Anbieter-Integration, …)",
-          "price_is_final": "Preissensor ist bereits der Endpreis (keine MwSt./Aufschläge addieren)",
-          "use_energy_charts": "DE-LU-Spotpreise von energy-charts.info laden, wenn kein Preissensor gewählt ist",
-          "fixed_price_ct": "Aktueller Festpreis-Tarif: Arbeitspreis (ct/kWh, brutto)",
-          "fixed_base_fee_eur_month": "Aktueller Festpreis-Tarif: Grundpreis (€/Monat, brutto)",
-          "provider_markup_ct": "Dynamischer Tarif: Anbieter-Aufschlag auf den Börsenpreis (ct/kWh, brutto)",
-          "network_fee_ct": "Netzentgelt Arbeitspreis (ct/kWh, brutto)",
-          "levies_ct": "Steuern & Abgaben: Stromsteuer, Konzessionsabgabe, Umlagen (ct/kWh, brutto)",
-          "vat_percent": "MwSt. auf den Börsenpreis (%)",
-          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr des Anbieters (€/Monat, brutto)",
-          "grid_base_fee_eur_month": "Dynamischer Tarif: Netz-Grundpreis + Messstellenbetrieb (€/Monat, brutto)"
+          "energy_entity": "Netzbezugs-Energiesensor (z. B. EDL21 Wirkenergie gesamt / OBIS 1.8.0)",
+          "price_entity": "Preissensor: Endpreis pro kWh (alles inklusive)",
+          "fixed_price_ct": "Festpreistarif: Arbeitspreis (ct/kWh, brutto)",
+          "fixed_base_fee_eur_month": "Festpreistarif: Grundpreis (€/Monat, brutto)",
+          "provider_monthly_fee_eur": "Dynamischer Tarif: Grundgebühr (€/Monat, brutto)"
         },
         "data_description": {
-          "provider_name": "Nur zur Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
-          "price_entity": "Leer lassen, um energy-charts.info zu nutzen. 15-Minuten-Preislisten werden aus Attributen gelesen (EPEX Spot `data`, Nord Pool `raw_today`/`raw_tomorrow`, …), sonst wird der aktuelle Zustand je Slot verwendet. Einheit wird aus unit_of_measurement erkannt (€/kWh, ct/kWh, €/MWh).",
-          "price_is_final": "Aus: Sensor liefert den reinen (netto) Börsenpreis -> MwSt., Aufschlag, Netzentgelt und Abgaben werden addiert. An: Sensor enthält bereits alles (z. B. Integration deines Anbieters oder EPEX-Spot-Gesamtpreis mit Aufschlägen) -> unverändert verwendet.",
-          "provider_markup_ct": "Siehe Preisblatt / Tarifrechner deines Anbieters für deine PLZ. Der Standardwert ist nur ein Beispiel.",
-          "network_fee_ct": "Hängt vom Netzbetreiber / der PLZ ab; steht in der Preisaufschlüsselung der meisten Anbieter dynamischer Tarife. Der Standardwert ist nur ein Beispiel.",
-          "provider_monthly_fee_eur": "Der Standardwert ist nur ein Beispiel."
+          "provider_name": "Nur für die Anzeige (Geräte- und Eintragsname). Entitäts-IDs bleiben gleich.",
+          "price_entity": "Wähle einen Sensor, der bereits alle Aufschläge enthält, z. B. die Integration deines Anbieters (Tibber, …) oder EPEX Spot mit konfigurierten Aufschlägen. 15-Minuten-Preislisten in Attributen werden genutzt, sonst der aktuelle Zustand. Einheiten: €/kWh, ct/kWh, €/MWh.",
+          "provider_monthly_fee_eur": "Monatliche Gebühr des dynamischen Tarifs (Anbieter-Grundgebühr; Netz-Grundpreis/Messstelle hier ergänzen, falls abweichend vom Festpreistarif). Der Vorgabewert ist nur ein Beispiel."
         }
       }
     },
     "error": {
-      "unknown_price_unit": "Der Preissensor hat keine erkannte Einheit (€/kWh, ct/kWh, €/MWh) und keine Preisliste in den Attributen.",
-      "no_price_source": "Preissensor wählen oder energy-charts.info aktivieren."
+      "unknown_price_unit": "Die Einheit \"{unit}\" des Preissensors wird nicht unterstützt (€/kWh, ct/kWh oder €/MWh) und er hat keine Preislisten-Attribute.",
+      "price_entity_required": "Bitte einen Preissensor auswählen.",
+      "entity_not_found": "Entität nicht gefunden.",
+      "unknown": "Unerwarteter Fehler, siehe Home-Assistant-Protokoll."
     }
   },
   "entity": {
     "sensor": {
-      "current_spot_price": {
-        "name": "Aktueller Preis (Quelle)"
-      },
       "current_dynamic_price": {
-        "name": "Aktueller dynamischer Preis (effektiv)"
+        "name": "Aktueller dynamischer Preis"
       },
       "dynamic_energy_cost": {
-        "name": "Dynamischer Tarif Energiekosten"
+        "name": "Energiekosten dynamischer Tarif"
       },
       "fixed_energy_cost": {
-        "name": "Festpreis Energiekosten"
+        "name": "Energiekosten Festpreistarif"
       },
       "dynamic_total_cost": {
-        "name": "Dynamischer Tarif Gesamtkosten inkl. Gebühren"
+        "name": "Gesamtkosten dynamischer Tarif inkl. Gebühren"
       },
       "fixed_total_cost": {
-        "name": "Festpreis Gesamtkosten inkl. Grundpreis"
+        "name": "Gesamtkosten Festpreistarif inkl. Gebühren"
       },
       "savings": {
         "name": "Ersparnis mit dynamischem Tarif"
@@ -99,13 +80,13 @@
         "name": "Erfasster Verbrauch"
       },
       "avg_dynamic_price": {
-        "name": "Ø dynamischer Arbeitspreis"
+        "name": "Durchschnittlicher dynamischer Arbeitspreis"
       },
       "avg_dynamic_price_incl_fees": {
-        "name": "Ø dynamischer Preis inkl. Gebühren"
+        "name": "Durchschnittlicher dynamischer Preis inkl. Gebühren"
       },
       "avg_fixed_price_incl_fees": {
-        "name": "Ø Festpreis inkl. Grundpreis"
+        "name": "Durchschnittlicher Festpreis inkl. Gebühren"
       },
       "pending_energy": {
         "name": "Energie ohne Preis (wartend)"
@@ -113,7 +94,7 @@
     },
     "button": {
       "backfill": {
-        "name": "30 Tage aus Historie nachberechnen"
+        "name": "30 Tage aus Verlauf nachberechnen"
       },
       "reset": {
         "name": "Statistik zurücksetzen"
@@ -122,12 +103,12 @@
   },
   "services": {
     "backfill": {
-      "name": "Aus Historie nachberechnen",
-      "description": "Berechnet Kosten für den Zeitraum vor Beginn der Erfassung aus den Recorder-Statistiken (5-Min-Kurzzeitstatistik wo vorhanden, sonst stündlich).",
+      "name": "Aus Verlauf nachberechnen",
+      "description": "Berechnet die Kosten für den Zeitraum vor Beginn der Erfassung aus Recorder-Daten: Verbrauch aus Statistiken, Preise aus dem aufgezeichneten Verlauf des Preissensors (Zustände, sonst Statistiken).",
       "fields": {
         "entry_id": {
           "name": "Eintrag",
-          "description": "Eintrag (Standard: alle)"
+          "description": "Konfigurationseintrag (Standard: alle)"
         },
         "days": {
           "name": "Tage",
@@ -136,12 +117,12 @@
       }
     },
     "reset": {
-      "name": "Reset",
-      "description": "Alle Summen zurücksetzen.",
+      "name": "Zurücksetzen",
+      "description": "Setzt alle aufsummierten Werte zurück.",
       "fields": {
         "entry_id": {
           "name": "Eintrag",
-          "description": "Eintrag (Standard: alle)"
+          "description": "Konfigurationseintrag (Standard: alle)"
         }
       }
     }

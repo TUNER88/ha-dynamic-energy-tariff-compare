@@ -40,8 +40,8 @@ views:
             entity: sensor.dynamic_energy_tariff_compare_current_dynamic_price
             name: Dynamic price now
           - type: tile
-            entity: sensor.dynamic_energy_tariff_compare_current_spot_price
-            name: Spot price now
+            entity: sensor.dynamic_energy_tariff_compare_pending_energy
+            name: Waiting for a price
 
       - type: grid
         columns: 3
@@ -71,11 +71,6 @@ views:
             name: Fixed tariff energy only
           - entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price
             name: Ø dynamic energy price
-          - type: attribute
-            entity: sensor.dynamic_energy_tariff_compare_avg_dynamic_price
-            attribute: consumption_weighted_spot_ct
-            name: Ø spot price (consumption weighted)
-            suffix: ct/kWh
           - type: attribute
             entity: sensor.dynamic_energy_tariff_compare_savings
             attribute: savings_per_month_eur
@@ -147,7 +142,7 @@ views:
     path: dynamic-tariff-compare-charts
     icon: mdi:chart-bar
     cards:
-      # 15-min effective dynamic price for today + tomorrow, green when cheaper than
+      # 15-min dynamic (all-in) price for today + tomorrow, green when cheaper than
       # your fixed price, red when more expensive, fixed price as a flat line.
       - type: custom:apexcharts-card
         header:

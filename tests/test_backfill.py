@@ -30,49 +30,91 @@ START = datetime(2026, 10, 9, 0, 0, tzinfo=timezone.utc)
 NOW = datetime(2026, 10, 9, 4, 0, tzinfo=timezone.utc)
 
 
-async def test_backfill_hourly_with_energy_charts(
-    recorder_mock, hass: HomeAssistant, freezer, aioclient_mock
-) -> None:
-    freezer.move_to(NOW)
-    base = int(START.timestamp())
-    # 15-min spot prices: 0..15 * 10 EUR/MWh -> 0..15 ct/kWh net
-    aioclient_mock.get(
-        "https://api.energy-charts.info/price",
-        json={"unix_seconds": [base + 900 * i for i in range(16)],
-              "price": [10.0 * i for i in range(16)], "unit": "EUR / MWh"},
-    )
+PRICE = "sensor.tibber_pricing_de_current_price"
+
+
+def _import_energy(hass: HomeAssistant, unit: str, per_hour: float) -> None:
     meta = StatisticMetaData(
         has_sum=True, mean_type=StatisticMeanType.NONE, name=None, source="recorder",
-        statistic_id=ENERGY, unit_of_measurement="kWh", unit_class="energy",
+        statistic_id=ENERGY, unit_of_measurement=unit, unit_class="energy",
     )
     stats = [
-        StatisticData(start=START + timedelta(hours=h), state=100 + h + 1, sum=float(h + 1))
+        StatisticData(start=START + timedelta(hours=h), state=100 + (h + 1) * per_hour, sum=(h + 1) * per_hour)
         for h in range(4)
     ]
     # a row before the window so "change" for the first hour is defined
     stats.insert(0, StatisticData(start=START - timedelta(hours=1), state=100, sum=0.0))
     async_import_statistics(hass, meta, stats)
-    await async_wait_recording_done(hass)
 
-    hass.states.async_set(ENERGY, "104", ENERGY_ATTRS)
+
+def _import_price_means(hass: HomeAssistant, unit: str, values: list[float]) -> None:
+    meta = StatisticMetaData(
+        has_sum=False, mean_type=StatisticMeanType.ARITHMETIC, name=None, source="recorder",
+        statistic_id=PRICE, unit_of_measurement=unit, unit_class=None,
+    )
+    stats = [
+        StatisticData(start=START + timedelta(hours=h), mean=v, min=v, max=v)
+        for h, v in enumerate(values)
+    ]
+    async_import_statistics(hass, meta, stats)
+
+
+async def _setup(hass: HomeAssistant) -> MockConfigEntry:
     entry = MockConfigEntry(
         domain=DOMAIN,
-        data={**DEFAULTS, "energy_entity": ENERGY, "price_entity": None, "fixed_price_ct": 30.0,
-              "provider_markup_ct": 0.0, "network_fee_ct": 0.0, "levies_ct": 0.0, "vat_percent": 0.0},
+        version=2,
+        data={**DEFAULTS, "energy_entity": ENERGY, "price_entity": PRICE, "fixed_price_ct": 30.0},
     )
     entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
-    mgr = entry.runtime_data
+    return entry
 
+
+async def _backfill(hass: HomeAssistant, entry: MockConfigEntry) -> dict:
     result = await hass.services.async_call(
         DOMAIN, "backfill", {"days": 1}, blocking=True, return_response=True
     )
-    res = result[entry.entry_id]
+    return result[entry.entry_id]
+
+
+@pytest.mark.parametrize(("energy_unit", "per_hour"), [("kWh", 1.0), ("Wh", 1000.0)])
+async def test_backfill_prices_from_sensor_statistics(
+    recorder_mock, hass: HomeAssistant, freezer, energy_unit, per_hour
+) -> None:
+    """State history purged: hourly price means of the selected sensor are used.
+
+    EDL21 meters often report Wh; statistics are converted to kWh.
+    """
+    freezer.move_to(NOW)
+    _import_energy(hass, energy_unit, per_hour)
+    _import_price_means(hass, "EUR/kWh", [0.20, 0.30, 0.40, 0.50])
+    await async_wait_recording_done(hass)
+
+    hass.states.async_set(ENERGY, str(100 + 4 * per_hour), {**ENERGY_ATTRS, "unit_of_measurement": energy_unit})
+    hass.states.async_set(PRICE, "0.5", {"unit_of_measurement": "EUR/kWh", "state_class": "measurement"})
+    entry = await _setup(hass)
+    mgr = entry.runtime_data
+
+    res = await _backfill(hass, entry)
     assert res["status"] == "ok", res
     assert res["hourly_buckets"] >= 4
-    # 1 kWh per hour, spread 0.25 kWh per quarter -> 0.25 * sum(0..15) ct
+    assert res["price_slots_from_statistics"] >= 16
     assert mgr.acc.totals.energy_kwh == pytest.approx(4.0)
-    assert mgr.acc.totals.dynamic_energy_cost_eur == pytest.approx(0.25 * sum(range(16)) / 100)
+    assert mgr.acc.totals.dynamic_energy_cost_eur == pytest.approx(0.20 + 0.30 + 0.40 + 0.50)
     assert mgr.acc.totals.fixed_energy_cost_eur == pytest.approx(1.20)
     assert mgr.acc.totals.tracking_start <= START.timestamp()
+
+
+async def test_backfill_reports_missing_price_history(recorder_mock, hass: HomeAssistant, freezer) -> None:
+    freezer.move_to(NOW)
+    _import_energy(hass, "kWh", 1.0)
+    await async_wait_recording_done(hass)
+    hass.states.async_set(ENERGY, "104", ENERGY_ATTRS)
+    entry = await _setup(hass)  # price sensor has neither states nor statistics
+    mgr = entry.runtime_data
+    res = await _backfill(hass, entry)
+    assert res["status"] == "no_price_history", res
+    assert PRICE in res["message"]
+    assert mgr.acc.totals.energy_kwh == 0
+    assert mgr.acc.totals.dynamic_energy_cost_eur == 0

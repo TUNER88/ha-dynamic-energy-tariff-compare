@@ -14,7 +14,6 @@ from homeassistant.data_entry_flow import FlowResultType
 from custom_components.dynamic_energy_tariff_compare.const import (
     CONF_ENERGY_ENTITY,
     CONF_PRICE_ENTITY,
-    CONF_PRICE_IS_FINAL,
     DEFAULTS,
     DOMAIN,
 )
@@ -22,8 +21,9 @@ from custom_components.dynamic_energy_tariff_compare.const import (
 NOW = datetime(2026, 10, 10, 10, 5, tzinfo=timezone.utc)
 SLOT0 = datetime(2026, 10, 10, 10, 0, tzinfo=timezone.utc)
 ENERGY = "sensor.edl21_total_active_energy"
-PRICE = "sensor.epex_spot_data_net_price"
+PRICE = "sensor.epex_spot_data_total_price"
 ENERGY_ATTRS = {"device_class": "energy", "unit_of_measurement": "kWh", "state_class": "total_increasing"}
+ENERGY_WH_ATTRS = {**ENERGY_ATTRS, "unit_of_measurement": "Wh"}
 
 
 def _epex_attrs() -> dict:
@@ -45,12 +45,7 @@ def _options(**kw):
         **DEFAULTS,
         CONF_ENERGY_ENTITY: ENERGY,
         CONF_PRICE_ENTITY: PRICE,
-        CONF_PRICE_IS_FINAL: False,
         "fixed_price_ct": 30.0,
-        "provider_markup_ct": 2.0,
-        "network_fee_ct": 9.0,
-        "levies_ct": 7.0,
-        "vat_percent": 19.0,
         **kw,
     }
 
@@ -65,7 +60,7 @@ async def test_config_flow(hass: HomeAssistant) -> None:
     assert result["data"][CONF_ENERGY_ENTITY] == ENERGY
 
 
-async def test_config_flow_bad_price_unit(hass: HomeAssistant) -> None:
+async def test_config_flow_bad_price_unit_legacy(hass: HomeAssistant) -> None:
     hass.states.async_set(ENERGY, "1000", ENERGY_ATTRS)
     hass.states.async_set("sensor.weird", "5", {"unit_of_measurement": "SEK/kWh"})
     result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": config_entries.SOURCE_USER})
@@ -97,8 +92,8 @@ async def test_tracking_with_epex_sensor(hass: HomeAssistant, freezer) -> None:
     await hass.async_block_till_done()
     t = mgr.acc.totals
     assert t.energy_kwh == pytest.approx(2.0)
-    eff0 = 10 * 1.19 + 18
-    eff1 = 11 * 1.19 + 18
+    eff0 = 10.0  # the price sensor is the final all-in price
+    eff1 = 11.0
     expected = (4 / 3 * eff0 + 2 / 3 * eff1) / 100
     assert t.dynamic_energy_cost_eur == pytest.approx(expected)
     assert t.fixed_energy_cost_eur == pytest.approx(0.60)
@@ -115,9 +110,8 @@ async def test_tracking_with_epex_sensor(hass: HomeAssistant, freezer) -> None:
     assert float(cons.state) == pytest.approx(2.0)
     cur = hass.states.get("sensor.dynamic_energy_tariff_compare_current_dynamic_price")
     assert float(cur.state) == pytest.approx(eff1, abs=1e-3)
-    src = hass.states.get("sensor.dynamic_energy_tariff_compare_current_spot_price")
-    assert float(src.state) == pytest.approx(11.0)
-    assert len(src.attributes["today"]) == 8
+    assert len(cur.attributes["today"]) == 8
+    assert hass.states.get("sensor.dynamic_energy_tariff_compare_current_spot_price") is None
 
     # unavailable then negative jump (meter swap) is ignored
     hass.states.async_set(ENERGY, "unavailable", ENERGY_ATTRS)
@@ -133,34 +127,33 @@ async def test_tracking_with_epex_sensor(hass: HomeAssistant, freezer) -> None:
     assert entry.runtime_data.acc.totals.last_value == pytest.approx(5.0)
 
 
-async def test_final_price_state_only_sensor(hass: HomeAssistant, freezer) -> None:
-    """Provider integration (e.g. Tibber core): state only, EUR/kWh, already all-in."""
+async def test_state_only_price_sensor_and_wh_meter(hass: HomeAssistant, freezer) -> None:
+    """Core Tibber-like price (state only, EUR/kWh) and an EDL21 meter reporting Wh."""
     freezer.move_to(NOW)
     hass.states.async_set("sensor.provider_price", "0.30", {"unit_of_measurement": "EUR/kWh"})
-    hass.states.async_set(ENERGY, "1000", ENERGY_ATTRS)
-    entry = await _setup(hass, price_entity="sensor.provider_price", price_is_final=True)
+    hass.states.async_set(ENERGY, "1000000", ENERGY_WH_ATTRS)
+    entry = await _setup(hass, price_entity="sensor.provider_price")
     freezer.move_to(NOW + timedelta(minutes=5))
-    hass.states.async_set(ENERGY, "1001", ENERGY_ATTRS)
+    hass.states.async_set(ENERGY, "1001000", ENERGY_WH_ATTRS)  # +1000 Wh = 1 kWh
     await hass.async_block_till_done()
-    assert entry.runtime_data.acc.totals.dynamic_energy_cost_eur == pytest.approx(0.30)
+    t = entry.runtime_data.acc.totals
+    assert t.energy_kwh == pytest.approx(1.0)
+    assert t.dynamic_energy_cost_eur == pytest.approx(0.30)
+    assert t.fixed_energy_cost_eur == pytest.approx(0.30)
 
 
-async def test_energy_charts_fallback(hass: HomeAssistant, freezer, aioclient_mock) -> None:
+@pytest.mark.parametrize("unit", ["MWh", "GWh"])
+async def test_large_energy_units_converted(hass: HomeAssistant, freezer, unit) -> None:
     freezer.move_to(NOW)
-    ts = int(SLOT0.timestamp())
-    aioclient_mock.get(
-        "https://api.energy-charts.info/price",
-        json={"unix_seconds": [ts, ts + 900], "price": [100.0, 200.0], "unit": "EUR / MWh"},
-    )
-    hass.states.async_set(ENERGY, "1000", ENERGY_ATTRS)
-    entry = await _setup(hass, price_entity=None)
-    await hass.async_block_till_done()
-    mgr = entry.runtime_data
-    assert mgr.price_lookup(ts) == (pytest.approx(10.0), False)
+    hass.states.async_set("sensor.provider_price", "30", {"unit_of_measurement": "ct/kWh"})
+    attrs = {**ENERGY_ATTRS, "unit_of_measurement": unit}
+    hass.states.async_set(ENERGY, "1", attrs)
+    entry = await _setup(hass, price_entity="sensor.provider_price")
     freezer.move_to(NOW + timedelta(minutes=5))
-    hass.states.async_set(ENERGY, "1001", ENERGY_ATTRS)
+    step = 0.001 if unit == "MWh" else 0.000001
+    hass.states.async_set(ENERGY, str(1 + step), attrs)
     await hass.async_block_till_done()
-    assert mgr.acc.totals.dynamic_energy_cost_eur == pytest.approx((10 * 1.19 + 18) / 100)
+    assert entry.runtime_data.acc.totals.energy_kwh == pytest.approx(1.0)
 
 
 async def test_options_flow_changes_sensor(hass: HomeAssistant) -> None:
@@ -190,7 +183,7 @@ async def test_provider_name_and_stable_entity_ids(hass: HomeAssistant) -> None:
     assert "sensor.dynamic_energy_tariff_compare_savings" in ids
     assert "sensor.dynamic_energy_tariff_compare_dynamic_total_cost" in ids
     assert "button.dynamic_energy_tariff_compare_backfill" in ids
-    assert len(ids) == 14
+    assert len(ids) == 13
     devices = dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)
     assert [d.name for d in devices] == ["Dynamic Energy Tariff Compare (Rabot Energy)"]
     state = hass.states.get("sensor.dynamic_energy_tariff_compare_savings")
