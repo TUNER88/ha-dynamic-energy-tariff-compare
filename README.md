@@ -226,12 +226,16 @@ Entity IDs are fixed (also when you set a provider name):
 | `sensor.dynamic_energy_tariff_compare_savings_24h` | EUR | monetary | fixed − dynamic total cost incl. prorated fees, **last 24 h**; same attributes |
 | `sensor.dynamic_energy_tariff_compare_savings_30d` | EUR | monetary | same, **last 30 days** |
 | `sensor.dynamic_energy_tariff_compare_savings_365d` | EUR | monetary | same, **last 365 days** |
+| `sensor.dynamic_energy_tariff_compare_savings_percent` | % | measurement | savings since tracking start in % of the fixed total cost incl. fees: (fixed − dynamic) / fixed × 100, positive = dynamic cheaper. Attributes `energy_savings_percent` (energy cost only, without fees), `savings_eur`, `dynamic_total_cost_eur`, `fixed_total_cost_eur`, `consumption_kwh`, `tracking_since` |
+| `sensor.dynamic_energy_tariff_compare_savings_percent_24h` | % | measurement | same for the **last 24 h**; window attributes incl. `energy_savings_percent` |
+| `sensor.dynamic_energy_tariff_compare_savings_percent_30d` | % | measurement | same, **last 30 days** |
+| `sensor.dynamic_energy_tariff_compare_savings_percent_365d` | % | measurement | same, **last 365 days** |
 | `button.dynamic_energy_tariff_compare_backfill` | | config | backfill 30 days |
 | `button.dynamic_energy_tariff_compare_reset` | | config | reset all totals |
 
 ### Rolling windows (last 24 h, 30 days, 365 days)
 
-The `avg_dynamic_price_<window>` and `savings_<window>` sensors look back from *now*. They
+The `avg_dynamic_price_<window>`, `savings_<window>` and `savings_percent_<window>` sensors look back from *now*. They
 update every 15 minutes even when the meter doesn't report. Both carry the same attributes:
 
 | Attribute | Meaning |
@@ -245,6 +249,10 @@ update every 15 minutes even when the meter doesn't report. Both carry the same 
 | `dynamic_energy_cost_eur`, `fixed_energy_cost_eur` | energy cost in the window |
 | `dynamic_fees_eur`, `fixed_fees_eur` | monthly fees × tracked part of the window / 30.44 days |
 | `dynamic_total_cost_eur`, `fixed_total_cost_eur`, `savings_eur` | totals and their difference |
+| `savings_percent`, `energy_savings_percent` | savings in % of the fixed cost, incl. fees / energy only |
+
+The `savings_percent*` sensors are *unknown* while there is no priced consumption in the period
+or the fixed cost is 0. Pending (unpriced) energy is left out on both sides.
 
 * Consumption and energy cost are stored per 15-minute slot (in `.storage`, restart-safe).
   To keep the file small, slots older than 2 days are merged into hours and hours older than
@@ -371,6 +379,62 @@ content: |
   | Dynamic cost (€) |{% for e in w %} {{ v(e, 'dynamic_total_cost_eur') }} |{% endfor %}
   | Fixed cost (€) |{% for e in w %} {{ v(e, 'fixed_total_cost_eur') }} |{% endfor %}
   | **Savings (€)** |{% for e in w %} **{{ v(e, 'savings_eur') }}** |{% endfor %}
+  | Savings (%) |{% for e in w %} {{ v(e, 'savings_percent') }} |{% endfor %}
+  | Savings, energy only (%) |{% for e in w %} {{ v(e, 'energy_savings_percent') }} |{% endfor %}
+```
+
+Savings in percent of the fixed tariff's total cost (green = dynamic cheaper, red = more
+expensive):
+
+```yaml
+type: grid
+columns: 4
+square: false
+cards:
+  - type: gauge
+    entity: sensor.dynamic_energy_tariff_compare_savings_percent
+    name: Saved total
+    unit: "%"
+    min: -50
+    max: 50
+    needle: true
+    severity:
+      green: 0     # dynamic cheaper
+      yellow: -5
+      red: -50     # dynamic more expensive
+  - type: gauge
+    entity: sensor.dynamic_energy_tariff_compare_savings_percent_24h
+    name: Saved 24 h
+    unit: "%"
+    min: -50
+    max: 50
+    needle: true
+    severity:
+      green: 0     # dynamic cheaper
+      yellow: -5
+      red: -50     # dynamic more expensive
+  - type: gauge
+    entity: sensor.dynamic_energy_tariff_compare_savings_percent_30d
+    name: Saved 30 days
+    unit: "%"
+    min: -50
+    max: 50
+    needle: true
+    severity:
+      green: 0     # dynamic cheaper
+      yellow: -5
+      red: -50     # dynamic more expensive
+  - type: gauge
+    entity: sensor.dynamic_energy_tariff_compare_savings_percent_365d
+    name: Saved 365 days
+    unit: "%"
+    min: -50
+    max: 50
+    needle: true
+    severity:
+      green: 0     # dynamic cheaper
+      yellow: -5
+      red: -50     # dynamic more expensive
 ```
 
 ### 2. ApexCharts: today/tomorrow 15-min price vs. fixed price

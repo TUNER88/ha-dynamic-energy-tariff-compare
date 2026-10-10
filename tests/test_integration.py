@@ -186,10 +186,12 @@ async def test_provider_name_and_stable_entity_ids(hass: HomeAssistant) -> None:
     assert "sensor.dynamic_energy_tariff_compare_savings" in ids
     assert "sensor.dynamic_energy_tariff_compare_dynamic_total_cost" in ids
     assert "button.dynamic_energy_tariff_compare_backfill" in ids
-    assert len(ids) == 19
+    assert len(ids) == 23
+    assert "sensor.dynamic_energy_tariff_compare_savings_percent" in ids
     for key in ("24h", "30d", "365d"):
         assert f"sensor.dynamic_energy_tariff_compare_avg_dynamic_price_{key}" in ids
         assert f"sensor.dynamic_energy_tariff_compare_savings_{key}" in ids
+        assert f"sensor.dynamic_energy_tariff_compare_savings_percent_{key}" in ids
     devices = dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id)
     assert [d.name for d in devices] == ["Dynamic Energy Tariff Compare (Rabot Energy)"]
     state = hass.states.get("sensor.dynamic_energy_tariff_compare_savings")

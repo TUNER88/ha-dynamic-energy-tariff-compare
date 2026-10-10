@@ -12,7 +12,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import EntityCategory, UnitOfEnergy
+from homeassistant.const import PERCENTAGE, EntityCategory, UnitOfEnergy
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
@@ -102,6 +102,8 @@ def _window_attrs(m: DynamicEnergyTariffCompareManager, key: str) -> dict[str, A
         "dynamic_total_cost_eur": round(w.dynamic_total_cost_eur, 2),
         "fixed_total_cost_eur": round(w.fixed_total_cost_eur, 2),
         "savings_eur": round(w.savings_eur, 2),
+        "savings_percent": _r(w.savings_percent, 2),
+        "energy_savings_percent": _r(w.energy_savings_percent, 2),
     }
 
 
@@ -123,7 +125,29 @@ def _window_sensors(key: str) -> tuple[TCSensorDescription, ...]:
             value_fn=lambda m: _r(m.window_stats(key).savings_eur),
             attr_fn=lambda m: _window_attrs(m, key),
         ),
+        TCSensorDescription(
+            key=f"savings_percent_{key}",
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+            suggested_display_precision=1,
+            value_fn=lambda m: _r(m.window_stats(key).savings_percent, 2),
+            attr_fn=lambda m: _window_attrs(m, key),
+        ),
     )
+
+
+def _lifetime_percent_attrs(m: DynamicEnergyTariffCompareManager) -> dict[str, Any]:
+    now = m.now_ts()
+    acc = m.acc
+    pending_fixed = acc.pending_kwh * acc.params.fixed_price_ct / 100.0
+    return {
+        "energy_savings_percent": _r(acc.energy_savings_percent(), 2),
+        "savings_eur": round(acc.savings(now), 2),
+        "dynamic_total_cost_eur": round(acc.dynamic_total_cost(now), 2),
+        "fixed_total_cost_eur": round(acc.fixed_total_cost(now) - pending_fixed, 2),
+        "consumption_kwh": round(acc.totals.priced_energy_kwh, 3),
+        "tracking_since": _ts_local(acc.totals.tracking_start),
+    }
 
 
 SENSORS: tuple[TCSensorDescription, ...] = (
@@ -213,6 +237,14 @@ SENSORS: tuple[TCSensorDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         suggested_display_precision=3,
         value_fn=lambda m: _r(m.acc.pending_kwh),
+    ),
+    TCSensorDescription(
+        key="savings_percent",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=lambda m: _r(m.acc.savings_percent(m.now_ts()), 2),
+        attr_fn=_lifetime_percent_attrs,
     ),
     *(d for key in calc.WINDOWS for d in _window_sensors(key)),
 )

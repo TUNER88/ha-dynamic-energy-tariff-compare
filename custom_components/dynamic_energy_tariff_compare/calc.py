@@ -590,6 +590,13 @@ class SlotHistory:
         return hist
 
 
+def savings_percent(fixed_eur: float, dynamic_eur: float, priced_kwh: float) -> float | None:
+    """(fixed - dynamic) / fixed * 100; positive = dynamic cheaper. None without data."""
+    if priced_kwh <= 0 or fixed_eur <= 0:
+        return None
+    return (fixed_eur - dynamic_eur) / fixed_eur * 100.0
+
+
 @dataclass
 class WindowStats:
     """Rolling-window figures (gross)."""
@@ -615,6 +622,14 @@ class WindowStats:
     @property
     def savings_eur(self) -> float:
         return self.fixed_total_cost_eur - self.dynamic_total_cost_eur
+
+    @property
+    def savings_percent(self) -> float | None:
+        return savings_percent(self.fixed_total_cost_eur, self.dynamic_total_cost_eur, self.priced_kwh)
+
+    @property
+    def energy_savings_percent(self) -> float | None:
+        return savings_percent(self.fixed_energy_cost_eur, self.dynamic_energy_cost_eur, self.priced_kwh)
 
     def _ct(self, eur: float) -> float | None:
         return eur / self.priced_kwh * 100.0 if self.priced_kwh > 0 else None
@@ -766,6 +781,24 @@ class Accumulator:
             fixed_energy_cost_eur=fixed,
             dynamic_fees_eur=months * self.params.provider_monthly_fee_eur,
             fixed_fees_eur=months * self.params.fixed_base_fee_eur_month,
+        )
+
+    def _pending_fixed(self) -> float:
+        return self.pending_kwh * self.params.fixed_price_ct / 100.0
+
+    def savings_percent(self, now_ts: float) -> float | None:
+        """Lifetime savings relative to the fixed total cost (same kWh on both sides)."""
+        return savings_percent(
+            self.fixed_total_cost(now_ts) - self._pending_fixed(),
+            self.dynamic_total_cost(now_ts),
+            self.totals.priced_energy_kwh,
+        )
+
+    def energy_savings_percent(self) -> float | None:
+        """Lifetime savings on energy cost only (without monthly fees)."""
+        t = self.totals
+        return savings_percent(
+            t.fixed_energy_cost_eur - self._pending_fixed(), t.dynamic_energy_cost_eur, t.priced_energy_kwh
         )
 
     def avg_dynamic_price_ct(self) -> float | None:

@@ -76,6 +76,28 @@ def test_window_boundary_is_proportional() -> None:
     assert hist.window(start, NOW_TS) == pytest.approx([18.0, 18.0, 1.8, 5.4])
 
 
+def test_savings_percent() -> None:
+    assert calc.savings_percent(10.0, 8.0, 5.0) == pytest.approx(20.0)
+    assert calc.savings_percent(10.0, 12.5, 5.0) == pytest.approx(-25.0)  # dynamic more expensive
+    assert calc.savings_percent(0.0, 1.0, 5.0) is None  # no fixed cost
+    assert calc.savings_percent(10.0, 8.0, 0.0) is None  # no priced consumption
+
+    acc = _acc(NOW_TS - DAY)
+    acc.add_energy([(NOW_TS - 3600, 10.0)], lambda s: 20.0)  # 2.00 EUR vs 3.00 EUR fixed
+    acc.add_energy([(NOW_TS - 1800, 5.0)], lambda s: None)  # pending: excluded on both sides
+    months = DAY / calc.SECONDS_PER_MONTH
+    fixed, dyn = 3.0 + 12 * months, 2.0 + 6 * months
+    assert acc.savings_percent(NOW_TS) == pytest.approx((fixed - dyn) / fixed * 100)
+    assert acc.energy_savings_percent() == pytest.approx(100 / 3)
+    w = acc.window_stats(calc.WINDOWS["24h"], NOW_TS)
+    assert w.savings_percent == pytest.approx((fixed - dyn) / fixed * 100)
+    assert w.energy_savings_percent == pytest.approx(100 / 3)
+    # no priced consumption -> None (fees alone are not a ratio)
+    empty = _acc(NOW_TS - DAY)
+    assert empty.savings_percent(NOW_TS) is None
+    assert empty.window_stats(DAY, NOW_TS).savings_percent is None
+
+
 # ------------------------------------------------------- compaction / pruning
 def test_compaction_and_pruning_keep_window_sums() -> None:
     acc = _acc(NOW_TS - 400 * DAY)
@@ -131,6 +153,7 @@ NOW = datetime(2026, 10, 10, 10, 5, tzinfo=timezone.utc)
 SLOT0 = datetime(2026, 10, 10, 10, 0, tzinfo=timezone.utc)
 AVG = "sensor.dynamic_energy_tariff_compare_avg_dynamic_price_{}"
 SAV = "sensor.dynamic_energy_tariff_compare_savings_{}"
+PCT = "sensor.dynamic_energy_tariff_compare_savings_percent{}"
 
 
 def _price_attrs() -> dict:
@@ -183,6 +206,15 @@ async def test_window_sensors_live_restart_tick_and_reset(hass: HomeAssistant, f
         assert sav.attributes["unit_of_measurement"] == "EUR"
         # fees prorated over the 10 min 2 s tracked so far (same for every window)
         assert float(sav.state) == pytest.approx(0.20 + 6.0 * 602 / calc.SECONDS_PER_MONTH, abs=1e-4)
+    fees = 602 / calc.SECONDS_PER_MONTH
+    pct = (0.60 + 12 * fees - 0.40 - 6 * fees) / (0.60 + 12 * fees) * 100
+    for ent in [PCT.format("_" + k) for k in ("24h", "30d", "365d")] + [PCT.format("")]:
+        st = hass.states.get(ent)
+        assert float(st.state) == pytest.approx(pct, abs=0.01), ent
+        assert st.attributes["unit_of_measurement"] == "%"
+        assert st.attributes["state_class"] == "measurement"
+        assert st.attributes["energy_savings_percent"] == pytest.approx(100 / 3, abs=0.01)
+    assert hass.states.get(PCT.format("")).attributes["consumption_kwh"] == pytest.approx(2.0)
     start_24h = hass.states.get(AVG.format("24h")).attributes["window_start"]
     assert start_24h == "2026-10-09T12:15:02+02:00"  # local time, labelled with the window start
 
@@ -206,6 +238,8 @@ async def test_window_sensors_live_restart_tick_and_reset(hass: HomeAssistant, f
     assert len(entry.runtime_data.acc.history) == 0
     assert hass.states.get(AVG.format("365d")).state == "unknown"
     assert float(hass.states.get(SAV.format("365d")).state) == 0
+    assert hass.states.get(PCT.format("_365d")).state == "unknown"
+    assert hass.states.get(PCT.format("")).state == "unknown"
 
 
 async def test_dashboard_window_table_renders(hass: HomeAssistant) -> None:
@@ -221,7 +255,8 @@ async def test_dashboard_window_table_renders(hass: HomeAssistant) -> None:
     attrs = {
         "consumption_kwh": 2.0, "avg_dynamic_price_ct": 20.0, "avg_dynamic_price_incl_fees_ct": None,
         "avg_fixed_price_incl_fees_ct": 31.2, "dynamic_total_cost_eur": 0.4,
-        "fixed_total_cost_eur": 0.6, "savings_eur": 0.0,
+        "fixed_total_cost_eur": 0.6, "savings_eur": 0.0, "savings_percent": 33.33,
+        "energy_savings_percent": None,
     }
     for key in ("24h", "30d", "365d"):
         hass.states.async_set(AVG.format(key), "20.0", attrs)
@@ -229,3 +264,5 @@ async def test_dashboard_window_table_renders(hass: HomeAssistant) -> None:
     assert "| Consumption (kWh) | 2.0 | 2.0 | 2.0 |" in out
     assert "| Ø dynamic incl. fees (ct/kWh) | – | – | – |" in out
     assert "| **Savings (€)** | **0.0** | **0.0** | **0.0** |" in out
+    assert "| Savings (%) | 33.33 | 33.33 | 33.33 |" in out
+    assert "| Savings, energy only (%) | – | – | – |" in out
